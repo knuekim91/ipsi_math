@@ -280,6 +280,9 @@ header h1{font-size:26px;letter-spacing:-.01em}
 .sheet .opt small{display:block;color:var(--ink3);font-size:12px;margin-top:2px}
 .sheet .opt[disabled]{opacity:.45;cursor:default}
 .sheet .hint{font-size:12px;color:var(--ink3);line-height:1.6;margin:4px 0 2px}
+.sheet .idlist{font-family:Consolas,monospace;font-size:13px;line-height:1.9;color:var(--ink);
+  background:var(--paper);border:1px solid var(--rule);padding:10px 12px;margin:2px 0 8px;
+  max-height:180px;overflow-y:auto;user-select:text;-webkit-user-select:text;white-space:pre-wrap}
 .barbtn[disabled]{opacity:.4;cursor:default}
 
 /* ---- 모달 ---- */
@@ -351,7 +354,7 @@ header h1{font-size:26px;letter-spacing:-.01em}
   <div class="barsel" id="barsel">
     <span class="cnt"><b id="selcount">0</b>개 선택</span>
     <button class="ghost" id="clearsel">해제</button>
-    <button class="barbtn" id="printbtn">인쇄 · PDF</button>
+    <button class="barbtn" id="printbtn">내보내기</button>
   </div>
 </div>
 
@@ -359,10 +362,10 @@ header h1{font-size:26px;letter-spacing:-.01em}
   <div class="sheet">
     <h2>선택한 문항 내보내기</h2>
     <div class="sub" id="psub">—</div>
-    <button class="opt" id="opt1">문제만 내려받기<small>풀이 공간 포함. 파일을 열면 인쇄 · PDF 저장 버튼이 있습니다</small></button>
-    <button class="opt" id="opt2">문제 + 해설 내려받기<small>문제를 먼저 싣고, 쪽을 나눠 해설을 붙입니다</small></button>
-    <button class="opt" id="opt3">문항 번호 복사<small>저장소의 make_pdf.py로 더 정갈한 PDF를 만들 때</small></button>
-    <div class="hint" id="dlhint"></div>
+    <button class="opt" id="opt3">문항 번호 복사<small>클립보드에 담깁니다</small></button>
+    <div class="idlist" id="idlist"></div>
+    <div class="hint">이 번호를 전달하면 인쇄용 <b>문제지 · 해설지 PDF</b>를 만들어 드립니다.<br>
+      복사가 안 되면 위 목록을 화면 캡처해서 보내도 됩니다.</div>
     <button class="close" id="pclose">닫기</button>
   </div>
 </div>
@@ -418,18 +421,6 @@ function setSync(on, text){
 
 loadLocal(); loadSel();
 setSync(false, '이 기기에만 저장됩니다');
-
-let dl = null;
-(async function(){
-  try { dl = await claude.use('downloads'); } catch (e) { dl = null; }
-  const hint = document.getElementById('dlhint');
-  if (!dl) {
-    ['opt1','opt2'].forEach(function(id){ document.getElementById(id).disabled = true; });
-    hint.textContent = '이 화면에서는 파일 내려받기를 쓸 수 없습니다. 문항 번호를 복사해 주세요.';
-  } else {
-    hint.textContent = '내려받은 파일을 열고 위쪽의 인쇄 버튼을 누르면, 아이패드에서는 PDF로 저장을 고를 수 있습니다.';
-  }
-})();
 
 (async function(){
   let cap = null;
@@ -687,9 +678,10 @@ function selectedProblems(){
 }
 
 document.getElementById('printbtn').onclick = function(){
-  const n = selected.size;
-  document.getElementById('psub').textContent =
-    n + '개 문항 · ' + selectedProblems().map(function(p){ return p.id; }).join(', ');
+  const list = selectedProblems();
+  document.getElementById('psub').textContent = list.length + '개 문항';
+  document.getElementById('idlist').textContent =
+    list.map(function(p){ return p.id; }).join(String.fromCharCode(10));
   document.getElementById('pmodal').classList.add('on');
 };
 document.getElementById('pclose').onclick = function(){
@@ -699,111 +691,6 @@ document.getElementById('pmodal').onclick = function(e){
   if (e.target === this) this.classList.remove('on');
 };
 
-function buildPrint(withSol){
-  const list = selectedProblems();
-  const today = new Date();
-  const dd = Math.round((EXAM - new Date(today.getFullYear(), today.getMonth(), today.getDate())) / 86400000);
-  const head = '<div class="pr-head"><div><div class="pr-t">선택 문항 ' + list.length + '제</div>' +
-    '<div class="pr-m">' + [...new Set(list.map(function(p){ return p.unitLabel; }))].join(' · ') + '</div></div>' +
-    '<div class="pr-m">' + today.getFullYear() + '.' + (today.getMonth()+1) + '.' + today.getDate() +
-    ' · 수능 D-' + dd + '</div></div>';
-
-  let q = list.map(function(p, i){
-    return '<article class="pr-q"><div class="pr-qh"><span class="pr-n">' + (i+1) + '</span>' +
-      '<span class="pr-c">' + esc(p.level) + '</span>' +
-      '<span class="pr-c">' + esc(p.topic) + '</span>' +
-      '<span class="pr-c">' + esc(p.source) + '</span></div>' +
-      '<div class="pr-s">' + p.q + '</div>' +
-      '<div class="pr-w" style="height:' + (withSol ? 42 : 62) + 'mm"></div></article>';
-  }).join('');
-
-  if (!withSol) return head + q;
-
-  const sol = list.map(function(p, i){
-    let b = '<article class="pr-q pr-sol"><div class="pr-qh"><span class="pr-n">' + (i+1) + '</span>' +
-      '<span class="pr-c">' + esc(p.topic) + '</span>' +
-      '<span class="pr-a">정답 ' + esc(p.answer) + '</span></div>';
-    if (p.idea) b += '<div class="pr-b idea"><span class="lab">발상</span>' + p.idea + '</div>';
-    if (p.sol)  b += '<div class="pr-b"><span class="lab">풀이</span>' + p.sol + '</div>';
-    if (p.alt)  b += '<div class="pr-b alt"><span class="lab">다른 풀이</span>' + p.alt + '</div>';
-    if (p.trap) b += '<div class="pr-b trap"><span class="lab">함정</span>' + p.trap + '</div>';
-    if (p.know) b += '<div class="pr-b know"><span class="lab">노하우</span>' + p.know + '</div>';
-    return b + '</article>';
-  }).join('');
-  return head + q + '<div class="pr-break"></div>' + head + sol;
-}
-
-const PRINT_CSS =
-  '@page{size:A4;margin:16mm 15mm 14mm}' +
-  'body{font-family:"Malgun Gothic","맑은 고딕",-apple-system,sans-serif;font-size:11pt;' +
-    'line-height:1.75;color:#000;background:#fff}' +
-  '.m{font-family:Cambria,Georgia,"Times New Roman",serif;font-size:1.04em}' +
-  'sub,sup{font-size:.72em}' +
-  '.pr-head{display:flex;justify-content:space-between;align-items:flex-end;' +
-    'border-bottom:2px solid #000;padding-bottom:6px;margin-bottom:16px}' +
-  '.pr-t{font-size:17pt;font-weight:700}' +
-  '.pr-m{font-size:9pt;color:#444}' +
-  '.pr-q{page-break-inside:avoid;margin-bottom:16px}' +
-  '.pr-sol{page-break-inside:auto;border-bottom:1px solid #ccc;padding-bottom:10px}' +
-  '.pr-sol .pr-qh{page-break-after:avoid}' +
-  '.pr-qh{display:flex;gap:8px;align-items:baseline;border-bottom:1px solid #999;' +
-    'padding-bottom:4px;margin-bottom:8px;flex-wrap:wrap}' +
-  '.pr-n{font-size:15pt;font-weight:700;font-family:Georgia,serif;min-width:20px}' +
-  '.pr-c{font-size:8.5pt;border:1px solid #999;padding:1px 6px;white-space:nowrap}' +
-  '.pr-a{font-size:10pt;font-weight:700;border:1px solid #000;padding:2px 9px;margin-left:auto}' +
-  '.pr-s p{margin:0 0 7px}' +
-  '.pr-s .cond{display:block;margin:7px 0;padding:6px 11px;border:1px solid #666}' +
-  '.pr-s .choices{display:flex;flex-wrap:wrap;gap:5px 22px;margin-top:8px;' +
-    'font-family:Cambria,Georgia,serif}' +
-  '.pr-w{border:1px dashed #bbb;margin-top:9px}' +
-  '.pr-break{page-break-after:always}' +
-  '.pr-b{margin-bottom:8px}' +
-  '.pr-b p{margin:0 0 5px}' +
-  '.pr-b .lab{display:inline-block;font-size:8.5pt;font-weight:700;letter-spacing:.18em;' +
-    'margin-right:8px;border-bottom:2px solid #000}' +
-  '.pr-b.idea{padding-left:10px;border-left:3px solid #000}' +
-  '.pr-b.alt{padding:8px 11px;border:1px dashed #666}' +
-  '.pr-b.trap{padding:7px 11px;border-left:3px solid #777;background:#f6f6f6}' +
-  '.pr-b.know{padding:8px 11px;border:1px solid #000}' +
-  '.step{font-weight:700}' +
-  'ol{margin:0 0 5px;padding-left:20px}';
-
-function standaloneDoc(withSol){
-  const d = new Date();
-  const stamp = d.getFullYear() + '.' + (d.getMonth()+1) + '.' + d.getDate();
-  const css = PRINT_CSS + ' .bar-top{position:sticky;top:0;background:#fff;border-bottom:1px solid #ccc;' +
-    'padding:10px 0 12px;margin-bottom:14px;display:flex;align-items:center;gap:12px;flex-wrap:wrap}' +
-    ' .bar-top button{font:inherit;font-size:15px;padding:11px 18px;border:1px solid #111;background:#111;' +
-    'color:#fff;border-radius:3px;cursor:pointer}' +
-    ' .bar-top span{font-size:13px;color:#555}' +
-    ' body{max-width:820px;margin:0 auto;padding:0 18px 40px}' +
-    ' @media print{ .bar-top{display:none} body{max-width:none;padding:0} }';
-  return '<!doctype html><html lang="ko"><head><meta charset="utf-8">' +
-    '<meta name="viewport" content="width=device-width,initial-scale=1">' +
-    '<title>선택 문항 ' + selected.size + '제 (' + stamp + ')</title>' +
-    '<style>' + css + '</style></head><body>' +
-    '<div class="bar-top"><button onclick="window.print()">인쇄 · PDF로 저장</button>' +
-    '<span>아이패드에서는 인쇄 화면에서 &lsquo;PDF로 저장&rsquo;을 고르세요.</span></div>' +
-    buildPrint(withSol) + '</body></html>';
-}
-
-function download(withSol){
-  if (!dl) { toast('이 화면에서는 내려받기를 쓸 수 없어요'); return; }
-  const d = new Date();
-  const pad = function(n){ return (n < 10 ? '0' : '') + n; };
-  const name = '선택문항_' + selected.size + '제_' + (withSol ? '문제해설' : '문제') + '_' +
-    d.getFullYear() + pad(d.getMonth()+1) + pad(d.getDate()) + '.html';
-  document.getElementById('pmodal').classList.remove('on');
-  dl.save({ filename: name, data: standaloneDoc(withSol) }).then(function(){
-    toast('내려받았어요. 파일을 열고 인쇄를 누르세요');
-  }, function(err){
-    const c = err && err.code;
-    if (c === 'declined') return;
-    toast(c === 'rate_limited' ? '잠시 후 다시 눌러주세요' : '내려받기에 실패했어요');
-  });
-}
-document.getElementById('opt1').onclick = function(){ download(false); };
-document.getElementById('opt2').onclick = function(){ download(true); };
 document.getElementById('opt3').onclick = function(){
   const NL = String.fromCharCode(10);
   const txt = selectedProblems().map(function(p){ return p.id; }).join(NL);
