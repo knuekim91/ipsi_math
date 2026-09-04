@@ -1,0 +1,109 @@
+/* ipsi_math - 인쇄용 스타일 (A4, 흑백 인쇄 기준) */
+
+@page { size: A4; margin: 16mm 15mm 14mm 15mm; }
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: "Malgun Gothic", "맑은 고딕", sans-serif;
+  font-size: 10.6pt;
+  line-height: 1.75;
+  color: #000;
+}
+
+/* ---------- 수식 ---------- */
+.m, i, sub, sup {
+  font-family: "Cambria Math", Cambria, "Times New Roman", "Batang", serif;
+}
+.m { font-size: 1.04em; letter-spacing: .01em; }
+sub, sup { font-size: .72em; }
+
+/* ---------- 머리글 ---------- */
+.sheet-head {
+  display: flex; justify-content: space-between; align-items: flex-end;
+  border-bottom: 1.6pt solid #000;
+  padding-bottom: 5pt; margin-bottom: 13pt;
+}
+.ht { font-size: 16pt; font-weight: 700; letter-spacing: -.02em; }
+.hs { font-size: 8.6pt; color: #444; margin-top: 2pt; }
+.hr { text-align: right; }
+.kind {
+  font-size: 8.4pt; font-weight: 700; letter-spacing: .28em;
+  border: 1pt solid #000; padding: 1.5pt 7pt; display: inline-block;
+}
+.meta { font-size: 8pt; color: #444; margin-top: 4pt; }
+
+/* ---------- 문항 공통 ---------- */
+/* 문제는 절대 쪼개지 않는다. 해설은 길면 다음 장으로 이어지게 둔다(종이 절약). */
+.q { page-break-inside: avoid; break-inside: avoid; margin-bottom: 11pt; }
+.s { margin-bottom: 15pt; padding-bottom: 8pt; border-bottom: .5pt solid #ccc; }
+.s .qh { page-break-after: avoid; break-after: avoid; }
+
+.qh {
+  display: flex; align-items: baseline; gap: 6pt; flex-wrap: wrap;
+  border-bottom: .6pt solid #999; padding-bottom: 3pt; margin-bottom: 6pt;
+}
+.qn {
+  font-size: 14pt; font-weight: 700; line-height: 1;
+  min-width: 16pt; font-family: "Times New Roman", serif;
+}
+.chip {
+  font-size: 7.6pt; color: #333; border: .6pt solid #999;
+  padding: .5pt 4pt; white-space: nowrap;
+}
+.qid { font-size: 7.2pt; color: #888; font-family: Consolas, monospace; }
+.ansbig {
+  margin-left: auto; font-size: 9.4pt; font-weight: 700;
+  border: 1pt solid #000; padding: 1pt 7pt; white-space: nowrap;
+}
+
+/* ---------- 문제지 ---------- */
+.stem p { margin: 0 0 5pt; }
+.stem { font-size: 10.8pt; }
+.cond {
+  display: block; margin: 5pt 0; padding: 4pt 9pt;
+  border: .6pt solid #666;
+}
+.choices {
+  display: flex; flex-wrap: wrap; gap: 4pt 20pt;
+  margin-top: 6pt; font-family: "Cambria Math", Cambria, serif;
+}
+.work {
+  border: .5pt dashed #bbb;
+  margin-top: 7pt;
+}
+
+/* ---------- 해설지 ---------- */
+.restem {
+  font-size: 9.6pt; color: #333; background: #f2f2f2;
+  padding: 6pt 9pt; margin-bottom: 7pt;
+}
+.restem p { margin: 0 0 3pt; }
+.restem p:last-child { margin-bottom: 0; }
+
+.lab {
+  display: inline-block; font-size: 7.8pt; font-weight: 700;
+  letter-spacing: .18em; margin-right: 7pt; vertical-align: 2pt;
+  border-bottom: 1.4pt solid #000; padding-bottom: 1pt;
+}
+.idea, .sol, .know, .trap { margin-bottom: 6pt; }
+.idea p, .sol p, .know p, .trap p { margin: 0 0 4pt; }
+.idea { padding-left: 8pt; border-left: 2.2pt solid #000; }
+.know { padding: 6pt 9pt; border: 1pt solid #000; }
+.trap { padding: 5pt 9pt; border-left: 2.2pt solid #777; background: #f6f6f6; }
+.sol ol { margin: 0 0 4pt; padding-left: 16pt; }
+.sol li { margin-bottom: 2pt; }
+.step { font-weight: 700; }
+
+/* ---------- 정답표 ---------- */
+.anstable { page-break-after: always; break-after: page; }
+.anstable h2 {
+  font-size: 11pt; margin: 0 0 6pt;
+  border-bottom: 1pt solid #000; padding-bottom: 3pt;
+}
+table { border-collapse: collapse; width: 100%; font-size: 9pt; }
+th, td { border: .5pt solid #999; padding: 3.5pt 6pt; text-align: center; }
+th { background: #eee; font-size: 8.2pt; font-weight: 700; }
+td.mono { font-family: Consolas, monospace; font-size: 8.2pt; }
+td.ans { font-weight: 700; font-family: "Cambria Math", Cambria, serif; }
