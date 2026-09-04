@@ -200,7 +200,8 @@ def render_solutions(probs, with_table):
     <span class="ansbig">정답 {esc(p.get('answer',''))}</span></div>"""]
         if s.get("문제"):
             parts.append(f'<div class="restem">{block(s["문제"])}</div>')
-        for label, cls in (("발상", "idea"), ("풀이", "sol"), ("노하우", "know"), ("함정", "trap")):
+        for label, cls in (("발상", "idea"), ("풀이", "sol"), ("다른 풀이", "alt"),
+                           ("함정", "trap"), ("노하우", "know")):
             if s.get(label):
                 parts.append(
                     f'<div class="{cls}"><span class="lab">{label}</span>{block(s[label])}</div>'

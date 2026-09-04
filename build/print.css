@@ -87,8 +87,11 @@ sub, sup { font-size: .72em; }
   letter-spacing: .18em; margin-right: 7pt; vertical-align: 2pt;
   border-bottom: 1.4pt solid #000; padding-bottom: 1pt;
 }
-.idea, .sol, .know, .trap { margin-bottom: 6pt; }
-.idea p, .sol p, .know p, .trap p { margin: 0 0 4pt; }
+.idea, .sol, .alt, .know, .trap { margin-bottom: 6pt; }
+.idea p, .sol p, .alt p, .know p, .trap p { margin: 0 0 4pt; }
+.alt { padding: 6pt 9pt; border: .6pt dashed #666; }
+.alt .lab { border-bottom-color: #666; }
+.alt ol { margin: 0 0 4pt; padding-left: 16pt; }
 .idea { padding-left: 8pt; border-left: 2.2pt solid #000; }
 .know { padding: 6pt 9pt; border: 1pt solid #000; }
 .trap { padding: 5pt 9pt; border-left: 2.2pt solid #777; background: #f6f6f6; }

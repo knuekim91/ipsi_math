@@ -71,6 +71,7 @@ def collect():
                 "q": sec.get("문제", ""),
                 "idea": sec.get("발상", ""),
                 "sol": sec.get("풀이", ""),
+                "alt": sec.get("다른 풀이", ""),
                 "trap": sec.get("함정", ""),
                 "know": sec.get("노하우", ""),
             })
@@ -194,6 +195,8 @@ header h1{font-size:26px;letter-spacing:-.01em}
 .panel ol{margin:0 0 8px;padding-left:19px}
 .lab{display:block;font-size:10px;letter-spacing:.15em;font-weight:600;color:var(--indigo);margin-bottom:4px}
 .pidea{padding-left:11px;border-left:2px solid var(--indigo)}
+.palt{padding:11px 13px;border:1px dashed var(--ink3);margin:10px 0}
+.palt .lab{color:var(--ink3)}
 .ptrap{padding:10px 12px;background:var(--stopbg);border-left:2px solid var(--stop);color:var(--ink2)}
 .ptrap .lab{color:var(--stop)}
 .pknow{padding:11px 13px;border:1px solid var(--rule)}
@@ -424,6 +427,7 @@ function renderList(){
           '<span class="lab">발상</span>' + p.idea + '</div>' +
         '<div class="panel' + (sh.sol ? ' on' : '') + '" data-panel="sol">' +
           '<span class="lab">풀이</span>' + p.sol +
+          (p.alt ? '<div class="palt"><span class="lab">다른 풀이</span>' + p.alt + '</div>' : '') +
           (p.trap ? '<div class="ptrap"><span class="lab">함정</span>' + p.trap + '</div>' : '') +
           '<div class="pknow"><span class="lab">노하우</span>' + p.know + '</div>' +
           '<div class="pans">정답 <b>' + esc(p.answer) + '</b></div>' +
