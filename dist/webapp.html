@@ -89,8 +89,19 @@ header h1{font-size:26px;letter-spacing:-.01em}
 .p.s-ok{border-left:3px solid var(--ok)}
 .p.s-mid{border-left:3px solid var(--warn)}
 .p.s-no{border-left:3px solid var(--stop)}
-.phead{width:100%;text-align:left;background:none;border:0;padding:13px 15px;cursor:pointer;
+.phead{display:flex;align-items:stretch}
+.pmain{flex:1;min-width:0;text-align:left;background:none;border:0;padding:13px 15px;cursor:pointer;
   display:flex;align-items:center;gap:9px;font-family:inherit;color:inherit;font-size:15px}
+.selbtn{flex:none;width:54px;background:none;border:0;border-left:1px solid var(--rule2);
+  cursor:pointer;color:var(--ink3);font-family:inherit;font-size:15px;line-height:1;
+  display:flex;align-items:center;justify-content:center}
+.selbtn .box{width:22px;height:22px;border:1.5px solid var(--rule);border-radius:3px;
+  display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700}
+.selbtn[aria-pressed="true"] .box{background:var(--indigo);border-color:var(--indigo);color:#fff}
+.p.sel{box-shadow:inset 3px 0 0 var(--indigo), var(--shadow)}
+.listtools{display:flex;justify-content:flex-end;margin-top:12px}
+.listtools button{font-size:12.5px;color:var(--ink2);background:none;border:0;cursor:pointer;
+  font-family:inherit;padding:6px 2px;text-decoration:underline;text-underline-offset:3px}
 .ptitle{flex:1;min-width:0}
 .ptopic{font-weight:500;display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .pmeta{font-size:11px;color:var(--ink3);display:block;margin-top:1px}
@@ -171,6 +182,20 @@ header h1{font-size:26px;letter-spacing:-.01em}
 .barlink[disabled]{cursor:default;color:var(--ink3)}
 .barlink[disabled] .go{display:none}
 .p.flash{outline:3px solid var(--markline);outline-offset:-1px}
+.barsel{display:none;align-items:center;gap:10px;width:100%}
+.barsel.on{display:flex}
+.barsel .cnt{flex:1;font-size:13px;color:var(--ink)}
+.barsel .cnt b{color:var(--indigo);font-weight:700;font-size:15px}
+.ghost{font-size:13px;min-height:44px;padding:0 14px;border:1px solid var(--rule);
+  background:none;color:var(--ink2);cursor:pointer;font-family:inherit;border-radius:2px;flex:none}
+.toast{position:fixed;left:50%;transform:translateX(-50%);bottom:96px;z-index:60;
+  background:var(--ink);color:var(--paper);font-size:13px;padding:10px 16px;border-radius:3px;
+  opacity:0;pointer-events:none;transition:opacity .2s}
+.toast.on{opacity:1}
+.sheet .opt{width:100%;text-align:left;font-size:14.5px;min-height:56px;padding:12px 14px;
+  margin-bottom:9px;border:1px solid var(--rule);background:var(--card);color:var(--ink);
+  cursor:pointer;font-family:inherit}
+.sheet .opt small{display:block;color:var(--ink3);font-size:12px;margin-top:2px}
 .barbtn[disabled]{opacity:.4;cursor:default}
 
 /* ---- 모달 ---- */
@@ -209,6 +234,40 @@ header h1{font-size:26px;letter-spacing:-.01em}
 }
 :focus-visible{outline:2px solid var(--markline);outline-offset:2px}
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
+
+/* ---- 인쇄 / PDF 저장 ---- */
+#printarea{display:none}
+@media print{
+  @page{size:A4;margin:16mm 15mm 14mm}
+  html,body{background:#fff!important;color:#000!important;padding:0!important;font-size:10.6pt}
+  .wrap,.bar,.modal,.toast{display:none!important}
+  #printarea{display:block}
+  .pr-head{display:flex;justify-content:space-between;align-items:flex-end;
+    border-bottom:1.6pt solid #000;padding-bottom:5pt;margin-bottom:12pt}
+  .pr-t{font-size:15pt;font-weight:700}
+  .pr-m{font-size:8pt;color:#444}
+  .pr-q{page-break-inside:avoid;margin-bottom:11pt}
+  .pr-sol{page-break-inside:auto;border-bottom:.5pt solid #ccc;padding-bottom:7pt}
+  .pr-sol .pr-qh{page-break-after:avoid}
+  .pr-qh{display:flex;gap:6pt;align-items:baseline;border-bottom:.6pt solid #999;
+    padding-bottom:3pt;margin-bottom:6pt}
+  .pr-n{font-size:14pt;font-weight:700;font-family:Georgia,serif;min-width:16pt}
+  .pr-c{font-size:7.6pt;border:.6pt solid #999;padding:.5pt 4pt;white-space:nowrap}
+  .pr-s p{margin:0 0 5pt}
+  .pr-s .cond{display:block;margin:5pt 0;padding:4pt 9pt;border:.6pt solid #666}
+  .pr-s .choices{display:flex;flex-wrap:wrap;gap:4pt 20pt;margin-top:6pt}
+  .pr-w{border:.5pt dashed #bbb;margin-top:7pt}
+  .pr-break{page-break-after:always}
+  .pr-a{font-size:9.4pt;font-weight:700;border:1pt solid #000;padding:1pt 7pt;margin-left:auto}
+  .pr-b{margin-bottom:6pt;font-size:10pt}
+  .pr-b .lab{display:inline-block;font-size:7.8pt;font-weight:700;letter-spacing:.18em;
+    margin-right:7pt;border-bottom:1.4pt solid #000}
+  .pr-b.idea{padding-left:8pt;border-left:2.2pt solid #000}
+  .pr-b.alt{padding:6pt 9pt;border:.6pt dashed #666}
+  .pr-b.trap{padding:5pt 9pt;border-left:2.2pt solid #777}
+  .pr-b.know{padding:6pt 9pt;border:1pt solid #000}
+  .pr-b p{margin:0 0 4pt}
+}
 </style>
 
 <div class="wrap">
@@ -229,15 +288,36 @@ header h1{font-size:26px;letter-spacing:-.01em}
   </div>
 
   <div class="filters" id="filters"></div>
+  <div class="listtools"><button id="selall">보이는 문항 모두 선택</button></div>
   <div class="list" id="list"></div>
 </div>
 
 <div class="bar">
-  <div class="barin">
+  <div class="barin" id="barnormal">
     <button class="barlink" id="nextbtn">—</button>
     <button class="barbtn" id="reviewbtn">다시 볼 문항</button>
   </div>
+  <div class="barsel" id="barsel">
+    <span class="cnt"><b id="selcount">0</b>개 선택</span>
+    <button class="ghost" id="clearsel">해제</button>
+    <button class="barbtn" id="printbtn">인쇄 · PDF</button>
+  </div>
 </div>
+
+<div class="modal" id="pmodal">
+  <div class="sheet">
+    <h2>선택한 문항 내보내기</h2>
+    <div class="sub" id="psub">—</div>
+    <button class="opt" id="opt1">문제만 인쇄<small>풀이 공간이 함께 나옵니다. 시험지처럼 풀 때</small></button>
+    <button class="opt" id="opt2">문제 + 해설 인쇄<small>문제를 먼저 싣고, 쪽을 나눠 해설을 붙입니다</small></button>
+    <button class="opt" id="opt3">문항 번호 복사<small>저장소의 make_pdf.py로 더 정갈한 PDF를 만들 때</small></button>
+    <button class="close" id="pclose">닫기</button>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<div id="printarea"></div>
 
 <div class="modal" id="modal">
   <div class="sheet">
@@ -261,6 +341,15 @@ const EXAM = new Date(2026, 10, 19);
 
 /* ---------- 저장소: db 있으면 공유, 없으면 이 기기에만 ---------- */
 const LS = 'ipsi_math_progress_v1';
+const LS_SEL = 'ipsi_math_selected_v1';
+let selected = new Set();
+function loadSel(){
+  try { selected = new Set(JSON.parse(localStorage.getItem(LS_SEL) || '[]')); }
+  catch (e) { selected = new Set(); }
+}
+function saveSel(){
+  try { localStorage.setItem(LS_SEL, JSON.stringify([...selected])); } catch (e) {}
+}
 let state = {};        // id -> {status, note, at}
 let db = null;
 
@@ -276,7 +365,7 @@ function setSync(on, text){
   document.getElementById('synctxt').textContent = text;
 }
 
-loadLocal();
+loadLocal(); loadSel();
 setSync(false, '이 기기에만 저장됩니다');
 
 (async function(){
@@ -372,18 +461,24 @@ function renderList(){
     const st = (state[p.id] || {}).status || '';
     const note = (state[p.id] || {}).note || '';
     const isOpen = opened.has(p.id);
+    const isSel = selected.has(p.id);
     const sh = shown[p.id] || {};
     const hard = /상/.test(p.diff) && p.diff !== '중상';
     return '' +
-    '<article class="p ' + statusClass(st) + (isOpen ? ' open' : '') + '" data-id="' + esc(p.id) + '">' +
-      '<button class="phead" aria-expanded="' + isOpen + '">' +
-        '<span class="arrow"></span>' +
-        '<span class="ptitle"><span class="ptopic">' + esc(p.topic) + '</span>' +
-          '<span class="pmeta">' + esc(p.unitLabel) + ' · ' + esc(p.source) + '</span></span>' +
-        (p.origin !== '기출'
-          ? '<span class="badge origin ' + originClass(p.origin) + '">' + esc(p.origin) + '</span>' : '') +
-        '<span class="badge' + (hard ? ' hard' : '') + '">' + esc(p.level) + '</span>' +
-      '</button>' +
+    '<article class="p ' + statusClass(st) + (isOpen ? ' open' : '') + (isSel ? ' sel' : '') +
+      '" data-id="' + esc(p.id) + '">' +
+      '<div class="phead">' +
+        '<button class="pmain" aria-expanded="' + isOpen + '">' +
+          '<span class="arrow"></span>' +
+          '<span class="ptitle"><span class="ptopic">' + esc(p.topic) + '</span>' +
+            '<span class="pmeta">' + esc(p.unitLabel) + ' · ' + esc(p.source) + '</span></span>' +
+          (p.origin !== '기출'
+            ? '<span class="badge origin ' + originClass(p.origin) + '">' + esc(p.origin) + '</span>' : '') +
+          '<span class="badge' + (hard ? ' hard' : '') + '">' + esc(p.level) + '</span>' +
+        '</button>' +
+        '<button class="selbtn" aria-pressed="' + isSel + '" aria-label="인쇄할 문항으로 선택">' +
+          '<span class="box">' + (isSel ? '✓' : '') + '</span></button>' +
+      '</div>' +
       '<div class="pbody">' +
         '<div class="stem">' + p.q + '</div>' +
         '<div class="reveal">' +
@@ -420,9 +515,13 @@ function renderList(){
 function bind(){
   document.querySelectorAll('.p').forEach(function(card){
     const id = card.dataset.id;
-    card.querySelector('.phead').onclick = function(){
+    card.querySelector('.pmain').onclick = function(){
       if (opened.has(id)) opened.delete(id); else opened.add(id);
       render();
+    };
+    card.querySelector('.selbtn').onclick = function(){
+      if (selected.has(id)) selected.delete(id); else selected.add(id);
+      saveSel(); render();
     };
     card.querySelectorAll('.rbtn').forEach(function(b){
       b.onclick = function(){
@@ -470,6 +569,17 @@ function renderSummary(){
   const rb = document.getElementById('reviewbtn');
   rb.textContent = '다시 볼 문항 ' + (mid + no);
   rb.disabled = (mid + no) === 0;
+
+  // 선택이 있으면 하단 바를 선택 모드로 바꾼다
+  const has = selected.size > 0;
+  document.getElementById('barnormal').style.display = has ? 'none' : 'flex';
+  document.getElementById('barsel').classList.toggle('on', has);
+  document.getElementById('selcount').textContent = selected.size;
+
+  const vis = PROBLEMS.filter(inFilter);
+  const allSel = vis.length > 0 && vis.every(function(p){ return selected.has(p.id); });
+  document.getElementById('selall').textContent =
+    allSel ? '선택 모두 해제' : '보이는 문항 모두 선택 (' + vis.length + ')';
 }
 
 // 어떤 이유로든 다시 그릴 때 입력 중이던 메모의 포커스와 커서 위치를 복원한다
@@ -492,6 +602,101 @@ function render(){
   }
 }
 render();
+
+/* ---------- 선택 · 내보내기 ---------- */
+document.getElementById('selall').onclick = function(){
+  const vis = PROBLEMS.filter(inFilter);
+  const allSel = vis.length > 0 && vis.every(function(p){ return selected.has(p.id); });
+  vis.forEach(function(p){ if (allSel) selected.delete(p.id); else selected.add(p.id); });
+  saveSel(); render();
+};
+document.getElementById('clearsel').onclick = function(){
+  selected.clear(); saveSel(); render();
+};
+
+function toast(msg){
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.classList.add('on');
+  setTimeout(function(){ t.classList.remove('on'); }, 1800);
+}
+function selectedProblems(){
+  return PROBLEMS.filter(function(p){ return selected.has(p.id); });
+}
+
+document.getElementById('printbtn').onclick = function(){
+  const n = selected.size;
+  document.getElementById('psub').textContent =
+    n + '개 문항 · ' + selectedProblems().map(function(p){ return p.id; }).join(', ');
+  document.getElementById('pmodal').classList.add('on');
+};
+document.getElementById('pclose').onclick = function(){
+  document.getElementById('pmodal').classList.remove('on');
+};
+document.getElementById('pmodal').onclick = function(e){
+  if (e.target === this) this.classList.remove('on');
+};
+
+function buildPrint(withSol){
+  const list = selectedProblems();
+  const today = new Date();
+  const dd = Math.round((EXAM - new Date(today.getFullYear(), today.getMonth(), today.getDate())) / 86400000);
+  const head = '<div class="pr-head"><div><div class="pr-t">선택 문항 ' + list.length + '제</div>' +
+    '<div class="pr-m">' + [...new Set(list.map(function(p){ return p.unitLabel; }))].join(' · ') + '</div></div>' +
+    '<div class="pr-m">' + today.getFullYear() + '.' + (today.getMonth()+1) + '.' + today.getDate() +
+    ' · 수능 D-' + dd + '</div></div>';
+
+  let q = list.map(function(p, i){
+    return '<article class="pr-q"><div class="pr-qh"><span class="pr-n">' + (i+1) + '</span>' +
+      '<span class="pr-c">' + esc(p.level) + '</span>' +
+      '<span class="pr-c">' + esc(p.topic) + '</span>' +
+      '<span class="pr-c">' + esc(p.source) + '</span></div>' +
+      '<div class="pr-s">' + p.q + '</div>' +
+      '<div class="pr-w" style="height:' + (withSol ? 42 : 62) + 'mm"></div></article>';
+  }).join('');
+
+  if (!withSol) return head + q;
+
+  const sol = list.map(function(p, i){
+    let b = '<article class="pr-q pr-sol"><div class="pr-qh"><span class="pr-n">' + (i+1) + '</span>' +
+      '<span class="pr-c">' + esc(p.topic) + '</span>' +
+      '<span class="pr-a">정답 ' + esc(p.answer) + '</span></div>';
+    if (p.idea) b += '<div class="pr-b idea"><span class="lab">발상</span>' + p.idea + '</div>';
+    if (p.sol)  b += '<div class="pr-b"><span class="lab">풀이</span>' + p.sol + '</div>';
+    if (p.alt)  b += '<div class="pr-b alt"><span class="lab">다른 풀이</span>' + p.alt + '</div>';
+    if (p.trap) b += '<div class="pr-b trap"><span class="lab">함정</span>' + p.trap + '</div>';
+    if (p.know) b += '<div class="pr-b know"><span class="lab">노하우</span>' + p.know + '</div>';
+    return b + '</article>';
+  }).join('');
+  return head + q + '<div class="pr-break"></div>' + head + sol;
+}
+
+function doPrint(withSol){
+  document.getElementById('printarea').innerHTML = buildPrint(withSol);
+  document.getElementById('pmodal').classList.remove('on');
+  setTimeout(function(){
+    try { window.print(); }
+    catch (e) { toast('인쇄를 열 수 없어요. 문항 번호 복사를 써주세요'); }
+  }, 60);
+}
+document.getElementById('opt1').onclick = function(){ doPrint(false); };
+document.getElementById('opt2').onclick = function(){ doPrint(true); };
+document.getElementById('opt3').onclick = function(){
+  const NL = String.fromCharCode(10);
+  const txt = selectedProblems().map(function(p){ return p.id; }).join(NL);
+  const done = function(){ toast('문항 번호 ' + selected.size + '개를 복사했어요');
+                           document.getElementById('pmodal').classList.remove('on'); };
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(txt).then(done, function(){ fallbackCopy(txt, done); });
+  } else { fallbackCopy(txt, done); }
+};
+function fallbackCopy(txt, done){
+  const ta = document.createElement('textarea');
+  ta.value = txt; ta.style.position = 'fixed'; ta.style.opacity = '0';
+  document.body.appendChild(ta); ta.select();
+  try { document.execCommand('copy'); done(); }
+  catch (e) { toast('복사가 안 돼요. 화면의 문항 번호를 직접 적어주세요'); }
+  document.body.removeChild(ta);
+}
 
 /* ---------- 안 푼 문항으로 이동 ---------- */
 function unsolvedIn(list){
