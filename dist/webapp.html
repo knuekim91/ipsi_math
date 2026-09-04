@@ -149,6 +149,15 @@ header h1{font-size:26px;letter-spacing:-.01em}
 .barin b{color:var(--stop)}
 .barbtn{font-size:13.5px;padding:0 18px;min-height:44px;border:1px solid var(--ink);background:var(--ink);
   color:var(--paper);cursor:pointer;font-family:inherit;border-radius:2px;flex:none}
+.barlink{flex:1;min-width:0;text-align:left;font-size:13px;color:var(--ink2);
+  background:none;border:0;padding:0 4px 0 0;min-height:44px;cursor:pointer;font-family:inherit;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+@media (max-width:400px){ .barlink{font-size:12.5px} }
+.barlink b{color:var(--ink);font-weight:600}
+.barlink .go{color:var(--indigo);font-weight:600;margin-left:6px;white-space:nowrap}
+.barlink[disabled]{cursor:default;color:var(--ink3)}
+.barlink[disabled] .go{display:none}
+.p.flash{outline:3px solid var(--markline);outline-offset:-1px}
 .barbtn[disabled]{opacity:.4;cursor:default}
 
 /* ---- 모달 ---- */
@@ -212,8 +221,8 @@ header h1{font-size:26px;letter-spacing:-.01em}
 
 <div class="bar">
   <div class="barin">
-    <span id="barinfo">—</span>
-    <button class="barbtn" id="reviewbtn">복습할 문항 보기</button>
+    <button class="barlink" id="nextbtn">—</button>
+    <button class="barbtn" id="reviewbtn">다시 볼 문항</button>
   </div>
 </div>
 
@@ -323,7 +332,7 @@ function renderFilters(){
   });
   el.innerHTML = parts.join('');
   el.querySelectorAll('.fchip').forEach(function(b){
-    b.onclick = function(){ filter = b.dataset.f; render(); };
+    b.onclick = function(){ filter = b.dataset.f; lastJumpId = null; render(); };
   });
 }
 
@@ -421,9 +430,14 @@ function renderSummary(){
   document.getElementById('n-mid').textContent = mid;
   document.getElementById('n-no').textContent = no;
   const left = PROBLEMS.length - ok - mid - no;
-  document.getElementById('barinfo').innerHTML =
-    '아직 안 푼 문항 ' + left + '개 · 다시 볼 문항 <b>' + (mid + no) + '</b>개';
-  document.getElementById('reviewbtn').disabled = (mid + no) === 0;
+  const nb = document.getElementById('nextbtn');
+  nb.innerHTML = left
+    ? '아직 안 푼 문항 <b>' + left + '</b>개<span class="go">바로가기 →</span>'
+    : '전부 표시했어요';
+  nb.disabled = left === 0;
+  const rb = document.getElementById('reviewbtn');
+  rb.textContent = '다시 볼 문항 ' + (mid + no);
+  rb.disabled = (mid + no) === 0;
 }
 
 // 어떤 이유로든 다시 그릴 때 입력 중이던 메모의 포커스와 커서 위치를 복원한다
@@ -446,6 +460,46 @@ function render(){
   }
 }
 render();
+
+/* ---------- 안 푼 문항으로 이동 ---------- */
+function unsolvedIn(list){
+  return list.filter(function(p){ return !((state[p.id] || {}).status); });
+}
+let lastJumpId = null;   // 마지막으로 이동한 문항 (스크롤 위치보다 안정적)
+
+document.getElementById('nextbtn').onclick = function(){
+  let pool = unsolvedIn(PROBLEMS.filter(function(p){ return filter === 'all' || p.unit === filter; }));
+  if (!pool.length && filter !== 'all') {   // 지금 단원에 없으면 전체로 넓힌다
+    filter = 'all'; lastJumpId = null; render();
+    pool = unsolvedIn(PROBLEMS);
+  }
+  if (!pool.length) return;
+
+  let start = 0;
+  if (lastJumpId) {
+    const i = pool.findIndex(function(p){ return p.id === lastJumpId; });
+    if (i >= 0) {
+      start = (i + 1) % pool.length;               // 바로 다음 안 푼 문항으로
+    } else {
+      // 방금 표시해서 목록에서 빠진 경우 -> 원래 있던 자리 다음부터
+      const gone = PROBLEMS.findIndex(function(p){ return p.id === lastJumpId; });
+      const j = pool.findIndex(function(p){ return PROBLEMS.indexOf(p) > gone; });
+      start = j >= 0 ? j : 0;
+    }
+  }
+  const target = pool[start];
+  lastJumpId = target.id;
+
+  opened.add(target.id);
+  render();
+  const el = document.querySelector('.p[data-id="' + target.id + '"]');
+  if (!el) return;
+  const smooth = !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY - 12,
+                    behavior: smooth ? 'smooth' : 'auto' });
+  el.classList.add('flash');
+  setTimeout(function(){ el.classList.remove('flash'); }, 1300);
+};
 
 /* ---------- 복습 목록 ---------- */
 document.getElementById('reviewbtn').onclick = function(){
