@@ -26,6 +26,7 @@ ipsi_math/
 ├─ dist/                   생성된 PDF (문제지 + 해설지)
 ├─ log/progress.md         무엇을 틀렸고 무엇을 처방했는지의 기록
 ├─ build/make_pdf.py       PDF 생성기
+├─ build/make_webapp.py    웹앱 생성기
 └─ CLAUDE.md               Claude가 따르는 작업 규약
 ```
 
@@ -46,7 +47,19 @@ GitHub에서 그대로 읽히고, 동시에 PDF의 원본이 됩니다.
 4. 같은 난이도의 **유사문항 3~5개를 새로 만들어** (답은 전부 코드로 검증)
 5. **문제지 PDF와 해설지 PDF**를 만들어 드립니다.
 
-### 2. PDF 만들기
+### 2. 웹앱으로 보기 (나은이용)
+
+**https://claude.ai/code/artifact/35b8893a-424a-4a1d-b756-1ea1fe4cf24e**
+
+폰·태블릿에서 열어 단원별로 문제를 풀고, 문항마다 `알겠음 / 헷갈림 / 모르겠음`을 표시합니다.
+막힌 지점을 한 줄 메모해두면 그게 다음 세트의 재료가 됩니다.
+문항이 늘어나면 아래 명령으로 다시 만들어 같은 주소에 올립니다.
+
+```bash
+python build/make_webapp.py
+```
+
+### 3. PDF 만들기
 
 ```bash
 python build/make_pdf.py --set sets/2026-09-04_9월모평_고난도6제.txt
@@ -67,7 +80,7 @@ python build/make_pdf.py --set sets/2026-09-04_9월모평_고난도6제.txt
 
 의존성은 없습니다. 파이썬 표준 라이브러리와 컴퓨터에 설치된 Chrome(또는 Edge)만 씁니다.
 
-### 3. 복습 세트 뽑기
+### 4. 복습 세트 뽑기
 
 ```bash
 python build/make_pdf.py --status wrong --name 9월_오답총정리
