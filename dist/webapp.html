@@ -31,11 +31,20 @@
   --shadow:none;
 }
 *{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
 body{margin:0;background:var(--paper);color:var(--ink);
   font-family:'IBM Plex Sans KR',system-ui,'Malgun Gothic',sans-serif;
   font-size:15px;line-height:1.7;-webkit-font-smoothing:antialiased;
-  padding-bottom:80px}
+  padding-bottom:104px}
 .wrap{max-width:720px;margin:0 auto;padding:0 16px}
+/* 터치 기기: 탭 시 회색 깜빡임·글자 선택·더블탭 확대 방지 */
+button,textarea{-webkit-tap-highlight-color:transparent;touch-action:manipulation}
+button{-webkit-user-select:none;user-select:none}
+/* 태블릿에서는 본문을 한 단계 키운다 */
+@media (min-width:768px){
+  body{font-size:16px}
+  .wrap{max-width:768px;padding:0 24px}
+}
 h1,h2,h3{font-family:'Gowun Batang',Georgia,serif;font-weight:700;margin:0;text-wrap:balance}
 .m,.stem i{font-family:Georgia,'Times New Roman','Gowun Batang',serif}
 .eyebrow{font-size:10.5px;font-weight:600;letter-spacing:.16em;color:var(--ink3)}
@@ -62,9 +71,9 @@ header h1{font-size:26px;letter-spacing:-.01em}
 .filters{display:flex;gap:7px;overflow-x:auto;padding:14px 0 4px;margin:0 -16px;
   padding-left:16px;padding-right:16px;scrollbar-width:none}
 .filters::-webkit-scrollbar{display:none}
-.fchip{flex:none;font-size:12.5px;padding:5px 12px;border:1px solid var(--rule);
+.fchip{flex:none;font-size:13px;padding:0 14px;min-height:40px;border:1px solid var(--rule);
   background:var(--card);color:var(--ink2);cursor:pointer;white-space:nowrap;border-radius:2px;
-  font-family:inherit}
+  font-family:inherit;display:inline-flex;align-items:center}
 .fchip[aria-pressed="true"]{background:var(--ink);color:var(--paper);border-color:var(--ink)}
 .fchip .c{opacity:.55;margin-left:5px;font-family:Georgia,serif}
 
@@ -93,8 +102,9 @@ header h1{font-size:26px;letter-spacing:-.01em}
 .choices{display:flex;flex-wrap:wrap;gap:5px 18px;margin-top:8px;font-family:Georgia,serif}
 
 .reveal{margin-top:12px;display:flex;gap:7px;flex-wrap:wrap}
-.rbtn{font-size:12.5px;padding:6px 13px;border:1px solid var(--rule);background:var(--card);
-  color:var(--ink2);cursor:pointer;font-family:inherit;border-radius:2px}
+.rbtn{font-size:13.5px;padding:0 18px;min-height:44px;border:1px solid var(--rule);background:var(--card);
+  color:var(--ink2);cursor:pointer;font-family:inherit;border-radius:2px;
+  display:inline-flex;align-items:center}
 .rbtn:hover{color:var(--ink);border-color:var(--ink3)}
 .rbtn[aria-pressed="true"]{background:var(--ink);color:var(--paper);border-color:var(--ink)}
 
@@ -117,42 +127,62 @@ header h1{font-size:26px;letter-spacing:-.01em}
 .marks{margin-top:15px;padding-top:13px;border-top:1px solid var(--rule2)}
 .marks .lab{color:var(--ink3);margin-bottom:7px}
 .mrow{display:flex;gap:7px}
-.mbtn{flex:1;font-size:13px;padding:9px 4px;border:1px solid var(--rule);background:var(--card);
+.mbtn{flex:1;font-size:14px;padding:4px;min-height:48px;border:1px solid var(--rule);background:var(--card);
   color:var(--ink2);cursor:pointer;font-family:inherit;border-radius:2px}
 .mbtn[aria-pressed="true"]{font-weight:600}
 .mbtn.ok[aria-pressed="true"]{background:var(--okbg);border-color:var(--ok);color:var(--ok)}
 .mbtn.mid[aria-pressed="true"]{background:var(--warnbg);border-color:var(--warn);color:var(--warn)}
 .mbtn.no[aria-pressed="true"]{background:var(--stopbg);border-color:var(--stop);color:var(--stop)}
-.note{margin-top:9px;width:100%;font-family:inherit;font-size:13.5px;padding:9px 11px;
-  border:1px solid var(--rule);background:var(--paper);color:var(--ink);resize:vertical;min-height:40px}
+.note{margin-top:9px;width:100%;font-family:inherit;font-size:16px;padding:11px 12px;
+  border:1px solid var(--rule);background:var(--paper);color:var(--ink);resize:vertical;min-height:58px;
+  line-height:1.6}
 .note:focus{outline:2px solid var(--markline);outline-offset:-1px}
 .notehint{font-size:11px;color:var(--ink3);margin-top:5px}
 
 /* ---- 하단 바 ---- */
 .bar{position:fixed;left:0;right:0;bottom:0;background:var(--card);border-top:1px solid var(--rule);
-  padding:10px 16px;z-index:30}
+  padding:10px 16px calc(10px + env(safe-area-inset-bottom));z-index:30}
 .barin{max-width:720px;margin:0 auto;display:flex;align-items:center;gap:12px;justify-content:space-between}
 .barin span{font-size:12px;color:var(--ink2)}
 .barin b{color:var(--stop)}
-.barbtn{font-size:12.5px;padding:7px 14px;border:1px solid var(--ink);background:var(--ink);
-  color:var(--paper);cursor:pointer;font-family:inherit;border-radius:2px}
+.barbtn{font-size:13.5px;padding:0 18px;min-height:44px;border:1px solid var(--ink);background:var(--ink);
+  color:var(--paper);cursor:pointer;font-family:inherit;border-radius:2px;flex:none}
 .barbtn[disabled]{opacity:.4;cursor:default}
 
 /* ---- 모달 ---- */
 .modal{position:fixed;inset:0;background:rgba(10,14,22,.55);z-index:40;display:none;
   align-items:flex-end;justify-content:center}
 .modal.on{display:flex}
-.sheet{background:var(--card);width:100%;max-width:720px;max-height:82vh;overflow-y:auto;
-  border-top:2px solid var(--ink);padding:20px 18px 28px}
+.sheet{background:var(--card);width:100%;max-width:720px;max-height:82vh;max-height:82dvh;overflow-y:auto;
+  -webkit-overflow-scrolling:touch;border-top:2px solid var(--ink);
+  padding:20px 18px calc(28px + env(safe-area-inset-bottom))}
 .sheet h2{font-size:19px;margin-bottom:4px}
 .sheet .sub{font-size:12.5px;color:var(--ink3);margin-bottom:16px}
 .qitem{border-top:1px solid var(--rule2);padding:11px 0}
 .qitem .t{font-weight:500;font-size:14px}
 .qitem .m2{font-size:12px;color:var(--ink3);margin-top:2px}
 .qitem .nt{font-size:13px;color:var(--ink2);margin-top:6px;padding:8px 10px;background:var(--paper)}
-.close{margin-top:18px;width:100%;font-size:13.5px;padding:11px;border:1px solid var(--rule);
+.close{margin-top:18px;width:100%;font-size:14px;min-height:48px;border:1px solid var(--rule);
   background:var(--card);color:var(--ink2);cursor:pointer;font-family:inherit}
 .empty{color:var(--ink3);font-size:13.5px;padding:18px 0}
+
+/* ---- 태블릿(아이패드) 가독성: 반드시 스타일시트 끝에 두어야 앞 규칙을 이긴다 ---- */
+@media (min-width:768px){
+  .stem{font-size:17px;line-height:1.9}
+  .panel{font-size:16px;line-height:1.85}
+  .phead{font-size:16px;padding:15px 17px}
+  .pmeta{font-size:12px}
+  .badge{font-size:11px}
+  .choices{gap:7px 26px;font-size:17px}
+  .cond{padding:10px 14px}
+  .eyebrow{font-size:11.5px}
+  header h1{font-size:30px}
+  .summary .n{font-size:26px}
+  .summary .l{font-size:12px}
+  .syncline{font-size:12.5px}
+  .barin span{font-size:13px}
+  .notehint{font-size:12px}
+}
 :focus-visible{outline:2px solid var(--markline);outline-offset:2px}
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
 </style>
