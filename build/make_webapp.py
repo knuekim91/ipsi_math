@@ -354,11 +354,13 @@ setSync(false, '이 기기에만 저장됩니다');
   } catch(e){ db = null; }
 })();
 
-function put(id, patch){
+function put(id, patch, opts){
   const cur = state[id] || { status:'', note:'' };
   const next = Object.assign({}, cur, patch, { at: new Date().toISOString() });
   state[id] = next;
-  saveLocal(); render();
+  saveLocal();
+  // 메모 저장은 silent — 목록을 다시 그리면 입력창이 파괴되어 포커스가 날아간다
+  if (!(opts && opts.silent)) render();
   if (db) {
     db.doc('progress/' + id).set({
       status: next.status || '', note: next.note || '', at: next.at
@@ -368,6 +370,10 @@ function put(id, patch){
 
 /* ---------- 렌더 ---------- */
 let filter = 'all';
+const pendingFlush = new Set();   // 아직 저장되지 않았을 수 있는 메모 입력창들
+function flushAll(){ pendingFlush.forEach(function(f){ try { f(); } catch (e) {} }); }
+document.addEventListener('visibilitychange', function(){ if (document.hidden) flushAll(); });
+window.addEventListener('pagehide', flushAll);
 const opened = new Set();
 const shown = {};   // id -> {idea:bool, sol:bool}
 
@@ -446,6 +452,7 @@ function renderList(){
       '</div>' +
     '</article>';
   }).join('');
+  pendingFlush.clear();
   bind();
 }
 
@@ -473,10 +480,13 @@ function bind(){
     const ta = card.querySelector('.note');
     if (ta) {
       let t = null;
-      ta.oninput = function(){
-        clearTimeout(t);
-        t = setTimeout(function(){ put(id, { note: ta.value }); }, 700);
+      const flush = function(){
+        clearTimeout(t); t = null;
+        if (((state[id] || {}).note || '') !== ta.value) put(id, { note: ta.value }, { silent: true });
       };
+      ta.oninput = function(){ clearTimeout(t); t = setTimeout(flush, 400); };
+      ta.onblur = flush;              // 입력창을 벗어날 때 확실히 저장
+      pendingFlush.add(flush);        // 앱 전환·화면 닫힘 대비
     }
   });
 }
@@ -496,7 +506,25 @@ function renderSummary(){
   document.getElementById('reviewbtn').disabled = (mid + no) === 0;
 }
 
-function render(){ renderFilters(); renderList(); renderSummary(); }
+// 어떤 이유로든 다시 그릴 때 입력 중이던 메모의 포커스와 커서 위치를 복원한다
+function render(){
+  const ae = document.activeElement;
+  let keep = null;
+  if (ae && ae.classList && ae.classList.contains('note')) {
+    const card = ae.closest('.p');
+    if (card) keep = { id: card.dataset.id, val: ae.value,
+                       s: ae.selectionStart, e: ae.selectionEnd };
+  }
+  renderFilters(); renderList(); renderSummary();
+  if (keep) {
+    const ta = document.querySelector('.p[data-id="' + keep.id + '"] .note');
+    if (ta) {
+      if (ta.value !== keep.val) ta.value = keep.val;
+      ta.focus();
+      try { ta.setSelectionRange(keep.s, keep.e); } catch (err) {}
+    }
+  }
+}
 render();
 
 /* ---------- 복습 목록 ---------- */
