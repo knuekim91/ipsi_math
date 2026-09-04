@@ -66,6 +66,8 @@ def collect():
                 "level": meta.get("level", ""),
                 "diff": meta.get("difficulty", ""),
                 "source": meta.get("source", ""),
+                "origin": meta.get("origin") or
+                          ("유사문항" if "자체 개발" in meta.get("source", "") else "기출"),
                 "core": meta.get("core", ""),
                 "answer": meta.get("answer", ""),
                 "q": sec.get("문제", ""),
@@ -90,6 +92,8 @@ TEMPLATE = r"""<title>수능 수학 발상 트레이너</title>
   --ok:#2A6A58; --okbg:rgba(42,106,88,.10);
   --warn:#9A6B12; --warnbg:rgba(154,107,18,.11);
   --stop:#A33A29; --stopbg:rgba(163,58,41,.10);
+  --new:#5B3FA0; --newbg:rgba(91,63,160,.13);
+  --mine:#8A4A0E; --minebg:rgba(138,74,14,.13);
   --shadow:0 1px 2px rgba(21,31,56,.06);
 }
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
@@ -99,6 +103,8 @@ TEMPLATE = r"""<title>수능 수학 발상 트레이너</title>
   --ok:#7CC7AE; --okbg:rgba(124,199,174,.12);
   --warn:#DFB765; --warnbg:rgba(223,183,101,.12);
   --stop:#E39683; --stopbg:rgba(227,150,131,.12);
+  --new:#C0AAF0; --newbg:rgba(192,170,240,.16);
+  --mine:#E8B37A; --minebg:rgba(232,179,122,.16);
   --shadow:none;
 }}
 :root[data-theme="dark"]{
@@ -108,6 +114,8 @@ TEMPLATE = r"""<title>수능 수학 발상 트레이너</title>
   --ok:#7CC7AE; --okbg:rgba(124,199,174,.12);
   --warn:#DFB765; --warnbg:rgba(223,183,101,.12);
   --stop:#E39683; --stopbg:rgba(227,150,131,.12);
+  --new:#C0AAF0; --newbg:rgba(192,170,240,.16);
+  --mine:#E8B37A; --minebg:rgba(232,179,122,.16);
   --shadow:none;
 }
 *{box-sizing:border-box}
@@ -170,6 +178,13 @@ header h1{font-size:26px;letter-spacing:-.01em}
 .pmeta{font-size:11px;color:var(--ink3);display:block;margin-top:1px}
 .badge{flex:none;font-size:10px;padding:2px 6px;border:1px solid var(--rule);color:var(--ink3);border-radius:2px}
 .badge.hard{color:var(--stop);border-color:color-mix(in srgb,var(--stop) 45%,transparent)}
+.badge.origin{font-weight:600;border-width:0;padding:3px 8px}
+.badge.origin.o-new{color:var(--new);background:var(--newbg)}
+.badge.origin.o-mine{color:var(--mine);background:var(--minebg)}
+.fchip.o-new[aria-pressed="false"]{color:var(--new);border-color:color-mix(in srgb,var(--new) 40%,transparent)}
+.fchip.o-new[aria-pressed="true"]{background:var(--new);border-color:var(--new);color:#fff}
+.fchip.o-mine[aria-pressed="false"]{color:var(--mine);border-color:color-mix(in srgb,var(--mine) 40%,transparent)}
+.fchip.o-mine[aria-pressed="true"]{background:var(--mine);border-color:var(--mine);color:#fff}
 .arrow{flex:none;width:0;height:0;border-left:5px solid var(--ink3);
   border-top:4px solid transparent;border-bottom:4px solid transparent;transition:transform .15s}
 .p[open] .arrow,.p.open .arrow{transform:rotate(90deg)}
@@ -392,6 +407,12 @@ PROBLEMS.forEach(function(p){
     UNITS.push({ key: p.unit, label: p.unitLabel });
 });
 
+function originClass(o){ return o === '유사문항' ? 'o-new' : o === '기출' ? '' : 'o-mine'; }
+function inFilter(p){
+  if (filter === 'all') return true;
+  if (filter.indexOf('origin:') === 0) return p.origin === filter.slice(7);
+  return p.unit === filter;
+}
 function statusClass(s){
   return s === 'ok' ? 's-ok' : s === 'mid' ? 's-mid' : s === 'no' ? 's-no' : '';
 }
@@ -405,6 +426,17 @@ function renderFilters(){
   const el = document.getElementById('filters');
   const parts = ['<button class="fchip" data-f="all" aria-pressed="' + (filter==='all') +
     '">전체<span class="c">' + PROBLEMS.length + '</span></button>'];
+  // 기출이 아닌 문항(유사문항·오답노트)을 앞쪽에 둬서 바로 찾을 수 있게 한다
+  const origins = [];
+  PROBLEMS.forEach(function(p){
+    if (p.origin !== '기출' && origins.indexOf(p.origin) < 0) origins.push(p.origin);
+  });
+  origins.forEach(function(o){
+    const n = PROBLEMS.filter(function(p){ return p.origin === o; }).length;
+    const key = 'origin:' + o;
+    parts.push('<button class="fchip ' + originClass(o) + '" data-f="' + esc(key) +
+      '" aria-pressed="' + (filter === key) + '">' + esc(o) + '<span class="c">' + n + '</span></button>');
+  });
   UNITS.forEach(function(u){
     const n = PROBLEMS.filter(function(p){ return p.unit === u.key; }).length;
     parts.push('<button class="fchip" data-f="' + esc(u.key) + '" aria-pressed="' +
@@ -417,7 +449,7 @@ function renderFilters(){
 }
 
 function renderList(){
-  const items = PROBLEMS.filter(function(p){ return filter === 'all' || p.unit === filter; });
+  const items = PROBLEMS.filter(inFilter);
   document.getElementById('list').innerHTML = items.map(function(p){
     const st = (state[p.id] || {}).status || '';
     const note = (state[p.id] || {}).note || '';
@@ -430,6 +462,8 @@ function renderList(){
         '<span class="arrow"></span>' +
         '<span class="ptitle"><span class="ptopic">' + esc(p.topic) + '</span>' +
           '<span class="pmeta">' + esc(p.unitLabel) + ' · ' + esc(p.source) + '</span></span>' +
+        (p.origin !== '기출'
+          ? '<span class="badge origin ' + originClass(p.origin) + '">' + esc(p.origin) + '</span>' : '') +
         '<span class="badge' + (hard ? ' hard' : '') + '">' + esc(p.level) + '</span>' +
       '</button>' +
       '<div class="pbody">' +
@@ -548,7 +582,7 @@ function unsolvedIn(list){
 let lastJumpId = null;   // 마지막으로 이동한 문항 (스크롤 위치보다 안정적)
 
 document.getElementById('nextbtn').onclick = function(){
-  let pool = unsolvedIn(PROBLEMS.filter(function(p){ return filter === 'all' || p.unit === filter; }));
+  let pool = unsolvedIn(PROBLEMS.filter(inFilter));
   if (!pool.length && filter !== 'all') {   // 지금 단원에 없으면 전체로 넓힌다
     filter = 'all'; lastJumpId = null; render();
     pool = unsolvedIn(PROBLEMS);
