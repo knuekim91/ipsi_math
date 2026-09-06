@@ -111,6 +111,22 @@ def plain(html):
     return re.sub(r"\s+", " ", t).strip()
 
 
+def stamp(n):
+    """index.html 의 app.css / data.js / app.js 에 ?v=... 를 붙인다.
+
+    안 붙이면 나은이 브라우저가 옛 data.js 를 그대로 써서
+    새 문항이나 고친 풀이가 안 보인다. 실제로 한 번 겪었다.
+    """
+    import datetime
+    v = datetime.datetime.now().strftime("%Y%m%d%H%M")
+    p = os.path.join(ROOT, "docs", "index.html")
+    s = io.open(p, encoding="utf-8").read()
+    for f in ("app.css", "data.js", "app.js"):
+        s = re.sub('"' + re.escape(f) + r'(\?v=\d+)?"',
+                   '"%s?v=%s"' % (f, v), s)
+    io.open(p, "w", encoding="utf-8").write(s)
+
+
 def build():
     probs = []
     for unit in sorted(UNITS):
@@ -178,6 +194,7 @@ def build():
                "years": years, "exams": exams, "exam": "2026-11-19"}
     io.open(OUT, "w", encoding="utf-8").write(
         "window.DATA = " + json.dumps(payload, ensure_ascii=False) + ";\n")
+    stamp(len(probs))
     print("문항 %d개 -> %s (%.0f KB)" % (len(probs), OUT, os.path.getsize(OUT) / 1024))
     for y in years:
         print("  %s  %d문항  (%s)" % (y["label"], y["count"],

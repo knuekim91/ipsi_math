@@ -215,6 +215,10 @@ python build/make_webapp.py      # 문항이 추가/수정될 때마다 실행
 | 단원 필터 띠 | `#toolbar` | `#filt` 칩. **목록을 따라다니는 sticky** |
 | 목록 | `#list` | 문항 카드 |
 
+`build/make_site.py`가 빌드할 때마다 `index.html`의 `app.css` · `data.js` · `app.js`에
+`?v=<타임스탬프>`를 새로 박는다. **이걸 빼면 나은이 브라우저가 옛 `data.js`를 계속 써서
+새 문항이나 고친 풀이가 안 보인다.** 실제로 한 번 겪었다.
+
 한 줄 배치는 `.ugrid`의 `--n`(그 과목의 단원 수)이 정한다. `app.js`의 `paintUnits()`가
 `style="--n:3"`처럼 넣어 주므로 **CSS를 고칠 필요가 없다.**
 
