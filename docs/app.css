@@ -355,3 +355,39 @@ button,input{font-family:inherit}
 .slot{font:600 20px/1.7 var(--mono);letter-spacing:.32em;text-align:center;
   margin:14px 0;color:var(--ink)}
 .slot span{font:500 12px/1 var(--body);letter-spacing:.02em;color:var(--dim)}
+
+/* ─────────── 추천 강좌 ─────────── */
+.lec{margin-top:16px;padding-top:14px;border-top:1px solid var(--line2)}
+.lec .lab{color:var(--tx3)}
+.lecrow{
+  display:flex;align-items:center;gap:10px;margin-top:9px;padding:11px 13px;
+  border:1px solid var(--line);border-radius:11px;background:var(--card2);
+  color:var(--tx);text-decoration:none;transition:border-color .16s,transform .16s;
+}
+.lecrow:hover{transform:translateY(-1px);border-color:var(--c,hsl(var(--h) 82% 64%))}
+.lecrow i{font-style:normal;font-size:12px;flex:none;
+  color:var(--c,hsl(var(--h) 82% 64%))}
+.lecrow b{font-size:13.5px;font-weight:600;flex:none}
+.lecrow span{font-size:11.5px;color:var(--tx3);overflow:hidden;
+  text-overflow:ellipsis;white-space:nowrap;margin-left:auto;font-family:var(--mono)}
+.lecrow.fixed{border-color:color-mix(in srgb,var(--c,#7DE2FF) 45%,var(--line))}
+.lecrow.fixed span{font-family:var(--body);letter-spacing:.02em;
+  color:var(--c,hsl(var(--h) 82% 64%));font-weight:600}
+.lecin{display:flex;gap:7px;margin-top:9px}
+.lecurl{
+  flex:1;min-width:0;font-size:15px;min-height:44px;padding:9px 13px;color:var(--tx);
+  background:var(--card);border:1px solid var(--line);border-radius:11px;-webkit-appearance:none;
+}
+.lecurl::placeholder{color:var(--tx3);font-size:13.5px}
+.lecsave,.lecdel{
+  flex:none;min-height:44px;padding:0 15px;border-radius:11px;cursor:pointer;
+  border:1px solid var(--line);background:var(--card2);color:var(--tx2);font-size:13.5px;
+}
+.lecsave:hover,.lecdel:hover{color:var(--tx);border-color:var(--ink)}
+.lecdel{padding:0 13px;color:var(--tx3)}
+.lecshare{
+  width:100%;margin-top:8px;min-height:40px;border-radius:11px;cursor:pointer;
+  border:1px dashed var(--line);background:none;color:var(--tx3);font-size:12.5px;
+}
+.lecshare:hover{color:var(--tx);border-color:var(--ink)}
+.lec .hint{margin-top:8px}

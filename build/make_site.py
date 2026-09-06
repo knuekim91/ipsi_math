@@ -146,6 +146,7 @@ def build():
                 "source": meta.get("source", ""),
                 "exam": meta.get("exam", ""),
                 "origin": meta.get("origin", "기출"),
+                "lecture": meta.get("lecture", ""),
                 "core": meta.get("core", ""),
                 "answer": meta.get("answer", ""),
                 "tags": [t.strip() for t in

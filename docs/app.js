@@ -21,6 +21,40 @@
   var open = {};            // id -> {card, idea, sol}
 
   /* ───────── 유틸 ───────── */
+
+  /* 주소로 쓸 수 있는 것만 통과시킨다. javascript: 같은 것은 막는다. */
+  function safeUrl(u) {
+    u = String(u == null ? "" : u).trim();
+    if (!u) return "";
+    if (/^[a-zA-Z][a-zA-Z0-9+.\-]*:/.test(u)) {          // 이미 스킴이 있으면
+      if (!/^https?:\/\//i.test(u)) return "";           // http(s) 아니면 거절
+    } else {
+      u = "https://" + u;                                // 그냥 붙여넣은 주소
+    }
+    try {
+      var x = new URL(u);
+      return (x.protocol === "http:" || x.protocol === "https:") ? x.href : "";
+    } catch (e) { return ""; }
+  }
+
+  /* 화면에 보여 줄 짧은 이름 (유튜브면 그렇게 적어 준다) */
+  function urlLabel(u) {
+    try {
+      var h = new URL(u).hostname.replace(/^www\./, "");
+      if (/youtu\.?be/.test(h)) return "YouTube";
+      return h;
+    } catch (e) { return "링크"; }
+  }
+
+  /* 문항 파일의 lecture 는 "제목 | 주소" 또는 "주소" */
+  function fixedLec(p) {
+    var raw = (p.lecture || "").trim();
+    if (!raw) return null;
+    var i = raw.lastIndexOf("|");
+    var name = i > 0 ? raw.slice(0, i).trim() : "";
+    var url = safeUrl(i > 0 ? raw.slice(i + 1) : raw);
+    return url ? { url: url, name: name || urlLabel(url) } : null;
+  }
   function esc(s) {
     return String(s == null ? "" : s).replace(/&/g, "&amp;").replace(/</g, "&lt;")
       .replace(/>/g, "&gt;").replace(/"/g, "&quot;");
@@ -223,6 +257,31 @@
           (p.know ? '<div class="know"><span class="lab">노하우</span>' + p.know + '</div>' : "") +
           '<div class="ansbig"><span>정답</span><b>' + esc(p.answer) + '</b></div>' +
           '</div>' : "") +
+        (function () {
+          var fx = fixedLec(p), my = safeUrl(s.lec);
+          var rows = "";
+          if (fx) {
+            rows += '<a class="lecrow fixed" href="' + esc(fx.url) + '" target="_blank"' +
+              ' rel="noopener noreferrer"><i>▶</i><b>' + esc(fx.name) + '</b>' +
+              '<span>추천</span></a>';
+          }
+          if (my) {
+            rows += '<a class="lecrow" href="' + esc(my) + '" target="_blank"' +
+              ' rel="noopener noreferrer"><i>▶</i><b>' + esc(urlLabel(my)) + '</b>' +
+              '<span>' + esc(my.replace(/^https?:\/\//, "").slice(0, 46)) + '</span></a>';
+          }
+          return '<div class="lec"><span class="lab">추천 강좌</span>' + rows +
+            '<div class="lecin">' +
+              '<input class="lecurl" type="url" inputmode="url" autocomplete="off"' +
+                ' placeholder="유튜브 등 강의 주소를 붙여 넣으세요"' +
+                ' aria-label="추천 강좌 주소" value="' + esc(s.lec || "") + '">' +
+              '<button class="lecsave">저장</button>' +
+              (my ? '<button class="lecdel" aria-label="지우기">✕</button>' : "") +
+            '</div>' +
+            (my ? '<button class="lecshare">이 강좌를 모두에게 보이도록 요청하기</button>' : "") +
+            '<div class="hint">여기에 넣은 주소는 <b>이 기기에만</b> 저장됩니다. ' +
+            '둘 다 보이게 하려면 위 버튼으로 알려 주세요.</div></div>';
+        })() +
         '<div class="react"><span class="lab">풀고 나서</span><div class="rrow">' +
           '<button class="rb ok" data-r="ok" aria-pressed="' + (s.status === "ok") + '">알겠음</button>' +
           '<button class="rb mid" data-r="mid" aria-pressed="' + (s.status === "mid") + '">헷갈림</button>' +
@@ -319,6 +378,27 @@
         ta.onblur = flush;
       }
 
+      var lu = c.querySelector(".lecurl");
+      if (lu) {
+        var saveLec = function () {
+          var v = lu.value.trim();
+          if (v && !safeUrl(v)) { toast("주소를 확인해 주세요"); return; }
+          state[id] = Object.assign({}, st(id), { lec: v });
+          save(); paintList();
+          toast(v ? "저장했어요" : "지웠어요");
+        };
+        var sb = c.querySelector(".lecsave");
+        if (sb) sb.onclick = saveLec;
+        lu.onkeydown = function (e) { if (e.key === "Enter") { e.preventDefault(); saveLec(); } };
+        var db = c.querySelector(".lecdel");
+        if (db) db.onclick = function () { lu.value = ""; saveLec(); };
+        var shb = c.querySelector(".lecshare");
+        if (shb) shb.onclick = function () {
+          var p = P.filter(function (x) { return x.id === id; })[0];
+          shareLec(p, safeUrl(st(id).lec));
+        };
+      }
+
       var send = c.querySelector(".sendbtn");
       if (send) {
         var ready = function () {
@@ -350,6 +430,24 @@
       "같은 수준의 유사문항을 만들어 주세요.");
     return L.join(NL);
   }
+  function lecText(p, url) {
+    return ["[ipsi_math 강좌]",
+      "문항: " + p.no + "번 · " + p.id + " · " + p.topic,
+      "출처: " + p.source,
+      "링크: " + url,
+      "",
+      "[요청] 이 강좌를 문항 파일의 lecture 에 넣어 주세요."].join(NL);
+  }
+  function shareLec(p, url) {
+    if (!url) return;
+    var txt = lecText(p, url);
+    if (navigator.share) {
+      navigator.share({ title: "ipsi_math 강좌", text: txt }).then(
+        function () { toast("보냈어요"); },
+        function (e) { if (!e || e.name !== "AbortError") copy(txt, "복사했어요. 붙여넣어 보내세요"); });
+    } else copy(txt, "복사했어요. Claude에게 붙여넣으세요");
+  }
+
   function share(p) {
     var txt = askText(p);
     if (navigator.share) {
