@@ -48,6 +48,15 @@ def parse(path):
     return meta, sec
 
 
+def strip_html(h):
+    """검색용 평문. 태그를 지우고 실체 참조를 되돌린다."""
+    t = re.sub(r"<[^>]+>", " ", h or "")
+    for a, b in (("&nbsp;", " "), ("&lt;", "<"), ("&gt;", ">"), ("&amp;", "&"),
+                 ("&lsquo;", "'"), ("&rsquo;", "'"), ("&middot;", "·")):
+        t = t.replace(a, b)
+    return re.sub(r"\s+", " ", t).strip()
+
+
 def collect():
     out = []
     for unit in sorted(os.listdir(os.path.join(ROOT, "units"))):
@@ -77,6 +86,13 @@ def collect():
                 "trap": sec.get("함정", ""),
                 "know": sec.get("노하우", ""),
             })
+            it = out[-1]
+            it["qplain"] = strip_html(it["q"])
+            it["search"] = " ".join([
+                it["id"], it["topic"], it["source"], it["origin"], it["level"],
+                it["core"], meta.get("tags", ""), it["qplain"],
+                strip_html(it["idea"]), strip_html(it["know"]),
+            ]).lower()
     return out
 
 
@@ -155,13 +171,35 @@ header h1{font-size:26px;letter-spacing:-.01em}
 .summary .l{font-size:11px;color:var(--ink3);margin-top:2px}
 .summary .ok .n{color:var(--ok)} .summary .warn .n{color:var(--warn)} .summary .stop .n{color:var(--stop)}
 
+/* ---- 검색 ---- */
+.searchbox{position:relative;margin-top:16px}
+.searchbox input{width:100%;font-family:inherit;font-size:16px;min-height:48px;
+  padding:12px 44px 12px 14px;border:1px solid var(--rule);background:var(--card);
+  color:var(--ink);border-radius:2px;-webkit-appearance:none;appearance:none}
+.searchbox input::placeholder{color:var(--ink3)}
+.searchbox input:focus{outline:2px solid var(--markline);outline-offset:-1px}
+.searchbox input::-webkit-search-cancel-button{display:none}
+.searchbox .clr{position:absolute;right:5px;top:50%;transform:translateY(-50%);
+  width:38px;height:38px;border:0;background:none;color:var(--ink3);font-size:15px;
+  cursor:pointer;display:none;font-family:inherit}
+.searchbox.on .clr{display:block}
+.psnip{display:block;font-size:11.5px;color:var(--ink2);margin-top:3px;
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.psnip b{background:linear-gradient(transparent 55%,var(--mark) 55%);font-weight:600}
+.hitcount{font-size:12.5px;color:var(--ink2);margin-right:auto}
+.hitcount b{color:var(--ink)}
+.noresult{text-align:center;color:var(--ink3);font-size:14px;padding:28px 10px}
+.noresult button{margin-top:10px;font-family:inherit;font-size:13.5px;min-height:44px;
+  padding:0 16px;border:1px solid var(--rule);background:var(--card);color:var(--ink2);
+  cursor:pointer;border-radius:2px}
+
 /* ---- 필터 ---- */
-.filters{display:flex;gap:7px;overflow-x:auto;padding:14px 0 4px;margin:0 -16px;
-  padding-left:16px;padding-right:16px;scrollbar-width:none}
-.filters::-webkit-scrollbar{display:none}
-.fchip{flex:none;font-size:13px;padding:0 14px;min-height:40px;border:1px solid var(--rule);
+.filters{display:flex;flex-wrap:wrap;gap:7px;padding:12px 0 0}
+.filters.units{padding-top:7px}
+.fchip{flex:none;font-size:13px;padding:0 13px;min-height:40px;border:1px solid var(--rule);
   background:var(--card);color:var(--ink2);cursor:pointer;white-space:nowrap;border-radius:2px;
   font-family:inherit;display:inline-flex;align-items:center}
+.filters.units .fchip{font-size:12.5px;padding:0 11px;min-height:38px}
 .fchip[aria-pressed="true"]{background:var(--ink);color:var(--paper);border-color:var(--ink)}
 .fchip .c{opacity:.55;margin-left:5px;font-family:Georgia,serif}
 
@@ -181,7 +219,7 @@ header h1{font-size:26px;letter-spacing:-.01em}
   display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700}
 .selbtn[aria-pressed="true"] .box{background:var(--indigo);border-color:var(--indigo);color:#fff}
 .p.sel{box-shadow:inset 3px 0 0 var(--indigo), var(--shadow)}
-.listtools{display:flex;justify-content:flex-end;margin-top:12px}
+.listtools{display:flex;justify-content:flex-end;align-items:center;gap:12px;margin-top:12px}
 .listtools button{font-size:12.5px;color:var(--ink2);background:none;border:0;cursor:pointer;
   font-family:inherit;padding:6px 2px;text-decoration:underline;text-underline-offset:3px}
 .ptitle{flex:1;min-width:0}
@@ -341,8 +379,15 @@ header h1{font-size:26px;letter-spacing:-.01em}
     <div class="stop"><div class="n" id="n-no">0</div><div class="l">모르겠음</div></div>
   </div>
 
-  <div class="filters" id="filters"></div>
-  <div class="listtools"><button id="selall">보이는 문항 모두 선택</button></div>
+  <div class="searchbox" id="searchbox">
+    <input id="q" type="search" inputmode="search" autocomplete="off"
+           placeholder="주제 · 문제 내용 · 출처로 찾기 (예: 로그, 중복조합, 모평)"
+           aria-label="문항 검색">
+    <button class="clr" id="qclear" aria-label="검색어 지우기">✕</button>
+  </div>
+  <div class="filters" id="filters-origin"></div>
+  <div class="filters units" id="filters-unit"></div>
+  <div class="listtools"><span class="hitcount" id="hitcount"></span><button id="selall">보이는 문항 모두 선택</button></div>
   <div class="list" id="list"></div>
 </div>
 
@@ -455,6 +500,7 @@ function put(id, patch, opts){
 
 /* ---------- 렌더 ---------- */
 let filter = 'all';
+let query = '';
 const pendingFlush = new Set();   // 아직 저장되지 않았을 수 있는 메모 입력창들
 function flushAll(){ pendingFlush.forEach(function(f){ try { f(); } catch (e) {} }); }
 document.addEventListener('visibilitychange', function(){ if (document.hidden) flushAll(); });
@@ -469,10 +515,29 @@ PROBLEMS.forEach(function(p){
 });
 
 function originClass(o){ return o === '유사문항' ? 'o-new' : o === '기출' ? '' : 'o-mine'; }
-function inFilter(p){
+function inChip(p){
   if (filter === 'all') return true;
   if (filter.indexOf('origin:') === 0) return p.origin === filter.slice(7);
   return p.unit === filter;
+}
+function inQuery(p){
+  return query === '' || (p.search || '').indexOf(query) >= 0;
+}
+// 목록·바로가기·모두선택이 모두 '지금 보이는 것'을 기준으로 움직인다
+function inFilter(p){ return inChip(p) && inQuery(p); }
+
+// 검색어가 문제 본문에서 걸렸을 때 그 앞뒤를 조금 보여준다
+function snippet(p){
+  if (query === '') return '';
+  if ((p.topic || '').toLowerCase().indexOf(query) >= 0) return '';
+  const plain = p.qplain || '';
+  const i = plain.toLowerCase().indexOf(query);
+  if (i < 0) return '';
+  const from = Math.max(0, i - 24);
+  const head = (from > 0 ? '… ' : '') + plain.slice(from, i);
+  const hit = plain.slice(i, i + query.length);
+  const tail = plain.slice(i + query.length, i + query.length + 40);
+  return '<span class="psnip">' + esc(head) + '<b>' + esc(hit) + '</b>' + esc(tail) + '…</span>';
 }
 function statusClass(s){
   return s === 'ok' ? 's-ok' : s === 'mid' ? 's-mid' : s === 'no' ? 's-no' : '';
@@ -483,34 +548,53 @@ function esc(s){
     .replace(/"/g,'&quot;');
 }
 
+const ORIGIN_ORDER = ['유사문항', '오답노트'];
+
 function renderFilters(){
-  const el = document.getElementById('filters');
-  const parts = ['<button class="fchip" data-f="all" aria-pressed="' + (filter==='all') +
+  // 1줄: 전체 + 출처(유사문항·오답노트)
+  const top = ['<button class="fchip" data-f="all" aria-pressed="' + (filter==='all') +
     '">전체<span class="c">' + PROBLEMS.length + '</span></button>'];
-  // 기출이 아닌 문항(유사문항·오답노트)을 앞쪽에 둬서 바로 찾을 수 있게 한다
-  const origins = [];
-  PROBLEMS.forEach(function(p){
+  const origins = ORIGIN_ORDER.filter(function(o){
+    return PROBLEMS.some(function(p){ return p.origin === o; });
+  });
+  PROBLEMS.forEach(function(p){          // 앞으로 새 출처가 생겨도 빠지지 않게
     if (p.origin !== '기출' && origins.indexOf(p.origin) < 0) origins.push(p.origin);
   });
   origins.forEach(function(o){
     const n = PROBLEMS.filter(function(p){ return p.origin === o; }).length;
     const key = 'origin:' + o;
-    parts.push('<button class="fchip ' + originClass(o) + '" data-f="' + esc(key) +
+    top.push('<button class="fchip ' + originClass(o) + '" data-f="' + esc(key) +
       '" aria-pressed="' + (filter === key) + '">' + esc(o) + '<span class="c">' + n + '</span></button>');
   });
-  UNITS.forEach(function(u){
+
+  // 2줄: 단원
+  const units = UNITS.map(function(u){
     const n = PROBLEMS.filter(function(p){ return p.unit === u.key; }).length;
-    parts.push('<button class="fchip" data-f="' + esc(u.key) + '" aria-pressed="' +
-      (filter===u.key) + '">' + esc(u.label) + '<span class="c">' + n + '</span></button>');
+    return '<button class="fchip" data-f="' + esc(u.key) + '" aria-pressed="' +
+      (filter===u.key) + '">' + esc(u.label) + '<span class="c">' + n + '</span></button>';
   });
-  el.innerHTML = parts.join('');
-  el.querySelectorAll('.fchip').forEach(function(b){
+
+  document.getElementById('filters-origin').innerHTML = top.join('');
+  document.getElementById('filters-unit').innerHTML = units.join('');
+  document.querySelectorAll('.filters .fchip').forEach(function(b){
     b.onclick = function(){ filter = b.dataset.f; lastJumpId = null; render(); };
   });
 }
 
 function renderList(){
   const items = PROBLEMS.filter(inFilter);
+  if (!items.length) {
+    const wider = query !== '' && filter !== 'all' &&
+                  PROBLEMS.filter(inQuery).length > 0;
+    document.getElementById('list').innerHTML =
+      '<div class="noresult">찾는 문항이 없습니다.' +
+      (wider ? '<br><button id="widen">전체에서 다시 찾기 (' +
+               PROBLEMS.filter(inQuery).length + ')</button>' : '') + '</div>';
+    if (wider) document.getElementById('widen').onclick = function(){
+      filter = 'all'; lastJumpId = null; render();
+    };
+    return;
+  }
   document.getElementById('list').innerHTML = items.map(function(p){
     const st = (state[p.id] || {}).status || '';
     const note = (state[p.id] || {}).note || '';
@@ -525,7 +609,8 @@ function renderList(){
         '<button class="pmain" aria-expanded="' + isOpen + '">' +
           '<span class="arrow"></span>' +
           '<span class="ptitle"><span class="ptopic">' + esc(p.topic) + '</span>' +
-            '<span class="pmeta">' + esc(p.unitLabel) + ' · ' + esc(p.source) + '</span></span>' +
+            '<span class="pmeta">' + esc(p.unitLabel) + ' · ' + esc(p.source) + '</span>' +
+            snippet(p) + '</span>' +
           (p.origin !== '기출'
             ? '<span class="badge origin ' + originClass(p.origin) + '">' + esc(p.origin) + '</span>' : '') +
           '<span class="badge' + (hard ? ' hard' : '') + '">' + esc(p.level) + '</span>' +
@@ -634,6 +719,9 @@ function renderSummary(){
   const allSel = vis.length > 0 && vis.every(function(p){ return selected.has(p.id); });
   document.getElementById('selall').textContent =
     allSel ? '선택 모두 해제' : '보이는 문항 모두 선택 (' + vis.length + ')';
+  document.getElementById('selall').style.display = vis.length ? '' : 'none';
+  document.getElementById('hitcount').innerHTML =
+    query === '' ? '' : '검색 결과 <b>' + vis.length + '</b>개';
 }
 
 // 어떤 이유로든 다시 그릴 때 입력 중이던 메모의 포커스와 커서 위치를 복원한다
@@ -656,6 +744,25 @@ function render(){
   }
 }
 render();
+
+/* ---------- 검색 ---------- */
+(function(){
+  const box = document.getElementById('searchbox');
+  const input = document.getElementById('q');
+  const apply = function(){
+    query = input.value.trim().toLowerCase();
+    box.classList.toggle('on', input.value !== '');
+    lastJumpId = null;
+    render();                       // 검색창은 목록 밖이라 포커스가 유지된다
+  };
+  input.addEventListener('input', apply);
+  input.addEventListener('keydown', function(e){
+    if (e.key === 'Escape') { input.value = ''; apply(); input.blur(); }
+  });
+  document.getElementById('qclear').onclick = function(){
+    input.value = ''; apply(); input.focus();
+  };
+})();
 
 /* ---------- 선택 · 내보내기 ---------- */
 document.getElementById('selall').onclick = function(){
