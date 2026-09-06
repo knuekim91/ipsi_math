@@ -177,10 +177,16 @@ button,input{font-family:inherit}
 #qx{position:absolute;right:6px;top:50%;transform:translateY(-50%);width:34px;height:34px;
   border:0;background:none;color:var(--tx3);cursor:pointer;display:none;font-size:14px}
 .search.on #qx{display:block}
-.views{display:grid;grid-template-columns:1fr 1fr;gap:3px;background:var(--card2);
-  border:1px solid var(--line);border-radius:12px;padding:3px;margin-top:auto}
-.vw{border:0;background:none;color:var(--tx3);font-size:13px;padding:0 13px;min-height:38px;cursor:pointer;border-radius:9px}
-.vw.on{background:var(--card2);color:var(--tx);box-shadow:var(--glow)}
+.views{display:grid;grid-template-columns:1fr 1fr;gap:4px;background:var(--card2);
+  border:1px solid var(--line);border-radius:12px;padding:4px;margin-top:auto}
+.vw{border:0;background:none;color:var(--tx3);font-size:13.5px;font-weight:500;
+  padding:0 13px;min-height:40px;cursor:pointer;border-radius:9px;
+  transition:background .16s,color .16s,box-shadow .16s}
+.vw:hover{color:var(--ink)}
+/* 선택된 쪽은 진하게 반전시켜 한눈에 보이게 한다 */
+.vw.on{background:var(--ink);color:var(--bg);font-weight:700;
+  box-shadow:0 2px 10px -3px color-mix(in srgb,var(--ink) 55%,transparent)}
+.vw.on:hover{color:var(--bg)}
 .filt{display:flex;gap:7px;flex-wrap:wrap}
 .fc{
   --c:hsl(var(--h,220) 82% 64%);

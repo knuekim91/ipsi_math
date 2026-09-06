@@ -32,4 +32,4 @@ answer: 39
 
 ## 노하우
 
-<b><span class='m'>|F(x)|</span>가 미분가능 ⟺ <span class='m'>F</span>가 그 점에서 부호를 바꾸지 않는다 ⟺ 근이라면 짝수 위수(중근).</b> 절댓값이 씌워진 다항함수가 나오면 이 문장부터 쓴다.<br><br>그리고 <b>두 함수의 차 <span class='m'>f−g</span>와 합 <span class='m'>f+g</span>가 같이 나오면 <span class='m'>p = f−g</span> 하나로 묶는다.</b> 합은 <span class='m'>f+g = p + 2g</span>로 다시 쓸 수 있어 미지수가 <span class='m'>p</span>와 <span class='m'>g</span> 둘로 정리된다. 여기서 <span class='m'>g</span>는 일차함수라 값·기울기 두 개면 완전히 결정되고, 그 두 개를 <span class='m'>x=1</span>의 연속·미분 조건이 정확히 하나씩 준다.
+<b><span class='m'>|F(x)|</span>가 미분가능 ⟺ <span class='m'>F</span>가 그 점에서 부호를 바꾸지 않는다 ⟺ 근이라면 중근.</b> 절댓값이 씌워진 다항함수가 나오면 이 문장부터 쓴다.<br><br>그리고 <b>두 함수의 차 <span class='m'>f−g</span>와 합 <span class='m'>f+g</span>가 같이 나오면 <span class='m'>p = f−g</span> 하나로 묶는다.</b> 합은 <span class='m'>f+g = p + 2g</span>로 다시 쓸 수 있어 미지수가 <span class='m'>p</span>와 <span class='m'>g</span> 둘로 정리된다. 여기서 <span class='m'>g</span>는 일차함수라 값·기울기 두 개면 완전히 결정되고, 그 두 개를 <span class='m'>x=1</span>의 연속·미분 조건이 정확히 하나씩 준다.
