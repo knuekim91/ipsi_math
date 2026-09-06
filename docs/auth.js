@@ -122,7 +122,15 @@
   function paintAccount() {
     var box = el("acct");
     if (!box) return;
-    if (!API) { box.innerHTML = ""; return; }
+
+    /* 서버를 아직 안 붙였어도 버튼은 보여 준다.
+       숨겨 두면 기능이 있는지조차 알 수 없다. */
+    if (!API) {
+      box.innerHTML = '<button class="acbtn dim" id="openlogin">로그인' +
+        '<em>준비 중</em></button>';
+      el("openlogin").onclick = function () { openDlg("setup"); };
+      return;
+    }
 
     if (!me) {
       box.innerHTML = '<button class="acbtn" id="openlogin">로그인</button>';
@@ -155,6 +163,20 @@
   function closeDlg() { el("logindlg").classList.remove("on"); }
 
   function paintDlg() {
+    if (mode === "setup") {
+      el("logintitle").textContent = "로그인 준비 중";
+      el("loginbody").innerHTML =
+        '<p class="lnote">로그인 기능은 <b>다 만들어져 있지만</b> 아직 서버에 연결되지 않았습니다. ' +
+        '연결하면 진도·메모·추천 강좌가 <b>아이패드와 컴퓨터 사이에서 자동으로 맞춰집니다.</b></p>' +
+        '<p class="lnote">연결하려면 저장소의 <b>server/README.md</b> 대로 ' +
+        'Google Apps Script를 배포하고, 나온 주소를 <b>docs/config.js</b>에 넣으면 됩니다. ' +
+        '10분이면 끝나고, Claude에게 주소만 주셔도 됩니다.</p>' +
+        '<p class="lnote dimmer">그때까지는 진도가 <b>이 기기에만</b> 저장됩니다. ' +
+        '문제를 푸는 데는 아무 지장이 없습니다.</p>';
+      el("loginsubmit").textContent = "알겠습니다";
+      el("loginswap").textContent = "";
+      return;
+    }
     var isNew = mode === "signup";
     el("logintitle").textContent = isNew ? "회원가입" : "로그인";
     el("loginbody").innerHTML =
@@ -181,6 +203,7 @@
   }
 
   function submit() {
+    if (mode === "setup") { closeDlg(); return; }
     var err = el("f-err");
     err.textContent = "";
     var id = (el("f-id").value || "").trim().toLowerCase();
@@ -215,11 +238,6 @@
 
   /* ───────── 시작 ───────── */
   function boot() {
-    if (!API) {                       // 서버 주소가 없으면 조용히 물러난다
-      var b = el("acct");
-      if (b) b.innerHTML = "";
-      return;
-    }
     el("loginsubmit").onclick = submit;
     el("loginswap").onclick = function () { mode = (mode === "login" ? "signup" : "login"); paintDlg(); };
     el("loginx").onclick = closeDlg;
@@ -231,6 +249,7 @@
     });
 
     paintAccount();
+    if (!API) return;                 // 서버가 없으면 동기화는 하지 않는다
     window.IPSI.onChange = schedulePush;
     if (me) pull();
   }
