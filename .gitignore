@@ -5,3 +5,5 @@ Thumbs.db
 .DS_Store
 build/chromeprof/
 *.tmp
+dist/_*.html
+dist/_*.json
