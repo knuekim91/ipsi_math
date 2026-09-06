@@ -9,6 +9,12 @@
   --ok:#4ADE80; --mid:#FBBF24; --no:#FB7185;
   --glow:0 0 0 1px rgba(255,255,255,.04), 0 18px 44px -18px rgba(0,0,0,.75);
   --r:14px;
+
+  /* 별칭 — 아래 규칙들이 쓰는 이름. 테마별 재정의는 --tx / --tx3 쪽에서 한다 */
+  --ink:var(--tx); --dim:var(--tx3);
+  --disp:'Nanum Myeongjo',serif;
+  --body:'IBM Plex Sans KR',system-ui,'Malgun Gothic',sans-serif;
+  --mono:'IBM Plex Mono',ui-monospace,monospace;
 }
 :root[data-theme="light"]{
   --bg:#F6F7FC; --bg2:#EEF1FA;
@@ -107,13 +113,21 @@ button,input{font-family:inherit}
 .sec-head h2{font-size:22px}
 .sec-head p{margin:6px 0 0;color:var(--tx3);font-size:13.5px}
 .subjects{padding:26px 0 8px}
-.subj{margin-bottom:22px}
+#subject-grid{display:flex;flex-direction:column;gap:14px}
+.subj{
+  border:1px solid var(--line);border-radius:calc(var(--r) + 4px);
+  background:var(--card);padding:15px 16px 16px;
+}
 .subj-t{
-  display:flex;align-items:baseline;gap:10px;margin:0 0 10px;
+  display:flex;align-items:baseline;gap:10px;margin:0 0 12px;padding-bottom:10px;
+  border-bottom:1px solid var(--line2);
   font-family:'Nanum Myeongjo',serif;font-size:16px;font-weight:700;
 }
-.subj-t small{font-size:11.5px;color:var(--tx3);font-family:'IBM Plex Sans KR',sans-serif;font-weight:400}
-.ugrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(168px,1fr));gap:10px}
+.subj-t small{font-size:11.5px;color:var(--tx3);font-family:'IBM Plex Sans KR',sans-serif;font-weight:400;margin-left:auto}
+/* --n = 그 과목의 단원 수. 수Ⅰ·수Ⅱ는 3개, 확통은 2개를 한 줄에 */
+.ugrid{display:grid;grid-template-columns:repeat(var(--n,3),minmax(0,1fr));gap:10px}
+@media(max-width:640px){.ugrid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:420px){.ugrid{grid-template-columns:1fr}}
 .utile{
   --c:hsl(var(--h) 82% 64%);
   position:relative;text-align:left;cursor:pointer;overflow:hidden;
@@ -129,14 +143,29 @@ button,input{font-family:inherit}
 .utile .ub i{display:block;height:100%;background:var(--c);border-radius:99px;transition:width .6s}
 .utile .dot{position:absolute;right:13px;top:13px;width:8px;height:8px;border-radius:50%;background:var(--c);box-shadow:0 0 10px var(--c)}
 
-/* ─────────── 검색 · 정렬 ─────────── */
-.toolbar{
-  position:sticky;top:0;z-index:40;padding:12px 0 10px;margin-top:14px;
+/* ─────────── 년도별 찾기 · 검색 (2열) ─────────── */
+.finder{display:grid;grid-template-columns:1fr 1fr;gap:14px;padding:18px 0 4px;align-items:stretch}
+@media(max-width:680px){.finder{grid-template-columns:1fr}}
+.fbox{
+  border:1px solid var(--line);border-radius:calc(var(--r) + 4px);
+  background:var(--card);padding:15px 16px 16px;
+  display:flex;flex-direction:column;gap:11px;min-width:0;
+}
+.fbox-t{
+  display:flex;align-items:baseline;gap:10px;padding-bottom:10px;
+  border-bottom:1px solid var(--line2);
+  font-family:'Nanum Myeongjo',serif;font-size:16px;font-weight:700;
+}
+.fbox-t small{font-size:11.5px;color:var(--tx3);font-family:'IBM Plex Sans KR',sans-serif;
+  font-weight:400;margin-left:auto;text-align:right}
+
+/* 단원 필터 띠 — 목록을 따라다닌다 */
+.chipbar{
+  position:sticky;top:0;z-index:40;padding:11px 0 10px;margin-top:16px;
   background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(14px);
   border-bottom:1px solid var(--line2);
 }
-.tb-in{display:flex;gap:10px;align-items:center}
-.search{position:relative;flex:1;min-width:0}
+.search{position:relative;min-width:0}
 .search svg{position:absolute;left:13px;top:50%;transform:translateY(-50%);width:17px;height:17px;
   fill:none;stroke:var(--tx3);stroke-width:2;stroke-linecap:round}
 .search input{
@@ -148,10 +177,11 @@ button,input{font-family:inherit}
 #qx{position:absolute;right:6px;top:50%;transform:translateY(-50%);width:34px;height:34px;
   border:0;background:none;color:var(--tx3);cursor:pointer;display:none;font-size:14px}
 .search.on #qx{display:block}
-.views{display:flex;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:3px;flex:none}
+.views{display:grid;grid-template-columns:1fr 1fr;gap:3px;background:var(--card2);
+  border:1px solid var(--line);border-radius:12px;padding:3px;margin-top:auto}
 .vw{border:0;background:none;color:var(--tx3);font-size:13px;padding:0 13px;min-height:38px;cursor:pointer;border-radius:9px}
 .vw.on{background:var(--card2);color:var(--tx);box-shadow:var(--glow)}
-.filt{display:flex;gap:7px;flex-wrap:wrap;padding-top:10px}
+.filt{display:flex;gap:7px;flex-wrap:wrap}
 .fc{
   --c:hsl(var(--h,220) 82% 64%);
   font-size:12.5px;min-height:32px;padding:0 12px;cursor:pointer;border-radius:99px;
@@ -270,7 +300,7 @@ button,input{font-family:inherit}
 
 
 /* ─── 학년도 선택 ─── */
-.yrow{display:flex;gap:8px;flex-wrap:wrap;align-items:center;padding:0 0 2px}
+.yrow{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
 .yb{appearance:none;border:1px solid var(--line);background:var(--card);
   color:var(--dim);font:700 14px/1 var(--mono);letter-spacing:.01em;
   padding:9px 15px;border-radius:10px;cursor:pointer;
@@ -282,10 +312,9 @@ button,input{font-family:inherit}
 .yb[aria-pressed="true"] i{opacity:.65}
 
 /* ─── 시험 선택 (연도 아래 단계) ─── */
-.exrow{display:flex;gap:8px;flex-wrap:wrap;align-items:center;
-  padding:0 0 10px;margin-top:-2px}
-.exrow:not(:empty){padding-top:9px;margin-top:7px;
-  border-top:1px dashed var(--line)}
+.exrow{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.exrow:not(:empty){padding-top:11px;border-top:1px dashed var(--line)}
+.exrow:empty{display:none}
 .exrow .lead{font:600 12px/1 var(--body);color:var(--dim);
   letter-spacing:.02em;margin-right:2px}
 .exb{appearance:none;border:1px solid var(--line);background:var(--card);

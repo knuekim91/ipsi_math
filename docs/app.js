@@ -110,7 +110,8 @@
           '<span class="ub"><i style="width:' + pct + '%"></i></span></button>';
       }).join("");
       return '<div class="subj"><div class="subj-t">' + esc(sub.key) +
-        '<small>' + total + '문항</small></div><div class="ugrid">' + tiles + '</div></div>';
+        '<small>' + total + '문항</small></div>' +
+        '<div class="ugrid" style="--n:' + sub.units.length + '">' + tiles + '</div></div>';
     }).join("");
 
     Array.prototype.forEach.call(document.querySelectorAll(".utile"), function (b) {
@@ -135,6 +136,17 @@
         (yearFilter === y.id) + '">' + esc(y.short) + ' <i>' + y.count + '</i></button>');
     });
     yr.innerHTML = yp.join("");
+    var nowEl = el("ynow");
+    if (nowEl) {
+      var yy = yearFilter && yearOf(yearFilter);
+      var lab = !yy ? "전체 " + P.length + "문항"
+        : (examFilter ? yy.label + " · " + (function () {
+            for (var i = 0; i < yy.exams.length; i++)
+              if (yy.exams[i].id === examFilter) return yy.exams[i].label;
+            return "";
+          })() : yy.label);
+      nowEl.textContent = lab;
+    }
     Array.prototype.forEach.call(yr.querySelectorAll(".yb"), function (b) {
       b.onclick = function () {
         yearFilter = (yearFilter === b.dataset.y) ? "" : b.dataset.y;

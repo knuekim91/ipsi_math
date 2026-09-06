@@ -67,17 +67,24 @@
 <section class="wrap subjects" id="units">
   <div class="sec-head">
     <h2>단원으로 찾기</h2>
-    <p>과목별로 묶었습니다. 색은 그 단원의 표시입니다.</p>
+    <p>과목별로 묶었습니다. 색은 그 단원의 표시이고, 막대는 표시해 둔 비율입니다.</p>
   </div>
   <div id="subject-grid"></div>
 </section>
 
-<!-- ─────────── 검색 · 정렬 ─────────── -->
-<div class="toolbar" id="toolbar">
-  <div class="wrap tb-in">
+<!-- ─────────── 년도별 찾기 · 검색 (2열) ─────────── -->
+<section class="wrap finder">
+  <div class="fbox">
+    <div class="fbox-t">년도별 찾기<small id="ynow">전체</small></div>
+    <div class="yrow" id="yrow" role="group" aria-label="학년도 선택"></div>
+    <div class="exrow" id="exrow" role="group" aria-label="시험 선택"></div>
+  </div>
+
+  <div class="fbox">
+    <div class="fbox-t">검색<small>내용 · 단원 · 문항 번호</small></div>
     <div class="search">
       <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg>
-      <input id="q" type="search" autocomplete="off" placeholder="내용으로 찾기 — 로그, 중복조합, 접선, 21번 …" aria-label="문항 검색">
+      <input id="q" type="search" autocomplete="off" placeholder="로그, 중복조합, 접선, 21번 …" aria-label="문항 검색">
       <button id="qx" aria-label="검색어 지우기">✕</button>
     </div>
     <div class="views" role="tablist">
@@ -85,8 +92,10 @@
       <button class="vw" data-view="unit" role="tab">단원별</button>
     </div>
   </div>
-  <div class="wrap yrow" id="yrow" role="group" aria-label="학년도 선택"></div>
-  <div class="wrap exrow" id="exrow" role="group" aria-label="시험 선택"></div>
+</section>
+
+<!-- ─────────── 단원 필터 (목록 따라다님) ─────────── -->
+<div class="chipbar" id="toolbar">
   <div class="wrap filt" id="filt"></div>
 </div>
 
