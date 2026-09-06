@@ -293,6 +293,30 @@ grep -l "φ\|ψ\|≡\|⌊\|위수\|고정점\|패리티" units/*/problems/*.md
 grep -n "</span> —\|— <span class=.m." units/*/problems/*.md
 ```
 
+## 6-3. 로그인과 동기화
+
+`server/Code.gs` 를 Google Apps Script 로 배포하고 그 `/exec` 주소를
+`docs/config.js` 의 `IPSI_API` 에 넣으면 켜진다. **비워 두면 기능이 조용히 꺼지고
+사이트는 기기별 localStorage 만 쓴다.** 배포 절차는 `server/README.md`.
+
+| 파일 | 역할 |
+|---|---|
+| `server/Code.gs` | Apps Script. 가입·로그인·pull·push |
+| `docs/config.js` | 서버 주소 한 줄 |
+| `docs/auth.js` | 로그인 창, 세션, 자동 동기화 |
+| `docs/app.js` | `window.IPSI` 로 상태를 내주고 `onChange` 로 변경을 알린다 |
+
+지켜야 할 것:
+
+- **`Content-Type` 은 반드시 `text/plain`.** `application/json` 으로 보내면
+  브라우저가 사전 요청(preflight)을 보내는데 Apps Script 가 응답하지 못해 CORS 오류가 난다.
+- **기록마다 `at`(수정 시각)을 남긴다.** 병합은 문항별로 `at` 이 큰 쪽이 이긴다.
+  `put(id, patch)` 를 쓰면 자동으로 붙는다. `state[id] = ...` 로 직접 쓰지 말 것.
+- **`window.IPSI.all()` 은 localStorage 를 다시 읽어 합친 뒤 돌려준다.**
+  탭을 두 개 열었을 때 다른 탭이 쓴 것을 덮어쓰지 않기 위해서다.
+- **`ipsi_math_owner` 로 기기의 주인을 기록한다.** 다른 계정으로 로그인하면
+  앞사람의 기록을 합치지 않는다. 이걸 빼면 아빠 진도가 나은이 계정으로 넘어간다.
+
 ## 7. 지켜야 할 원칙
 
 - **답을 추측해서 쓰지 않는다.** 검증하지 않은 답은 문항 파일에 넣지 않는다.

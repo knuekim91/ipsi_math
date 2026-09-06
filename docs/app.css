@@ -391,3 +391,40 @@ button,input{font-family:inherit}
 }
 .lecshare:hover{color:var(--tx);border-color:var(--ink)}
 .lec .hint{margin-top:8px}
+
+/* ─────────── 계정 (헤더) ─────────── */
+.acct{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:12px}
+.acwho{display:inline-flex;align-items:baseline;gap:8px;padding:7px 12px;
+  border:1px solid var(--line);border-radius:999px;background:var(--card)}
+.acwho b{font:600 13px/1 var(--body)}
+.acwho i{font-style:normal;font:500 11px/1 var(--body);color:var(--tx3)}
+.acbtn{appearance:none;border:1px solid var(--line);background:var(--card);color:var(--tx2);
+  font:600 13px/1 var(--body);padding:9px 14px;border-radius:999px;cursor:pointer;
+  transition:color .16s,border-color .16s,transform .16s}
+.acbtn:hover{color:var(--ink);border-color:var(--ink);transform:translateY(-1px)}
+.acbtn.ghost{padding:9px 12px;color:var(--tx3)}
+
+/* ─────────── 로그인 창 ─────────── */
+.ldlg{position:fixed;inset:0;z-index:80;display:none;align-items:center;justify-content:center;
+  padding:20px;background:color-mix(in srgb,#05070F 62%,transparent);backdrop-filter:blur(6px)}
+.ldlg.on{display:flex}
+.lcard{position:relative;width:100%;max-width:400px;padding:26px 24px 22px;
+  border:1px solid var(--line);border-radius:calc(var(--r) + 6px);
+  background:var(--card);box-shadow:var(--glow)}
+.lcard h3{font-family:var(--disp);font-size:21px;margin:0}
+.lsub{margin:8px 0 18px;font-size:13px;line-height:1.65;color:var(--tx3)}
+.lx{position:absolute;right:12px;top:12px;width:34px;height:34px;border:0;background:none;
+  color:var(--tx3);cursor:pointer;font-size:14px;border-radius:9px}
+.lx:hover{color:var(--ink)}
+.lbody{display:flex;flex-direction:column;gap:12px}
+.lbody label{display:flex;flex-direction:column;gap:6px;font:600 12px/1 var(--body);color:var(--tx3)}
+.lbody input{font-size:16px;min-height:46px;padding:10px 13px;color:var(--tx);
+  background:var(--bg2);border:1px solid var(--line);border-radius:11px;-webkit-appearance:none}
+.lbody input::placeholder{color:var(--tx3);font-size:13.5px}
+.lerr{min-height:18px;font-size:12.5px;color:var(--no);line-height:1.5}
+.lgo{width:100%;margin-top:16px;min-height:48px;border:0;border-radius:12px;cursor:pointer;
+  background:var(--ink);color:var(--bg);font:700 15px/1 var(--body)}
+.lgo:disabled{opacity:.6;cursor:default}
+.lswap{width:100%;margin-top:9px;min-height:40px;border:0;background:none;cursor:pointer;
+  color:var(--tx3);font:500 13px/1 var(--body);text-decoration:underline;text-underline-offset:3px}
+.lswap:hover{color:var(--ink)}

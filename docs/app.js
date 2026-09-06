@@ -10,7 +10,15 @@
 
   var state = {};
   try { state = JSON.parse(localStorage.getItem(LS) || "{}"); } catch (e) { state = {}; }
-  function save() { try { localStorage.setItem(LS, JSON.stringify(state)); } catch (e) {} }
+  function save() {
+    try { localStorage.setItem(LS, JSON.stringify(state)); } catch (e) {}
+    if (window.IPSI && window.IPSI.onChange) window.IPSI.onChange(state);
+  }
+  /* 한 문항의 기록을 고치고 수정 시각을 남긴다 */
+  function put(id, patch) {
+    state[id] = Object.assign({}, st(id), patch, { at: Date.now() });
+    save();
+  }
   function st(id) { return state[id] || {}; }
 
   var view = "no";          // no | unit
@@ -360,8 +368,8 @@
       Array.prototype.forEach.call(c.querySelectorAll(".rb"), function (b) {
         b.onclick = function () {
           var cur = st(id).status;
-          state[id] = Object.assign({}, st(id), { status: cur === b.dataset.r ? "" : b.dataset.r });
-          save(); paintHead(); paintUnits(); paintList();
+          put(id, { status: cur === b.dataset.r ? "" : b.dataset.r });
+          paintHead(); paintUnits(); paintList();
         };
       });
 
@@ -370,9 +378,7 @@
         var t = null;
         var flush = function () {
           clearTimeout(t); t = null;
-          if ((st(id).note || "") !== ta.value) {
-            state[id] = Object.assign({}, st(id), { note: ta.value }); save();
-          }
+          if ((st(id).note || "") !== ta.value) put(id, { note: ta.value });
         };
         ta.oninput = function () { clearTimeout(t); t = setTimeout(flush, 400); };
         ta.onblur = flush;
@@ -383,8 +389,8 @@
         var saveLec = function () {
           var v = lu.value.trim();
           if (v && !safeUrl(v)) { toast("주소를 확인해 주세요"); return; }
-          state[id] = Object.assign({}, st(id), { lec: v });
-          save(); paintList();
+          put(id, { lec: v });
+          paintList();
           toast(v ? "저장했어요" : "지웠어요");
         };
         var sb = c.querySelector(".lecsave");
@@ -408,7 +414,7 @@
         send.disabled = !ready();
         if (ta) ta.addEventListener("input", function () { send.disabled = !ready(); });
         send.onclick = function () {
-          if (ta) { state[id] = Object.assign({}, st(id), { note: ta.value }); save(); }
+          if (ta) put(id, { note: ta.value });
           var p = P.filter(function (x) { return x.id === id; })[0];
           share(p);
         };
@@ -478,6 +484,31 @@
       paintList();
     };
   });
+
+  /* ───────── 바깥(auth.js)과 연결하는 창구 ───────── */
+  window.IPSI = {
+    /* 저장된 것을 다시 읽어 메모리와 합친 뒤 돌려준다.
+       탭을 두 개 열어 두면 다른 탭이 쓴 것이 여기 없을 수 있어서다.
+       같은 문항이면 수정 시각(at)이 큰 쪽을 남긴다. */
+    all: function () {
+      try {
+        var disk = JSON.parse(localStorage.getItem(LS) || "{}");
+        for (var k in disk) {
+          if (!Object.prototype.hasOwnProperty.call(disk, k)) continue;
+          var a = state[k], b = disk[k];
+          if (!a || Number(b && b.at || 0) > Number(a.at || 0)) state[k] = b;
+        }
+      } catch (e) {}
+      return state;
+    },
+    replaceAll: function (obj) {
+      state = obj || {};
+      try { localStorage.setItem(LS, JSON.stringify(state)); } catch (e) {}
+      paintHead(); paintUnits(); paintList();
+    },
+    toast: toast,
+    onChange: null            // auth.js 가 채운다
+  };
 
   /* ───────── 시작 ───────── */
   paintHead(); paintUnits(); paintExams(); paintFilters(); paintList();

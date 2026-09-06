@@ -121,7 +121,7 @@ def stamp(n):
     v = datetime.datetime.now().strftime("%Y%m%d%H%M")
     p = os.path.join(ROOT, "docs", "index.html")
     s = io.open(p, encoding="utf-8").read()
-    for f in ("app.css", "data.js", "app.js"):
+    for f in ("app.css", "config.js", "data.js", "app.js", "auth.js"):
         s = re.sub('"' + re.escape(f) + r'(\?v=\d+)?"',
                    '"%s?v=%s"' % (f, v), s)
     io.open(p, "w", encoding="utf-8").write(s)

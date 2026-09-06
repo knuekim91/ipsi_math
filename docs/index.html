@@ -12,7 +12,7 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nanum+Myeongjo:wght@400;700;800&family=IBM+Plex+Sans+KR:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css"
       integrity="sha384-nB0miv6/jRmo5UMMR1wu3Gz6NLsoTkbqJghGIsx//Rlm+ZU03BU6SQNC66uf4l5+" crossorigin="anonymous">
-<link rel="stylesheet" href="app.css?v=202609062006">
+<link rel="stylesheet" href="app.css?v=202609062021">
 </head>
 <body>
 
@@ -27,6 +27,7 @@
         <span class="mark" aria-hidden="true">∫</span>
         <span class="bname">ipsi<em>_</em>math</span>
       </div>
+      <div class="acct" id="acct"></div>
       <h1>수능 수학<br><span>발상으로 푸는 기출</span></h1>
       <p class="lede">2027학년도 6월 · 9월 모의평가 전 문항.
         문제를 먼저 풀고, <b>핵심 아이디어</b>만 열어 다시 시도한 뒤, 마지막에 풀이를 봅니다.</p>
@@ -113,7 +114,21 @@
         integrity="sha384-7zkQWkzuo3B5mTepMUcHkMB5jZaolc2xDwL6VFqjFALcbeS9Ggm/Yr2r3Dy4lfFg" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"
         integrity="sha384-43gviWU0YVjaDtb/GhzOouOXtZMP/7XUzwPTstBeZFe/+rCMvRwr4yROQP43s0Xk" crossorigin="anonymous"></script>
-<script src="data.js?v=202609062006"></script>
-<script src="app.js?v=202609062006"></script>
+<!-- ─────────── 로그인 ─────────── -->
+<div class="ldlg" id="logindlg" role="dialog" aria-modal="true" aria-labelledby="logintitle">
+  <div class="lcard">
+    <button class="lx" id="loginx" aria-label="닫기">✕</button>
+    <h3 id="logintitle">로그인</h3>
+    <p class="lsub">로그인하면 진도·메모·추천 강좌가 <b>기기끼리 자동으로 맞춰집니다.</b></p>
+    <div class="lbody" id="loginbody"></div>
+    <button class="lgo" id="loginsubmit">로그인</button>
+    <button class="lswap" id="loginswap">처음이에요 (회원가입)</button>
+  </div>
+</div>
+
+<script src="config.js?v=202609062021"></script>
+<script src="data.js?v=202609062021"></script>
+<script src="app.js?v=202609062021"></script>
+<script src="auth.js?v=202609062021"></script>
 </body>
 </html>
