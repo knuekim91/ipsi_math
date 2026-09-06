@@ -24,7 +24,21 @@ answer: ④
 
 ## 풀이
 
-<p class="m">Σ(2a<sub>k</sub>+b<sub>k</sub>) − Σ(a<sub>k</sub>+b<sub>k</sub>) = Σa<sub>k</sub></p><p class="m">19 − 10 = 9</p>
+<p><span class="step">① 두 수열을 각각 구하려 하지 않는다.</span>
+구하는 것은 <span class="m">Σa<sub>k</sub></span> 하나뿐이고,
+주어진 두 식에는 <span class="m">Σa<sub>k</sub></span>와 <span class="m">Σb<sub>k</sub></span>가 섞여 있다.
+<b>두 식을 빼면 <span class="m">Σb<sub>k</sub></span>가 통째로 지워진다.</b></p>
+
+<p><span class="step">② 시그마를 항별로 나눈다.</span>
+시그마는 덧셈에 대해 나눠 쓸 수 있고, 상수배는 밖으로 나온다.</p>
+<p class="m">Σ(2a<sub>k</sub> + b<sub>k</sub>) = 2Σa<sub>k</sub> + Σb<sub>k</sub> = 19</p>
+<p class="m">Σ(a<sub>k</sub> + b<sub>k</sub>) = Σa<sub>k</sub> + Σb<sub>k</sub> = 10</p>
+
+<p><span class="step">③ 위 식에서 아래 식을 뺀다.</span>
+<span class="m">Σb<sub>k</sub></span>가 양쪽에 똑같이 있으므로 빼면 사라진다.</p>
+<p class="m">(2Σa<sub>k</sub> + Σb<sub>k</sub>) − (Σa<sub>k</sub> + Σb<sub>k</sub>) = 19 − 10</p>
+<p class="m">Σa<sub>k</sub> = 9</p>
+<p class="m">답 ④</p>
 
 ## 노하우
 

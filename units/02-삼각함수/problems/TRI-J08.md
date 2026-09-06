@@ -24,7 +24,32 @@ answer: ④
 
 ## 풀이
 
-<p><span class="step">① 코사인법칙.</span> <span class="m">AC = b</span>라 하면</p><p class="m">BC<sup>2</sup> = AB<sup>2</sup> + AC<sup>2</sup> − 2·AB·AC·cos A</p><p class="m">64 = 16 + b<sup>2</sup> − 2·4·b·(−1/4) = 16 + b<sup>2</sup> + 2b</p><p><span class="step">② 정리.</span></p><p class="m">b<sup>2</sup> + 2b − 48 = 0 → (b + 8)(b − 6) = 0</p><p>길이는 양수이므로 <span class="m">b = 6</span>.</p>
+<p><span class="step">① 어느 각과 어느 변이 짝인지 확인한다.</span>
+코사인법칙은 <b>한 각과 그 각이 마주 보는 변</b>을 잇는다.
+여기서 주어진 각은 A이고, <b>각 A가 마주 보는 변은 BC</b>다.
+각 A를 낀 두 변은 AB와 AC이므로, 구하는 AC를 <span class="m">b</span>라 두면 식을 세울 수 있다.</p>
+
+<p><span class="step">② 코사인법칙을 쓴다.</span></p>
+<p class="m">BC<sup>2</sup> = AB<sup>2</sup> + AC<sup>2</sup> − 2 × AB × AC × cos A</p>
+<p>값을 넣는다. <span class="m">AB = 4</span>, <span class="m">BC = 8</span>, <span class="m">cos A = −1/4</span>이다.</p>
+<p class="m">8<sup>2</sup> = 4<sup>2</sup> + b<sup>2</sup> − 2 × 4 × b × (−1/4)</p>
+
+<p><span class="step">③ 부호에 주의하며 정리한다.</span>
+<b><span class="m">cos A</span>가 음수</b>이므로 마지막 항에서 음수끼리 곱해져 <b>더하기</b>가 된다.</p>
+<p class="m">−2 × 4 × b × (−1/4) = +2b</p>
+<p class="m">64 = 16 + b<sup>2</sup> + 2b</p>
+
+<p><span class="step">④ 이차방정식을 만든다.</span>
+왼쪽의 <span class="m">64</span>를 오른쪽으로 넘긴다.</p>
+<p class="m">0 = b<sup>2</sup> + 2b + 16 − 64</p>
+<p class="m">b<sup>2</sup> + 2b − 48 = 0</p>
+
+<p><span class="step">⑤ 인수분해하고 길이 조건으로 거른다.</span>
+곱이 <span class="m">−48</span>, 합이 <span class="m">2</span>인 두 수는 <span class="m">8</span>과 <span class="m">−6</span>이다.</p>
+<p class="m">(b + 8)(b − 6) = 0 → b = −8 또는 b = 6</p>
+<p><b>길이는 양수여야 하므로</b> <span class="m">b = −8</span>은 버린다.</p>
+<p class="m">AC = 6</p>
+<p class="m">답 ④</p>
 
 ## 함정
 

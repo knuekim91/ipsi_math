@@ -24,7 +24,51 @@ answer: ⑤
 
 ## 풀이
 
-<p><span class="step">① a를 정한다.</span> <span class="m">h(t) = S′(t) = t<sup>2</sup> − 2t + a</span>이고 <span class="m">h(1) = f(1) − g(1) = 1</span>.</p><p class="m">1 − 2 + a = 1 → a = 2 &nbsp; → &nbsp; ㄱ은 거짓</p><p><span class="step">② S(t)를 구한다.</span> <span class="m">h(x) = x<sup>2</sup>−2x+2</span>이고 <span class="m">S(0) = 0</span>이므로</p><p class="m">S(t) = t<sup>3</sup>/3 − t<sup>2</sup> + 2t</p><p class="m">S(3) = 9 − 9 + 6 = 6 &nbsp; → &nbsp; ㄴ은 참</p><p><span class="step">③ ㄷ.</span> <span class="m">h &gt; 0</span>이므로 <span class="m">x = −2</span>부터 <span class="m">x = 2</span>까지의 넓이는 그대로 적분값이다.</p><p class="m">∫<sub>−2</sub><sup>2</sup>h = S(2) − S(−2) = (8/3 − 4 + 4) − (−8/3 − 4 − 4) = 40/3</p><p class="m">S(4) = 64/3 − 16 + 8 = 40/3 &nbsp; → &nbsp; ㄷ은 참</p><p>따라서 <b>ㄴ, ㄷ</b>.</p>
+<p><span class="step">① 두 곡선의 세로 간격을 하나의 함수로 둔다.</span></p>
+<p class="m">h(x) = f(x) − g(x)</p>
+<p>문제에서 <span class="m">f(x) &gt; g(x)</span>라 했으므로 <span class="m">h(x) &gt; 0</span>이다.
+<b>절댓값을 걱정하지 않아도 된다는 뜻</b>이라 이 조건이 중요하다.
+그러면 넓이는 그대로 적분값이다.</p>
+<p class="m">S(t) = ∫<sub>0</sub><sup>t</sup>h(x)dx</p>
+
+<p><span class="step">② S′(t)가 무엇인지 확인한다.</span>
+미적분의 기본정리에 따라 <b>넓이함수를 미분하면 그 자리의 세로 간격</b>이 된다.</p>
+<p class="m">S′(t) = h(t)</p>
+<p>문제가 <span class="m">S′(t) = t<sup>2</sup> − 2t + a</span>를 줬으므로</p>
+<p class="m">h(t) = t<sup>2</sup> − 2t + a</p>
+
+<p><span class="step">③ f(1) = g(1) + 1을 번역한다.</span>
+이 식을 옮기면 <span class="m">f(1) − g(1) = 1</span>, 곧</p>
+<p class="m">h(1) = 1</p>
+<p><b>넓이가 1이라는 뜻이 아니라 세로 간격이 1</b>이라는 뜻이다.
+②의 식에 <span class="m">t = 1</span>을 넣는다.</p>
+<p class="m">1 − 2 + a = 1 → a = 2</p>
+<p>따라서 <b>ㄱ(<span class="m">a = 1</span>)은 거짓</b>이다.</p>
+
+<p><span class="step">④ S(t)를 구한다.</span>
+<span class="m">h(x) = x<sup>2</sup> − 2x + 2</span>를 적분한다.
+적분 구간이 <span class="m">0</span>에서 시작하므로 <span class="m">S(0) = 0</span>이고, 이것이 상수를 정해 준다.</p>
+<p class="m">S(t) = t<sup>3</sup>/3 − t<sup>2</sup> + 2t</p>
+
+<p><span class="step">⑤ ㄴ을 확인한다.</span></p>
+<p class="m">S(3) = 27/3 − 9 + 6 = 9 − 9 + 6 = 6</p>
+<p><b>ㄴ은 참</b>이다.</p>
+
+<p><span class="step">⑥ ㄷ을 확인한다.</span>
+<span class="m">x = −2</span>부터 <span class="m">x = 2</span>까지의 넓이를 계산한다.
+<span class="m">h &gt; 0</span>이므로 절댓값 없이 적분하면 된다.
+<span class="m">S</span>의 식을 그대로 쓸 수 있다.</p>
+<p class="m">∫<sub>−2</sub><sup>2</sup>h dx = S(2) − S(−2)</p>
+<p class="m">S(2) = 8/3 − 4 + 4 = 8/3</p>
+<p class="m">S(−2) = −8/3 − 4 − 4 = −8/3 − 8</p>
+<p class="m">S(2) − S(−2) = 8/3 + 8/3 + 8 = 16/3 + 24/3 = 40/3</p>
+<p>이제 <span class="m">S(4)</span>와 비교한다.</p>
+<p class="m">S(4) = 64/3 − 16 + 8 = 64/3 − 8 = 64/3 − 24/3 = 40/3</p>
+<p>두 값이 같으므로 <b>ㄷ도 참</b>이다.</p>
+
+<p><span class="step">⑦ 답을 고른다.</span>
+옳은 것은 <b>ㄴ, ㄷ</b>.</p>
+<p class="m">답 ⑤</p>
 
 ## 함정
 

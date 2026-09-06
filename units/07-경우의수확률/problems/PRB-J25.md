@@ -24,7 +24,31 @@ answer: ①
 
 ## 풀이
 
-<p><span class="step">① (x+4)<sup>6</sup>의 일반항.</span></p><p class="m"><sub>6</sub>C<sub>r</sub> x<sup>6−r</sup> 4<sup>r</sup></p><p><span class="step">② 두 길.</span></p><p class="m">2 × (x<sup>6</sup>의 계수) = 2 × <sub>6</sub>C<sub>0</sub>4<sup>0</sup> = 2 × 1 = 2</p><p class="m">3x × (x<sup>5</sup>의 계수) = 3 × <sub>6</sub>C<sub>1</sub>4<sup>1</sup> = 3 × 24 = 72</p><p class="m">2 + 72 = 74</p>
+<p><span class="step">① x<sup>6</sup>을 만드는 길이 몇 개인지 센다.</span>
+<span class="m">(x + 4)<sup>6</sup></span>과 <span class="m">(3x + 2)</span>를 곱할 때,
+뒤쪽 인수에서 무엇을 뽑느냐에 따라 앞쪽에서 뽑아야 할 차수가 정해진다.
+뒤쪽은 <span class="m">3x</span> 아니면 <span class="m">2</span> 둘뿐이므로 <b>길은 두 개</b>다.</p>
+<p class="m">뒤에서 2(상수)를 뽑으면 → 앞에서 x<sup>6</sup>을 뽑아야 한다</p>
+<p class="m">뒤에서 3x를 뽑으면 → 앞에서 x<sup>5</sup>를 뽑아야 한다</p>
+
+<p><span class="step">② (x+4)<sup>6</sup>의 일반항을 쓴다.</span></p>
+<p class="m">일반항 = <sub>6</sub>C<sub>r</sub> x<sup>6−r</sup> 4<sup>r</sup></p>
+
+<p><span class="step">③ 첫 번째 길을 계산한다.</span>
+<span class="m">x<sup>6</sup></span>이 되려면 <span class="m">6 − r = 6</span>, 곧 <span class="m">r = 0</span>이다.</p>
+<p class="m"><sub>6</sub>C<sub>0</sub> × 4<sup>0</sup> = 1 × 1 = 1</p>
+<p>여기에 뒤쪽에서 뽑은 <span class="m">2</span>를 곱한다.</p>
+<p class="m">2 × 1 = 2</p>
+
+<p><span class="step">④ 두 번째 길을 계산한다.</span>
+<span class="m">x<sup>5</sup></span>이 되려면 <span class="m">6 − r = 5</span>, 곧 <span class="m">r = 1</span>이다.</p>
+<p class="m"><sub>6</sub>C<sub>1</sub> × 4<sup>1</sup> = 6 × 4 = 24</p>
+<p>여기에 뒤쪽에서 뽑은 <span class="m">3x</span>의 <b>계수 <span class="m">3</span>을 곱하는 것을 잊지 않는다.</b></p>
+<p class="m">3 × 24 = 72</p>
+
+<p><span class="step">⑤ 두 길을 더한다.</span></p>
+<p class="m">2 + 72 = 74</p>
+<p class="m">답 ①</p>
 
 ## 함정
 

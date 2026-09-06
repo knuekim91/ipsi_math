@@ -24,7 +24,20 @@ answer: ②
 
 ## 풀이
 
-<p class="m">P(A) = P(A∩B) + P(A∩B<sup>C</sup>) = 1/3 + 3/8 = 8/24 + 9/24 = 17/24</p><p class="m">P(A<sup>C</sup>) = 1 − 17/24 = 7/24</p>
+<p><span class="step">① 사건 A가 어떻게 나뉘는지 본다.</span>
+벤다이어그램에서 <span class="m">A</span>라는 원 안은
+<span class="m">B</span>와 겹치는 부분과 겹치지 않는 부분으로
+<b>빈틈없이 정확히 둘로 갈라진다.</b></p>
+<p class="m">P(A) = P(A ∩ B) + P(A ∩ B<sup>C</sup>)</p>
+
+<p><span class="step">② 값을 넣어 P(A)를 구한다.</span>
+분모를 <span class="m">24</span>로 통일한다.</p>
+<p class="m">P(A) = 1/3 + 3/8 = 8/24 + 9/24 = 17/24</p>
+
+<p><span class="step">③ 여사건의 확률을 구한다.</span>
+어떤 사건과 그 여사건의 확률의 합은 <span class="m">1</span>이다.</p>
+<p class="m">P(A<sup>C</sup>) = 1 − P(A) = 1 − 17/24 = 24/24 − 17/24 = 7/24</p>
+<p class="m">답 ②</p>
 
 ## 노하우
 

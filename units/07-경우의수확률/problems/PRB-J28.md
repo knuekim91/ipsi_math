@@ -24,7 +24,64 @@ answer: ③
 
 ## 풀이
 
-<p><span class="step">① 어떤 눈이 어떤 카드를 뒤집는가.</span></p><p class="m">k=1 → {1} &nbsp;&nbsp; k=2 → {2,3,4,5,6}</p><p class="m">k=3 → {1,2,3} &nbsp;&nbsp; k=4 → {4,5,6}</p><p class="m">k=5 → {1,2,3,4,5} &nbsp;&nbsp; k=6 → {6}</p><p><span class="step">② 카드별로 뒤집는 눈을 모은다.</span></p><p class="m">카드 1 : {1, 3, 5} &nbsp; = 홀수 눈 전부</p><p class="m">카드 2, 3 : {2, 3, 5}</p><p class="m">카드 4, 5 : {2, 4, 5}</p><p class="m">카드 6 : {2, 4, 6} &nbsp; = 짝수 눈 전부</p><p>카드 2와 3, 카드 4와 5는 <b>항상 함께 움직이므로 한 덩어리</b>로 본다.</p><p><span class="step">③ 필요한 홀짝.</span> 처음에 뒷면인 카드 1, 6은 <b>홀수 번</b>, 앞면인 나머지는 <b>짝수 번</b> 뒤집혀야 한다.</p><p>4번의 시행 중 홀수 눈이 <span class="m">o</span>번 나왔다 하면 카드 1은 <span class="m">o</span>번, 카드 6은 <span class="m">4 − o</span>번 뒤집힌다. 둘 다 홀수여야 하므로</p><p class="m">o = 1 또는 o = 3</p><p><span class="step">④ o = 1 (홀수 1번, 짝수 3번).</span> 짝수 눈 <span class="m">2, 4, 6</span>이 각각 <span class="m">a, b, c</span>번 (<span class="m">a+b+c=3</span>). 카드 2·3 그룹은 <span class="m">{2,3,5}</span>에, 카드 4·5 그룹은 <span class="m">{2,4,5}</span>에 반응하므로</p><p class="m">홀수 눈이 1 : a 짝수, a+b 짝수 → (a,b,c) = (0,0,3),(0,2,1),(2,0,1) → 1+3+3 = 7</p><p class="m">홀수 눈이 3 : a 홀수, a+b 짝수 → (1,1,1) → 6</p><p class="m">홀수 눈이 5 : a 홀수, a+b 홀수 → (1,0,2),(1,2,0),(3,0,0) → 3+3+1 = 7</p><p>홀수 눈이 나온 <b>자리를 고르는 4가지</b>를 곱하면</p><p class="m">4 × (7 + 6 + 7) = 4 × 20 = 80</p><p><span class="step">⑤ o = 3 (홀수 3번, 짝수 1번).</span> 같은 방식으로 세면</p><p class="m">짝수 눈이 2 : 7 &nbsp;/&nbsp; 4 : 6 &nbsp;/&nbsp; 6 : 7 &nbsp; → 20</p><p class="m">4 × 20 = 80</p><p><span class="step">⑥ 확률.</span></p><p class="m">(80 + 80) / 6<sup>4</sup> = 160 / 1296 = 10/81</p>
+<p><span class="step">① 순서가 아니라 횟수만 중요하다는 것을 확인한다.</span>
+카드를 두 번 뒤집으면 원래대로 돌아온다.
+그러므로 마지막 상태는 <b>각 카드가 몇 번 뒤집혔는지의 홀짝</b>만으로 정해지고,
+<b>언제 뒤집혔는지는 상관없다.</b>
+이것을 못 박아야 경우의 수가 폭발하지 않는다.</p>
+
+<p><span class="step">② 눈마다 어떤 카드를 뒤집는지 적는다.</span>
+<span class="m">k</span>가 홀수면 <span class="m">k</span> 이하, 짝수면 <span class="m">k</span> 이상을 뒤집는다.</p>
+<p class="m">k = 1 → {1} &nbsp;&nbsp; k = 2 → {2, 3, 4, 5, 6}</p>
+<p class="m">k = 3 → {1, 2, 3} &nbsp;&nbsp; k = 4 → {4, 5, 6}</p>
+<p class="m">k = 5 → {1, 2, 3, 4, 5} &nbsp;&nbsp; k = 6 → {6}</p>
+
+<p><span class="step">③ 표를 뒤집어 카드별로 다시 정리한다.</span>
+각 카드가 <b>어떤 눈에서 뒤집히는지</b>를 모은다.</p>
+<p class="m">카드 1 : {1, 3, 5} → 홀수 눈 전부</p>
+<p class="m">카드 2 : {2, 3, 5} &nbsp;&nbsp; 카드 3 : {2, 3, 5}</p>
+<p class="m">카드 4 : {2, 4, 5} &nbsp;&nbsp; 카드 5 : {2, 4, 5}</p>
+<p class="m">카드 6 : {2, 4, 6} → 짝수 눈 전부</p>
+<p><b>카드 2와 3은 완전히 같고, 카드 4와 5도 완전히 같다.</b>
+그러므로 살펴야 할 덩어리는 <span class="m">{1}, {2,3}, {4,5}, {6}</span> 네 개뿐이다.
+그리고 <b>카드 1은 홀수 눈에만, 카드 6은 짝수 눈에만 반응</b>한다는 것이 가장 강한 단서다.</p>
+
+<p><span class="step">④ 각 덩어리에 필요한 홀짝을 적는다.</span>
+처음에 <b>뒷면</b>인 카드 <span class="m">1</span>과 <span class="m">6</span>은 앞면이 되려면 <b>홀수 번</b>,
+처음에 <b>앞면</b>인 나머지는 그대로 있어야 하므로 <b>짝수 번</b> 뒤집혀야 한다.</p>
+
+<p><span class="step">⑤ 홀수 눈이 몇 번 나와야 하는지 정한다.</span>
+4번의 시행 중 홀수 눈이 <span class="m">o</span>번 나왔다고 하자.
+카드 <span class="m">1</span>은 <span class="m">o</span>번, 카드 <span class="m">6</span>은 <span class="m">4 − o</span>번 뒤집힌다.
+둘 다 홀수여야 하므로</p>
+<p class="m">o = 1 또는 o = 3</p>
+
+<p><span class="step">⑥ o = 1 인 경우를 센다.</span>
+홀수 눈이 한 번, 짝수 눈이 세 번 나온다.
+짝수 눈 <span class="m">2, 4, 6</span>이 각각 <span class="m">a, b, c</span>번
+(<span class="m">a + b + c = 3</span>) 나왔다고 하자.
+카드 <span class="m">2·3</span>은 <span class="m">\{2, 3, 5\}</span>에,
+카드 <span class="m">4·5</span>는 <span class="m">\{2, 4, 5\}</span>에 반응하므로
+두 덩어리가 짝수 번 뒤집힐 조건을 홀수 눈의 종류별로 따진다.</p>
+<p class="m">홀수 눈이 1 : a가 짝수, a+b가 짝수 → (a,b,c) = (0,0,3), (0,2,1), (2,0,1)</p>
+<p class="m">→ 3!/(0!0!3!) + 3!/(0!2!1!) + 3!/(2!0!1!) = 1 + 3 + 3 = 7</p>
+<p class="m">홀수 눈이 3 : a가 홀수, a+b가 짝수 → (1,1,1) → 3!/(1!1!1!) = 6</p>
+<p class="m">홀수 눈이 5 : a가 홀수, a+b가 홀수 → (1,0,2), (1,2,0), (3,0,0) → 3 + 3 + 1 = 7</p>
+<p>여기에 <b>홀수 눈이 네 번 중 몇 번째에 나왔는지 고르는 4가지</b>를 곱한다.</p>
+<p class="m">4 × (7 + 6 + 7) = 4 × 20 = 80</p>
+
+<p><span class="step">⑦ o = 3 인 경우를 센다.</span>
+이번에는 홀수 눈이 세 번, 짝수 눈이 한 번이다.
+같은 방식으로 짝수 눈의 종류별로 세면</p>
+<p class="m">짝수 눈이 2 : 7 &nbsp;/&nbsp; 짝수 눈이 4 : 6 &nbsp;/&nbsp; 짝수 눈이 6 : 7 &nbsp; → 합 20</p>
+<p class="m">4 × 20 = 80</p>
+
+<p><span class="step">⑧ 확률을 계산한다.</span>
+전체 경우의 수는 주사위를 네 번 던지는 <span class="m">6<sup>4</sup> = 1296</span>이다.</p>
+<p class="m">(80 + 80)/1296 = 160/1296</p>
+<p>분모와 분자를 <span class="m">16</span>으로 나눈다.</p>
+<p class="m">= 10/81</p>
+<p class="m">답 ③</p>
 
 ## 함정
 

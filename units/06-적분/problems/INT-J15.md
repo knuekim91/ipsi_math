@@ -24,7 +24,55 @@ answer: ④
 
 ## 풀이
 
-<p><span class="step">① (가)를 번역한다.</span> 길이 3짜리 구간 <span class="m">[p, p+3]</span> 안에서 <span class="m">f</span>가 부호를 바꾼다는 뜻이다. 부호 변화점이 <span class="m">c</span> 하나뿐이라면</p><p class="m">c ∈ (p, p+3) ⟺ c − 3 &lt; p &lt; c</p><p>주어진 범위가 <span class="m">0 &lt; p &lt; 3</span>이므로 <span class="m">c = 3</span>. 즉 <b>부호 변화점은 <span class="m">x = 3</span> 하나뿐</b>이다.</p><p><span class="step">② f의 꼴을 정한다.</span> 상수항이 0이므로 <span class="m">f(0) = 0</span>. <span class="m">x = 0</span>은 근인데 <b>부호는 안 바뀌므로 중근</b>이어야 한다.</p><p class="m">f(x) = k x<sup>2</sup>(x − 3) &nbsp; (k ≠ 0)</p><p><span class="step">③ (나)를 번역한다.</span> <span class="m">k &gt; 0</span>이라 하면 <span class="m">[0, 3]</span>에서 <span class="m">x<sup>2</sup> ≥ 0, x−3 ≤ 0</span>이므로 <span class="m">f ≤ 0</span>.</p><p class="m">f′(x) = 3k x(x − 2) → x = 2에서 최소, f(2) = −4k</p><p>양 끝 <span class="m">f(0) = f(3) = 0</span>이므로 <span class="m">[0,3]</span>에서 <span class="m">f</span>의 값은 <span class="m">−4k</span>부터 <span class="m">0</span>까지다.</p><p><span class="step">④ f + q가 부호를 바꿀 조건.</span> 최댓값 <span class="m">q</span>는 양수, 최솟값 <span class="m">q − 4k</span>는 음수라야 한다.</p><p class="m">0 &lt; q &lt; 4k</p><p>주어진 범위가 <span class="m">0 &lt; q &lt; 1</span>이므로 <span class="m">4k = 1 → k = 1/4</span>.</p><p><span class="step">⑤</span> <span class="m">f(x) = (1/4)x<sup>2</sup>(x−3)</span>, <span class="m">f(6) = (1/4)·36·3 = 27</span></p>
+<p><span class="step">① 두 조건의 &lsquo;≠&rsquo;가 무슨 뜻인지 번역한다.</span>
+<span class="m">∫|F| = |∫F|</span>가 성립하는 것은
+<b><span class="m">F</span>가 그 구간에서 부호를 바꾸지 않을 때뿐</b>이다.
+그러므로 <span class="m">≠</span>라는 조건은 모두
+<b>&lsquo;그 구간에서 부호가 바뀐다&rsquo;</b>로 읽으면 된다.
+이 번역 하나로 적분 문제가 그래프 문제가 된다.</p>
+
+<p><span class="step">② (가)를 번역한다.</span>
+길이가 <span class="m">3</span>인 구간 <span class="m">[p, p+3]</span> 안에서
+<span class="m">f</span>가 부호를 바꾼다는 뜻이다.
+<span class="m">f</span>의 부호가 바뀌는 점이 <span class="m">c</span> 하나뿐이라면
+그 점이 구간 안에 들어와야 하므로</p>
+<p class="m">p &lt; c &lt; p + 3 ⟺ c − 3 &lt; p &lt; c</p>
+<p>주어진 범위가 <span class="m">0 &lt; p &lt; 3</span>이므로 양쪽을 비교하면</p>
+<p class="m">c = 3</p>
+<p>즉 <b>부호가 바뀌는 점은 <span class="m">x = 3</span> 하나뿐</b>이다.</p>
+
+<p><span class="step">③ f의 꼴을 정한다.</span>
+&lsquo;상수항이 0&rsquo;이므로 <span class="m">f(0) = 0</span>, 즉 <span class="m">x = 0</span>은 근이다.
+그런데 ②에서 <b>부호가 바뀌는 점은 <span class="m">3</span>뿐</b>이라고 했으므로
+<span class="m">x = 0</span>에서는 근이면서도 부호가 바뀌지 않아야 한다.
+<b>근이지만 부호가 안 바뀌는 것은 중근</b>이다.</p>
+<p class="m">f(x) = k x<sup>2</sup>(x − 3) &nbsp; (k ≠ 0)</p>
+
+<p><span class="step">④ (나)를 위해 [0, 3]에서 f의 값 범위를 구한다.</span>
+<span class="m">k &gt; 0</span>이라 하자.
+<span class="m">[0, 3]</span>에서는 <span class="m">x<sup>2</sup> ≥ 0</span>이고 <span class="m">x − 3 ≤ 0</span>이므로
+<span class="m">f ≤ 0</span>이다. 최솟값을 찾기 위해 미분한다.</p>
+<p class="m">f(x) = k(x<sup>3</sup> − 3x<sup>2</sup>) → f′(x) = k(3x<sup>2</sup> − 6x) = 3kx(x − 2)</p>
+<p class="m">f′(x) = 0 → x = 0 또는 x = 2</p>
+<p class="m">f(2) = k(8 − 12) = −4k &nbsp; (최솟값)</p>
+<p>양 끝에서는 <span class="m">f(0) = f(3) = 0</span>이므로
+<span class="m">[0,3]</span>에서 <span class="m">f</span>의 값은 <span class="m">−4k</span>부터 <span class="m">0</span>까지다.</p>
+
+<p><span class="step">⑤ f + q가 부호를 바꿀 조건을 쓴다.</span>
+<span class="m">f</span>에 <span class="m">q</span>를 더하면 그래프가 <span class="m">q</span>만큼 위로 올라간다.
+값의 범위는 <span class="m">q − 4k</span>부터 <span class="m">q</span>까지가 된다.
+<b>부호가 바뀌려면 최댓값은 양수, 최솟값은 음수</b>여야 한다.</p>
+<p class="m">q &gt; 0 &nbsp;이고&nbsp; q − 4k &lt; 0</p>
+<p class="m">0 &lt; q &lt; 4k</p>
+
+<p><span class="step">⑥ k를 구한다.</span>
+문제가 준 범위가 <span class="m">0 &lt; q &lt; 1</span>이므로</p>
+<p class="m">4k = 1 → k = 1/4</p>
+<p class="m">f(x) = (1/4)x<sup>2</sup>(x − 3)</p>
+
+<p><span class="step">⑦ 답을 계산한다.</span></p>
+<p class="m">f(6) = (1/4) × 6<sup>2</sup> × (6 − 3) = (1/4) × 36 × 3 = 27</p>
+<p class="m">답 ④</p>
 
 ## 함정
 

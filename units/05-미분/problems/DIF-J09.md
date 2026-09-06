@@ -24,7 +24,35 @@ answer: ③
 
 ## 풀이
 
-<p><span class="step">① 위치를 만든다.</span> 원점 출발이므로 상수항은 0.</p><p class="m">x<sub>1</sub>(t) = t<sup>3</sup>/3 − t<sup>2</sup>/2, &nbsp; x<sub>2</sub>(t) = t<sup>2</sup>/2</p><p><span class="step">② 같게 놓는다.</span></p><p class="m">t<sup>3</sup>/3 − t<sup>2</sup>/2 = t<sup>2</sup>/2 → t<sup>3</sup>/3 = t<sup>2</sup></p><p class="m">t<sup>2</sup>(t − 3) = 0 → t = 0 또는 t = 3</p><p>양수이므로 <span class="m">k = 3</span>.</p>
+<p><span class="step">① 문제가 준 것과 구하는 것을 구분한다.</span>
+문제가 준 것은 <b>속도</b>이고 물어보는 것은 <b>위치가 같아지는 순간</b>이다.
+위치는 속도를 적분해서 얻는다.
+<b>&lsquo;위치가 같다&rsquo;를 &lsquo;속도가 같다&rsquo;로 착각하면 안 된다.</b></p>
+
+<p><span class="step">② 속도를 적분해 위치를 만든다.</span>
+적분하면 상수가 하나씩 붙지만,
+<b>두 점 모두 <span class="m">t = 0</span>일 때 원점에서 출발</b>하므로
+<span class="m">x(0) = 0</span>이 되어 상수는 <span class="m">0</span>이다.</p>
+<p class="m">x<sub>1</sub>(t) = ∫(t<sup>2</sup> − t)dt = t<sup>3</sup>/3 − t<sup>2</sup>/2</p>
+<p class="m">x<sub>2</sub>(t) = ∫t dt = t<sup>2</sup>/2</p>
+
+<p><span class="step">③ 두 위치를 같게 놓는다.</span></p>
+<p class="m">t<sup>3</sup>/3 − t<sup>2</sup>/2 = t<sup>2</sup>/2</p>
+<p>오른쪽의 <span class="m">t<sup>2</sup>/2</span>를 왼쪽으로 넘긴다.</p>
+<p class="m">t<sup>3</sup>/3 − t<sup>2</sup>/2 − t<sup>2</sup>/2 = 0</p>
+<p class="m">t<sup>3</sup>/3 − t<sup>2</sup> = 0</p>
+
+<p><span class="step">④ 공통인수로 묶어 푼다.</span>
+양변에 <span class="m">3</span>을 곱해 분수를 없앤다.</p>
+<p class="m">t<sup>3</sup> − 3t<sup>2</sup> = 0</p>
+<p>두 항 모두 <span class="m">t<sup>2</sup></span>을 가지고 있으므로 묶는다.</p>
+<p class="m">t<sup>2</sup>(t − 3) = 0 → t = 0 또는 t = 3</p>
+
+<p><span class="step">⑤ 조건에 맞는 값을 고른다.</span>
+<span class="m">t = 0</span>은 <b>출발하는 순간</b>이라 &lsquo;출발한 후&rsquo;가 아니고,
+문제도 <span class="m">k</span>가 양수라 했다.</p>
+<p class="m">k = 3</p>
+<p class="m">답 ③</p>
 
 ## 노하우
 

@@ -24,7 +24,31 @@ answer: ⑤
 
 ## 풀이
 
-<p><span class="step">① 전체.</span> <span class="m"><sub>10</sub>C<sub>4</sub> = 210</span></p><p><span class="step">② 여사건.</span> 5의 배수는 <span class="m">5, 10</span> 두 개. 이 둘을 빼고 나머지 8개에서 4개를 고른다.</p><p class="m"><sub>8</sub>C<sub>4</sub> = 70</p><p class="m">P(여사건) = 70/210 = 1/3</p><p><span class="step">③</span></p><p class="m">1 − 1/3 = 2/3</p>
+<p><span class="step">① 조건을 다시 읽는다.</span>
+네 수의 <b>곱</b>이 <span class="m">5</span>의 배수가 되려면
+곱 안에 <b>인수 <span class="m">5</span>가 적어도 하나</b> 있어야 한다.
+<span class="m">1</span>부터 <span class="m">10</span>까지 중에서 <span class="m">5</span>를 인수로 갖는 수는
+<span class="m">5</span>와 <span class="m">10</span> 둘뿐이다.
+그러므로 조건은 다음과 같이 바뀐다.</p>
+<p class="m">5 또는 10 중 적어도 하나를 뽑는다</p>
+
+<p><span class="step">② &lsquo;적어도 하나&rsquo;는 여사건으로 센다.</span>
+&lsquo;적어도 하나&rsquo;를 직접 세면 한 개인 경우와 두 개인 경우로 나눠야 해서 번거롭다.
+반대로 <b>하나도 안 뽑는 경우</b>는 한 번에 세어진다.</p>
+
+<p><span class="step">③ 전체 경우의 수를 구한다.</span>
+<span class="m">10</span>개에서 <span class="m">4</span>개를 <b>동시에</b> 꺼내므로 순서를 따지지 않는다.</p>
+<p class="m"><sub>10</sub>C<sub>4</sub> = (10 × 9 × 8 × 7)/(4 × 3 × 2 × 1) = 210</p>
+
+<p><span class="step">④ 여사건의 경우의 수를 구한다.</span>
+<span class="m">5</span>와 <span class="m">10</span>을 빼면 남는 것은 <span class="m">8</span>개다.
+그중에서 <span class="m">4</span>개를 고른다.</p>
+<p class="m"><sub>8</sub>C<sub>4</sub> = (8 × 7 × 6 × 5)/(4 × 3 × 2 × 1) = 70</p>
+<p class="m">P(여사건) = 70/210 = 1/3</p>
+
+<p><span class="step">⑤ 여사건에서 되돌린다.</span></p>
+<p class="m">P(구하는 사건) = 1 − 1/3 = 2/3</p>
+<p class="m">답 ⑤</p>
 
 ## 노하우
 

@@ -24,7 +24,65 @@ answer: 11
 
 ## 풀이
 
-<p><span class="step">① 최대근이 언제 튀는가.</span> 최고차 1인 삼차함수 <span class="m">f</span>의 극댓값을 <span class="m">M</span>(<span class="m">x=p</span>), 극솟값을 <span class="m">n</span>(<span class="m">x=q</span>, <span class="m">p&lt;q</span>)이라 하자.</p><p class="m">c &gt; n : 최대근 &gt; q &nbsp;/&nbsp; c = n : 최대근 = q &nbsp;/&nbsp; c &lt; n : 최대근 &lt; p</p><p>즉 <span class="m">c</span>가 <span class="m">n</span>을 지나는 순간 최대근이 <span class="m">q</span>에서 <span class="m">p</span> 아래로 <b>뚝 떨어진다</b>. <span class="m">c = M</span>에서는 아무 일도 없다.</p><p><span class="step">② h(t)를 본다.</span> <span class="m">f(x) = x<sup>3</sup> + bx<sup>2</sup> + cx + d</span>라 하면</p><p class="m">h(t) = (3t<sup>2</sup> + 2bt + c) − 4t<sup>2</sup> + 4 = −t<sup>2</sup> + 2bt + (c + 4)</p><p><b>위로 볼록한 포물선</b>이다.</p><p><span class="step">③ 불연속점이 t = 3 하나뿐.</span> <span class="m">h(t) = n</span>인 <span class="m">t</span>가 딱 하나여야 하는데, 위로 볼록한 포물선이 수평선과 한 점에서 만나려면 <b>꼭짓점에서 만나야</b> 한다.</p><p class="m">꼭짓점의 t좌표 = b = 3, &nbsp; n = h(3) = −9 + 18 + c + 4 = c + 13</p><p><span class="step">④ g(3) = 1.</span> <span class="m">t = 3</span>에서 <span class="m">h(3) = n</span>이므로 최대근은 극소점 <span class="m">q</span> 자체. 따라서 <span class="m">q = 1</span>.</p><p class="m">f′(x) = 3x<sup>2</sup> + 6x + c, &nbsp; f′(1) = 9 + c = 0 → c = −9</p><p class="m">f′(x) = 3(x + 3)(x − 1) → 극대 x = −3, 극소 x = 1 ✓</p><p><span class="step">⑤ d를 정한다.</span> <span class="m">n = h(3) = c + 13 = 4</span>이고 <span class="m">n = f(1) = 1 + 3 − 9 + d = d − 5</span>이므로</p><p class="m">d − 5 = 4 → d = 9</p><p class="m">f(x) = x<sup>3</sup> + 3x<sup>2</sup> − 9x + 9</p><p class="m">f(2) = 8 + 12 − 18 + 9 = 11</p>
+<p><span class="step">① 문제를 다시 읽기 좋게 바꾼다.</span>
+오른쪽 식을 <span class="m">t</span>만의 함수로 묶는다.</p>
+<p class="m">h(t) = f′(t) − 4t<sup>2</sup> + 4</p>
+<p>그러면 <span class="m">g(t)</span>는 <b>방정식 <span class="m">f(x) = h(t)</span>의 가장 큰 근</b>이다.
+즉 <span class="m">y = f(x)</span>의 그래프에 <b>수평선 <span class="m">y = h(t)</span>를 긋고
+가장 오른쪽 교점의 <span class="m">x</span>좌표</b>를 읽는 것이다.</p>
+
+<p><span class="step">② 수평선을 위아래로 움직이며 최대근이 언제 튀는지 본다.</span>
+최고차항의 계수가 <span class="m">1</span>인 삼차함수 <span class="m">f</span>의
+극댓값을 <span class="m">M</span>(<span class="m">x = p</span>에서),
+극솟값을 <span class="m">n</span>(<span class="m">x = q</span>에서, <span class="m">p &lt; q</span>)이라 하자.
+수평선의 높이를 <span class="m">c</span>라 하면</p>
+<p class="m">c &gt; n : 교점의 최댓값은 q보다 오른쪽</p>
+<p class="m">c = n : 교점의 최댓값은 정확히 q</p>
+<p class="m">c &lt; n : 교점이 하나뿐이고 그것은 p보다 왼쪽</p>
+<p>즉 <b><span class="m">c</span>가 극솟값 <span class="m">n</span>을 지나는 순간
+최대근이 <span class="m">q</span>에서 <span class="m">p</span> 아래로 뚝 떨어진다.</b>
+반대로 <span class="m">c = M</span>을 지날 때는 교점이 늘어나기는 하지만
+<b>새로 생기는 교점이 모두 왼쪽</b>이라 최대근은 그대로다.
+그러므로 <b>불연속은 <span class="m">h(t) = n</span>일 때만</b> 생긴다.</p>
+
+<p><span class="step">③ h(t)의 모양을 확인한다.</span>
+<span class="m">f(x) = x<sup>3</sup> + bx<sup>2</sup> + cx + d</span>라 하면
+<span class="m">f′(t) = 3t<sup>2</sup> + 2bt + c</span>이므로</p>
+<p class="m">h(t) = (3t<sup>2</sup> + 2bt + c) − 4t<sup>2</sup> + 4 = −t<sup>2</sup> + 2bt + (c + 4)</p>
+<p><span class="m">t<sup>2</sup></span>의 계수가 음수이므로 <b>위로 볼록한 포물선</b>이다.</p>
+
+<p><span class="step">④ &lsquo;t = 3에서만 불연속&rsquo;을 식으로 바꾼다.</span>
+②에서 불연속은 <span class="m">h(t) = n</span>인 <span class="m">t</span>에서만 생긴다고 했다.
+그런 <span class="m">t</span>가 <b>딱 하나</b>여야 하는데,
+위로 볼록한 포물선이 수평선 <span class="m">y = n</span>과 <b>한 점에서만 만나려면
+꼭짓점에서 만나야</b> 한다.</p>
+<p>꼭짓점의 <span class="m">t</span>좌표는 <span class="m">−2b/(2 × (−1)) = b</span>이므로</p>
+<p class="m">b = 3</p>
+<p>그때의 값이 극솟값 <span class="m">n</span>과 같다.</p>
+<p class="m">n = h(3) = −9 + 2 × 3 × 3 + c + 4 = −9 + 18 + c + 4 = c + 13</p>
+
+<p><span class="step">⑤ g(3) = 1을 쓴다.</span>
+<span class="m">t = 3</span>일 때 수평선의 높이가 극솟값과 같으므로
+②에 따라 최대근은 <b>극소점 <span class="m">q</span> 자체</b>다.</p>
+<p class="m">q = 1</p>
+<p><span class="m">f′(q) = 0</span>이므로 <span class="m">b = 3</span>을 넣은 도함수에 <span class="m">x = 1</span>을 대입한다.</p>
+<p class="m">f′(x) = 3x<sup>2</sup> + 6x + c</p>
+<p class="m">f′(1) = 3 + 6 + c = 9 + c = 0 → c = −9</p>
+<p>확인해 보면</p>
+<p class="m">f′(x) = 3x<sup>2</sup> + 6x − 9 = 3(x + 3)(x − 1)</p>
+<p>이므로 극대는 <span class="m">x = −3</span>, 극소는 <span class="m">x = 1</span>로 <b>가정과 맞는다.</b></p>
+
+<p><span class="step">⑥ d를 정한다.</span>
+극솟값을 두 가지로 표현해 같게 놓는다.
+④에서 <span class="m">n = c + 13 = −9 + 13 = 4</span>이고,
+직접 계산하면</p>
+<p class="m">n = f(1) = 1 + 3 − 9 + d = d − 5</p>
+<p class="m">d − 5 = 4 → d = 9</p>
+<p class="m">f(x) = x<sup>3</sup> + 3x<sup>2</sup> − 9x + 9</p>
+
+<p><span class="step">⑦ 답을 계산한다.</span></p>
+<p class="m">f(2) = 8 + 12 − 18 + 9 = 11</p>
+<p class="m">답 11</p>
 
 ## 함정
 

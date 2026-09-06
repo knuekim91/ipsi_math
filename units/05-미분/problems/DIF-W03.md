@@ -24,7 +24,91 @@ answer: 61
 
 ## 풀이
 
-<p><span class="step">① f의 꼴.</span> (가)에서</p><p class="m">f(x) = a(x − α)<sup>2</sup>(x − β) &nbsp; (α ≠ β)</p><p><span class="step">② 합성을 풀어 쓴다.</span> <span class="m">g(x) = x − f(x)</span>라 하면</p><p class="m">f(x − f(x)) = 0 ⟺ g(x) = α &nbsp;또는&nbsp; g(x) = β</p><p><span class="m">f(α) = f(β) = 0</span>이므로 <span class="m">g(α) = α</span>, <span class="m">g(β) = β</span>이다. 따라서 <b><span class="m">x = α</span>와 <span class="m">x = β</span>는 항상 해다.</b></p><p><span class="step">③ 나머지 한 개.</span> <span class="m">g</span>는 삼차함수이므로 각 방정식의 해는 1개, 2개, 3개 중 하나. 두 방정식의 해를 합쳐 3개이고 각각 적어도 1개이므로 <b>{1개, 2개}</b>다. 해가 2개인 쪽은 그 값이 <span class="m">g</span>의 <b>극값</b>이고, 두 해 중 하나는 극점에서의 <b>중근</b>이다.</p><p><span class="step">④ f′(1)=1 이 극점을 준다.</span></p><p class="m">g′(1) = 1 − f′(1) = 0, &nbsp; g(1) = 1 − f(1) = −3</p><p>새로 추가되는 해가 바로 이 극점 <span class="m">x = 1</span>이므로, 그 값은 <span class="m">−3</span>이다. 즉 <b><span class="m">α = −3</span> 또는 <span class="m">β = −3</span>.</b></p><p><span class="step">⑤ β = −3 은 불가능.</span> <span class="m">f = a(x−α)<sup>2</sup>(x+3)</span>이라 하면</p><p class="m">f(1) = 4a(1−α)<sup>2</sup> = 4 → a(1−α)<sup>2</sup> = 1</p><p class="m">f′(x) = a(x−α)(3x + 6 − α) → f′(1) = a(1−α)(9−α) = 1</p><p>두 식이 같으므로 <span class="m">a(1−α)[(1−α) − (9−α)] = 0</span>, 곧 <span class="m">−8a(1−α) = 0</span>. 그러면 <span class="m">f(1) = 0 ≠ 4</span>. <b>모순.</b></p><p><span class="step">⑥ α = −3 으로 f를 결정한다.</span> <span class="m">f(x) = a(x+3)<sup>2</sup>(x−β)</span>.</p><p class="m">f(1) = 16a(1−β) = 4 → a(1−β) = 1/4</p><p class="m">f′(x) = a(x+3)(3x + 3 − 2β) → f′(1) = 4a(6−2β) = 8a(3−β) = 1</p><p>두 식을 나누면 <span class="m">2(3−β) = (1−β)</span> → <span class="m">β = 5</span>, <span class="m">a = −1/16</span>.</p><p class="m">f(x) = −(1/16)(x+3)<sup>2</sup>(x−5)</p><p><span class="step">⑦ f′(0) &gt; 1 확인.</span></p><p class="m">f′(0) = −(1/16)(3)(3 − 10) = 21/16 &gt; 1 ✓</p><p><span class="step">⑧ 답.</span></p><p class="m">f(0) = −(1/16)(9)(−5) = 45/16</p><p class="m">q = 45, p = 16 → p + q = 61</p><p><span class="step">검산.</span> <span class="m">g(x) = x + (1/16)(x+3)<sup>2</sup>(x−5)</span>이고</p><p class="m">g(−3) = −3 = α, &nbsp; g(1) = −3 = α, &nbsp; g(5) = 5 = β</p><p><span class="m">f(x−f(x)) = 0</span>의 실근은 <span class="m">−3, 1, 5</span>로 <b>모두 3개</b> ✓</p>
+<p><span class="step">① f의 모양을 정한다.</span>
+(가)에서 삼차함수인데 <span class="m">f(x) = 0</span>의 서로 다른 실근이 <span class="m">2</span>개라 했다.
+삼차함수의 근은 위수를 합쳐 <span class="m">3</span>개이므로,
+<b>하나는 중근이고 하나는 단순근</b>이다.
+중근을 <span class="m">α</span>, 단순근을 <span class="m">β</span>라 하고 최고차항의 계수를 <span class="m">a</span>라 하면</p>
+<p class="m">f(x) = a(x − α)<sup>2</sup>(x − β), &nbsp; α ≠ β</p>
+
+<p><span class="step">② 안쪽을 치환해 방정식을 풀어 쓴다.</span>
+<span class="m">f(x − f(x)) = 0</span>은 <b>안쪽 <span class="m">x − f(x)</span>가 <span class="m">f</span>의 근이 되라</b>는 뜻이다.
+안쪽을 <span class="m">g(x)</span>라 두자.</p>
+<p class="m">g(x) = x − f(x)</p>
+<p class="m">f(x − f(x)) = 0 ⟺ g(x) = α 또는 g(x) = β</p>
+<p>즉 <span class="m">y = g(x)</span>의 그래프에 <b>수평선 두 개를 긋고 교점을 세는</b> 문제가 되었다.</p>
+
+<p><span class="step">③ 실근 두 개가 공짜로 생김을 확인한다.</span>
+<span class="m">α</span>와 <span class="m">β</span>는 <span class="m">f</span>의 근이라 <span class="m">f(α) = f(β) = 0</span>이다.
+이를 <span class="m">g</span>에 넣어 보면</p>
+<p class="m">g(α) = α − f(α) = α − 0 = α</p>
+<p class="m">g(β) = β − f(β) = β − 0 = β</p>
+<p>즉 <b><span class="m">x = α</span>는 <span class="m">g(x) = α</span>의 해이고,
+<span class="m">x = β</span>는 <span class="m">g(x) = β</span>의 해</b>다.
+계산하지 않아도 이미 <b>서로 다른 실근 두 개</b>가 확보되어 있다.</p>
+
+<p><span class="step">④ 나머지 한 개가 어디서 오는지 따진다.</span>
+실근이 모두 <span class="m">3</span>개라 했으므로 <b>딱 하나만 더</b> 나와야 한다.
+<span class="m">g</span>는 삼차함수이므로 <span class="m">g(x) = c</span>의 해는 <span class="m">1</span>개, <span class="m">2</span>개, <span class="m">3</span>개 중 하나다.
+두 방정식의 해를 합쳐 <span class="m">3</span>개이고 각각 적어도 <span class="m">1</span>개씩 있으므로,
+<b>하나는 해가 1개, 다른 하나는 해가 2개</b>다.</p>
+<p>삼차함수에서 <span class="m">g(x) = c</span>의 해가 정확히 <span class="m">2</span>개인 것은
+<b><span class="m">c</span>가 <span class="m">g</span>의 극값일 때뿐</b>이고,
+그때 두 해 중 하나는 <b>극값을 갖는 점에서의 중근</b>이다.</p>
+
+<p><span class="step">⑤ f′(1) = 1이 극점을 지목한다.</span>
+<span class="m">g(x) = x − f(x)</span>를 미분하면</p>
+<p class="m">g′(x) = 1 − f′(x)</p>
+<p><span class="m">f′(1) = 1</span>이므로</p>
+<p class="m">g′(1) = 1 − 1 = 0</p>
+<p>즉 <b><span class="m">x = 1</span>이 <span class="m">g</span>의 극점</b>이다. 그때의 값은</p>
+<p class="m">g(1) = 1 − f(1) = 1 − 4 = −3</p>
+<p>새로 추가되는 해가 바로 이 극점 <span class="m">x = 1</span>이므로,
+<b>그 수평선의 높이가 <span class="m">−3</span></b>이어야 한다. 따라서</p>
+<p class="m">α = −3 또는 β = −3</p>
+
+<p><span class="step">⑥ β = −3은 불가능함을 보인다.</span>
+<span class="m">f(x) = a(x − α)<sup>2</sup>(x + 3)</span>이라 하고 두 조건을 쓴다.</p>
+<p class="m">f(1) = a(1 − α)<sup>2</sup> × 4 = 4 → a(1 − α)<sup>2</sup> = 1</p>
+<p>도함수를 구한다. 공통인수 <span class="m">(x − α)</span>로 묶으면</p>
+<p class="m">f′(x) = a(x − α)[2(x + 3) + (x − α)] = a(x − α)(3x + 6 − α)</p>
+<p class="m">f′(1) = a(1 − α)(9 − α) = 1</p>
+<p>두 식의 오른쪽이 모두 <span class="m">1</span>이므로 왼쪽끼리 같다.</p>
+<p class="m">a(1 − α)<sup>2</sup> = a(1 − α)(9 − α)</p>
+<p>한쪽으로 넘기고 <span class="m">a(1 − α)</span>로 묶는다.</p>
+<p class="m">a(1 − α)[(1 − α) − (9 − α)] = 0 → a(1 − α)(−8) = 0</p>
+<p>그러면 <span class="m">a(1 − α) = 0</span>이 되어 <span class="m">f(1) = 0</span>이 되는데,
+<span class="m">f(1) = 4</span>라 했으므로 <b>모순</b>이다.</p>
+
+<p><span class="step">⑦ α = −3으로 f를 결정한다.</span>
+<span class="m">f(x) = a(x + 3)<sup>2</sup>(x − β)</span>로 두고 같은 두 조건을 쓴다.</p>
+<p class="m">f(1) = a × 16 × (1 − β) = 4 → a(1 − β) = 1/4 &nbsp;&nbsp; … ㉠</p>
+<p class="m">f′(x) = a(x + 3)[2(x − β) + (x + 3)] = a(x + 3)(3x + 3 − 2β)</p>
+<p class="m">f′(1) = a × 4 × (6 − 2β) = 8a(3 − β) = 1 &nbsp;&nbsp; … ㉡</p>
+<p>㉡을 ㉠으로 나누면 <span class="m">a</span>가 약분된다.</p>
+<p class="m">8(3 − β) / (1 − β) = 1 ÷ (1/4) = 4</p>
+<p class="m">8(3 − β) = 4(1 − β) → 24 − 8β = 4 − 4β</p>
+<p class="m">20 = 4β → β = 5</p>
+<p>㉠에 넣어 <span class="m">a</span>를 구한다.</p>
+<p class="m">a(1 − 5) = 1/4 → −4a = 1/4 → a = −1/16</p>
+<p class="m">f(x) = −(1/16)(x + 3)<sup>2</sup>(x − 5)</p>
+
+<p><span class="step">⑧ f′(0) &gt; 1 인지 확인한다.</span>
+<b>이 조건은 장식이 아니다.</b> 다른 갈래를 걸러내기 위해 붙은 것이므로 반드시 확인한다.</p>
+<p class="m">f′(0) = −(1/16) × 3 × (0 + 3 − 10) = −(1/16) × 3 × (−7) = 21/16</p>
+<p class="m">21/16 = 1.3125 &gt; 1 ✓</p>
+
+<p><span class="step">⑨ 답을 만든다.</span></p>
+<p class="m">f(0) = −(1/16) × 9 × (−5) = 45/16</p>
+<p><span class="m">45</span>와 <span class="m">16</span>은 서로소이므로
+<span class="m">q = 45</span>, <span class="m">p = 16</span>이다.</p>
+<p class="m">p + q = 16 + 45 = 61</p>
+
+<p><span class="step">⑩ 검산한다.</span>
+<span class="m">g(x) = x + (1/16)(x + 3)<sup>2</sup>(x − 5)</span>에 세 값을 넣어 본다.</p>
+<p class="m">g(−3) = −3 = α &nbsp;/&nbsp; g(1) = 1 − 4 = −3 = α &nbsp;/&nbsp; g(5) = 5 − 0 = 5 = β</p>
+<p><span class="m">f(x − f(x)) = 0</span>의 실근은 <span class="m">−3, 1, 5</span>로 <b>모두 3개</b>다. ✓</p>
+<p class="m">답 61</p>
 
 ## 함정
 

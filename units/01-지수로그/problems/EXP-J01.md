@@ -24,7 +24,22 @@ answer: ②
 
 ## 풀이
 
-<p class="m">∛9 = (3<sup>2</sup>)<sup>1/3</sup> = 3<sup>2/3</sup></p><p class="m">3<sup>2/3</sup> × 3<sup>−5/3</sup> = 3<sup>2/3 − 5/3</sup> = 3<sup>−1</sup> = 1/3</p>
+<p><span class="step">① 거듭제곱근을 분수 지수로 바꾼다.</span>
+<span class="m">∛9</span>는 세제곱근이므로 지수 <span class="m">1/3</span>으로 쓸 수 있다.
+그리고 <span class="m">9 = 3<sup>2</sup></span>이므로 밑을 <span class="m">3</span>으로 맞춘다.</p>
+<p class="m">∛9 = 9<sup>1/3</sup> = (3<sup>2</sup>)<sup>1/3</sup></p>
+<p>지수법칙 <span class="m">(a<sup>m</sup>)<sup>n</sup> = a<sup>mn</sup></span>에 따라 <b>겹친 지수를 곱한다.</b></p>
+<p class="m">= 3<sup>2 × (1/3)</sup> = 3<sup>2/3</sup></p>
+
+<p><span class="step">② 밑이 같아졌으므로 지수를 더한다.</span>
+이제 두 수 모두 밑이 <span class="m">3</span>이다.
+<span class="m">a<sup>m</sup> × a<sup>n</sup> = a<sup>m+n</sup></span>을 쓴다.</p>
+<p class="m">3<sup>2/3</sup> × 3<sup>−5/3</sup> = 3<sup>2/3 + (−5/3)</sup> = 3<sup>−3/3</sup> = 3<sup>−1</sup></p>
+
+<p><span class="step">③ 음수 지수를 분수로 고친다.</span>
+<span class="m">a<sup>−1</sup> = 1/a</span>이다.</p>
+<p class="m">3<sup>−1</sup> = 1/3</p>
+<p class="m">답 ②</p>
 
 ## 노하우
 

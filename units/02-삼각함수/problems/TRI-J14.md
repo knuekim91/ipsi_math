@@ -24,7 +24,52 @@ answer: ③
 
 ## 풀이
 
-<p><span class="step">① 구간을 주기로 읽는다.</span> <span class="m">u = bπx</span>라 하면 <span class="m">x : 0 → 2</span>일 때 <span class="m">u : 0 → 2bπ</span>, 곧 <b>b주기</b>.</p><p><span class="step">② 근의 개수 규칙.</span> <span class="m">cos u = c</span>의 근의 개수는</p><p class="m">−1 &lt; c &lt; 1 → 2b개 &nbsp;/&nbsp; c = −1 → b개 &nbsp;/&nbsp; |c| &gt; 1 → 0개</p><p><span class="step">③ 첫 번째 인수.</span> <span class="m">cos(bπx) = 1/2</span> → 항상 <b>2b개</b>.</p><p><span class="step">④ 두 번째 인수.</span> <span class="m">cos(bπx) = −(a+2)/(2a) = c<sub>2</sub></span>. <span class="m">a &gt; 0</span>이므로 <span class="m">c<sub>2</sub> &lt; 0</span>이고 <span class="m">c<sub>2</sub> ≠ 1/2</span>이라 겹치는 근은 없다.</p><p class="m">c<sub>2</sub> ≥ −1 ⟺ (a+2)/(2a) ≤ 1 ⟺ a ≥ 2</p><p><span class="step">⑤ 경우를 나눈다.</span></p><p class="m">a &lt; 2 : c<sub>2</sub> &lt; −1 → 총 2b = 15 (불가, 짝수)</p><p class="m">a &gt; 2 : −1 &lt; c<sub>2</sub> &lt; 0 → 총 4b = 15 (불가)</p><p class="m">a = 2 : c<sub>2</sub> = −1 → 총 2b + b = 3b = 15 → b = 5</p><p class="m">a + b = 2 + 5 = 7</p>
+<p><span class="step">① 곱이 0이므로 두 방정식으로 나눈다.</span>
+두 수의 곱이 <span class="m">0</span>이면 둘 중 하나가 <span class="m">0</span>이다.</p>
+<p class="m">cos(bπx) = 1/2 &nbsp;&nbsp; 또는 &nbsp;&nbsp; a cos(bπx) + (a+2)/2 = 0</p>
+<p>두 번째 식을 <span class="m">cos</span>에 대해 정리한다.
+(<span class="m">a</span>는 양수라 <span class="m">0</span>으로 나눌 걱정이 없다.)</p>
+<p class="m">cos(bπx) = −(a + 2)/(2a) &nbsp; 이 값을 c<sub>2</sub>라 하자</p>
+
+<p><span class="step">② 구간이 몇 주기인지 센다.</span>
+<span class="m">u = bπx</span>로 두면
+<span class="m">x</span>가 <span class="m">0</span>에서 <span class="m">2</span>까지 갈 때 <span class="m">u</span>는 <span class="m">0</span>에서 <span class="m">2bπ</span>까지 간다.
+<span class="m">cos</span>의 주기가 <span class="m">2π</span>이므로 이것은 <b>정확히 <span class="m">b</span>주기</b>다.</p>
+
+<p><span class="step">③ 한 주기당 근이 몇 개인지 정리한다.</span>
+<span class="m">cos u = c</span>의 근의 개수는 <span class="m">c</span>의 값에 따라 다르다.</p>
+<p class="m">−1 &lt; c &lt; 1 : 한 주기에 2개 → 모두 2b개</p>
+<p class="m">c = −1 : 한 주기에 1개(접점) → 모두 b개</p>
+<p class="m">|c| &gt; 1 : 0개</p>
+
+<p><span class="step">④ 개수가 홀수라는 것이 무엇을 뜻하는지 본다.</span>
+<b>실근이 15개, 즉 홀수다.</b>
+그런데 위 표에서 <span class="m">2b</span>는 항상 짝수이므로,
+<b>어딘가에서 근이 절반으로 줄어야 하고 그것은 <span class="m">c = −1</span>일 때뿐</b>이다.
+이것이 이 문제의 핵심 단서다.</p>
+
+<p><span class="step">⑤ 첫 번째 방정식의 근을 센다.</span>
+<span class="m">1/2</span>은 <span class="m">−1</span>과 <span class="m">1</span> 사이이므로 언제나 <span class="m">2b</span>개다.</p>
+
+<p><span class="step">⑥ 두 번째 방정식을 a에 따라 나눈다.</span>
+<span class="m">a &gt; 0</span>이므로 <span class="m">c<sub>2</sub> = −(a+2)/(2a)</span>는 <b>항상 음수</b>다.
+따라서 <span class="m">1/2</span>과 같아질 일이 없어 <b>두 방정식의 근이 겹치지 않는다.</b>
+<span class="m">c<sub>2</sub></span>가 <span class="m">−1</span>보다 큰지 작은지를 따진다.</p>
+<p class="m">c<sub>2</sub> ≥ −1 ⟺ (a+2)/(2a) ≤ 1 ⟺ a + 2 ≤ 2a ⟺ a ≥ 2</p>
+
+<p><b>[경우 1] <span class="m">a &lt; 2</span></b> — <span class="m">c<sub>2</sub> &lt; −1</span>이라 근이 없다.
+총 <span class="m">2b = 15</span>인데 왼쪽은 짝수라 <b>불가능</b>하다.</p>
+
+<p><b>[경우 2] <span class="m">a &gt; 2</span></b> — <span class="m">−1 &lt; c<sub>2</sub> &lt; 0</span>이라 <span class="m">2b</span>개다.
+총 <span class="m">2b + 2b = 4b = 15</span>인데 <span class="m">15</span>는 <span class="m">4</span>의 배수가 아니라 <b>불가능</b>하다.</p>
+
+<p><b>[경우 3] <span class="m">a = 2</span></b> — <span class="m">c<sub>2</sub> = −4/4 = −1</span>이라 <span class="m">b</span>개다.</p>
+<p class="m">2b + b = 3b = 15 → b = 5</p>
+<p><span class="m">b = 5</span>는 자연수이므로 조건에 맞는다.</p>
+
+<p><span class="step">⑦ 답을 만든다.</span></p>
+<p class="m">a + b = 2 + 5 = 7</p>
+<p class="m">답 ③</p>
 
 ## 함정
 

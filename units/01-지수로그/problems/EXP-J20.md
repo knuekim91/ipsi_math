@@ -24,7 +24,51 @@ answer: 48
 
 ## 풀이
 
-<p><span class="step">(가) 기울기 m.</span></p><p class="m">3α − β = 3log<sub>b</sub>β + log<sub>b</sub>α = log<sub>b</sub>(αβ<sup>3</sup>) = log<sub>b</sub>1 = 0</p><p class="m">β = 3α → m = β/α = 3 &nbsp; 따라서 p = 3</p><p><span class="step">(나) β.</span> <span class="m">β = mα</span>이므로</p><p class="m">β<sup>4</sup> = β·β<sup>3</sup> = (mα)β<sup>3</sup> = m(αβ<sup>3</sup>) = m = 3</p><p class="m">β = ⁴√3 = 3<sup>1/4</sup> &nbsp; 따라서 q = 3<sup>1/4</sup></p><p><span class="step">(다) g(m).</span> <span class="m">α = β/m = 3<sup>1/4</sup>/3 = 3<sup>−3/4</sup></span>이므로</p><p class="m">log<sub>m</sub>α = log<sub>3</sub>3<sup>−3/4</sup> = −3/4</p><p class="m">g(m) = β / log<sub>m</sub>α = 3<sup>1/4</sup> ÷ (−3/4) = −(4/3)·3<sup>1/4</sup> &nbsp; 따라서 r = −(4/3)·3<sup>1/4</sup></p><p><span class="step">마무리.</span></p><p class="m">p × q × r = 3 · 3<sup>1/4</sup> · (−4/3)·3<sup>1/4</sup> = −4 · 3<sup>1/2</sup> = −4√3</p><p class="m">(p × q × r)<sup>2</sup> = 16 × 3 = 48</p>
+<p><span class="step">① 점 P가 두 그래프 위에 있다는 것을 식으로 쓴다.</span>
+<span class="m">P(α, β)</span>가 <span class="m">y = f(x) = b<sup>x</sup></span> 위에 있으므로</p>
+<p class="m">β = b<sup>α</sup> &nbsp; 즉 &nbsp; α = log<sub>b</sub>β</p>
+<p>또 <span class="m">y = g(x) = −log<sub>b</sub>x</span> 위에도 있으므로</p>
+<p class="m">β = −log<sub>b</sub>α &nbsp; 즉 &nbsp; log<sub>b</sub>α = −β</p>
+
+<p><span class="step">② (가) — 조건 αβ<sup>3</sup> = 1을 로그로 바꾼다.</span>
+<b>곱이 1인 조건은 로그를 씌우면 합이 0인 조건</b>이 된다.
+밑이 <span class="m">b</span>인 로그를 취한다.</p>
+<p class="m">log<sub>b</sub>(αβ<sup>3</sup>) = log<sub>b</sub>1 = 0</p>
+<p>왼쪽을 로그의 성질로 풀어 쓰면</p>
+<p class="m">log<sub>b</sub>α + 3log<sub>b</sub>β = 0</p>
+<p>①에서 얻은 <span class="m">log<sub>b</sub>α = −β</span>와
+<span class="m">log<sub>b</sub>β = α</span>를 넣는다.</p>
+<p class="m">−β + 3α = 0 → β = 3α</p>
+<p>직선 OP의 기울기는 <span class="m">(β − 0)/(α − 0) = β/α</span>이므로</p>
+<p class="m">m = β/α = 3 &nbsp; 따라서 &nbsp; p = 3</p>
+
+<p><span class="step">③ (나) — β를 구한다.</span>
+<span class="m">β = mα</span>이므로 <span class="m">β<sup>4</sup></span>을 다음과 같이 바꿔 쓸 수 있다.</p>
+<p class="m">β<sup>4</sup> = β × β<sup>3</sup> = (mα) × β<sup>3</sup> = m × (αβ<sup>3</sup>)</p>
+<p>괄호 안이 조건에 의해 <span class="m">1</span>이므로</p>
+<p class="m">β<sup>4</sup> = m = 3</p>
+<p>양변을 <span class="m">4</span>제곱근 하면 (<span class="m">β</span>는 제1사분면 점의 좌표라 양수)</p>
+<p class="m">β = ⁴√3 = 3<sup>1/4</sup> &nbsp; 따라서 &nbsp; q = 3<sup>1/4</sup></p>
+
+<p><span class="step">④ (다) — g(m)을 구한다.</span>
+먼저 <span class="m">α</span>를 구한다.</p>
+<p class="m">α = β/m = 3<sup>1/4</sup>/3 = 3<sup>1/4 − 1</sup> = 3<sup>−3/4</sup></p>
+<p>문제의 과정이 <span class="m">g(m) = β / log<sub>m</sub>α</span>까지 왔으므로
+<span class="m">log<sub>m</sub>α</span>를 계산한다. <span class="m">m = 3</span>이다.</p>
+<p class="m">log<sub>m</sub>α = log<sub>3</sub>3<sup>−3/4</sup> = −3/4</p>
+<p>나눗셈을 곱셈으로 바꿔 계산한다.</p>
+<p class="m">g(m) = 3<sup>1/4</sup> ÷ (−3/4) = 3<sup>1/4</sup> × (−4/3) = −(4/3) × 3<sup>1/4</sup></p>
+<p class="m">따라서 r = −(4/3) × 3<sup>1/4</sup></p>
+
+<p><span class="step">⑤ 세 값을 곱한다.</span>
+<span class="m">3<sup>1/4</sup></span>이 두 번 나오므로 지수를 더해 <span class="m">3<sup>1/2</sup></span>이 된다.</p>
+<p class="m">p × q × r = 3 × 3<sup>1/4</sup> × (−4/3) × 3<sup>1/4</sup></p>
+<p class="m">= (3 × (−4/3)) × 3<sup>1/4 + 1/4</sup> = −4 × 3<sup>1/2</sup> = −4√3</p>
+
+<p><span class="step">⑥ 제곱한다.</span>
+<b>음수이지만 제곱하므로 부호는 사라진다.</b></p>
+<p class="m">(−4√3)<sup>2</sup> = 16 × 3 = 48</p>
+<p class="m">답 48</p>
 
 ## 함정
 

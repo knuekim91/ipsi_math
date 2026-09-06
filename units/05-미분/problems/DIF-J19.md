@@ -24,7 +24,26 @@ answer: 9
 
 ## 풀이
 
-<p class="m">y′ = 3x<sup>2</sup> − 10x + 3</p><p class="m">y′(1) = 3 − 10 + 3 = −4</p><p class="m">y − 5 = −4(x − 1) → y = −4x + 9</p><p><span class="m">x = 0</span>일 때 <span class="m">y = 9</span>.</p>
+<p><span class="step">① 접선을 만드는 데 필요한 두 조각을 확인한다.</span>
+접선은 <b>지나는 점</b>과 <b>기울기</b>만 있으면 정해진다.
+지나는 점은 문제가 준 <span class="m">(1, 5)</span>이고,
+기울기는 <b>그 점에서의 미분계수</b>다.</p>
+
+<p><span class="step">② 도함수를 구해 기울기를 계산한다.</span></p>
+<p class="m">y = x<sup>3</sup> − 5x<sup>2</sup> + 3x + 6 → y′ = 3x<sup>2</sup> − 10x + 3</p>
+<p><span class="m">x = 1</span>을 대입한다.</p>
+<p class="m">y′(1) = 3 × 1 − 10 × 1 + 3 = 3 − 10 + 3 = −4</p>
+
+<p><span class="step">③ 접선의 방정식을 세운다.</span>
+기울기가 <span class="m">−4</span>이고 점 <span class="m">(1, 5)</span>를 지나므로</p>
+<p class="m">y − 5 = −4(x − 1)</p>
+<p>오른쪽을 전개하고 <span class="m">5</span>를 넘긴다.</p>
+<p class="m">y = −4x + 4 + 5 = −4x + 9</p>
+
+<p><span class="step">④ y절편을 읽는다.</span>
+<span class="m">y</span>절편은 <span class="m">x = 0</span>일 때의 <span class="m">y</span>값이다.</p>
+<p class="m">y = −4 × 0 + 9 = 9</p>
+<p class="m">답 9</p>
 
 ## 노하우
 

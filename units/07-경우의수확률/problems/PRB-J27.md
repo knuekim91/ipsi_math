@@ -24,7 +24,31 @@ answer: ④
 
 ## 풀이
 
-<p><span class="step">① 전체.</span> 원소 5개가 각각 3가지 → <span class="m">3<sup>5</sup> = 243</span></p><p><span class="step">② 여사건 f(1)f(2) = 4.</span> <span class="m">f(1), f(2) ∈ {1,2,3}</span>이므로 곱이 4가 되는 순서쌍은</p><p class="m">(f(1), f(2)) = (2, 2) &nbsp; 뿐</p><p><span class="m">f(3), f(4), f(5)</span>는 자유이므로 <span class="m">3<sup>3</sup> = 27</span>가지.</p><p><span class="step">③</span></p><p class="m">243 − 27 = 216</p>
+<p><span class="step">① &lsquo;≠&rsquo;를 보고 여사건을 택한다.</span>
+조건이 <span class="m">f(1) × f(2) ≠ 4</span>이므로,
+<b>곱이 <span class="m">4</span>가 되는 경우를 세서 전체에서 빼는 편</b>이 훨씬 짧다.</p>
+
+<p><span class="step">② 전체 함수의 개수를 센다.</span>
+<span class="m">X</span>의 원소 <span class="m">1, 2, 3, 4, 5</span> 각각에 대해
+<span class="m">Y = {1, 2, 3}</span>의 값 하나를 정하면 함수가 하나 만들어진다.
+각 원소마다 <span class="m">3</span>가지씩이므로</p>
+<p class="m">3<sup>5</sup> = 243</p>
+
+<p><span class="step">③ 곱이 4가 되는 경우를 센다.</span>
+<span class="m">f(1)</span>과 <span class="m">f(2)</span>는 <b>둘 다 <span class="m">Y = {1, 2, 3}</span>의 원소</b>다.
+곱이 <span class="m">4</span>가 되는 순서쌍을 찾는다.</p>
+<p class="m">1 × 4 = 4 → 4는 Y에 없다 (불가능)</p>
+<p class="m">2 × 2 = 4 → 가능</p>
+<p class="m">4 × 1 = 4 → 4는 Y에 없다 (불가능)</p>
+<p>따라서 가능한 것은 <b><span class="m">(f(1), f(2)) = (2, 2)</span> 하나뿐</b>이다.</p>
+
+<p><span class="step">④ 나머지 값은 자유임을 확인한다.</span>
+<span class="m">f(3), f(4), f(5)</span>에는 아무 조건이 없으므로 각각 <span class="m">3</span>가지다.</p>
+<p class="m">1 × 3<sup>3</sup> = 27</p>
+
+<p><span class="step">⑤ 빼서 답을 만든다.</span></p>
+<p class="m">243 − 27 = 216</p>
+<p class="m">답 ④</p>
 
 ## 함정
 
