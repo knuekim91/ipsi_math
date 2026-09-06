@@ -228,6 +228,8 @@ header h1{font-size:26px;letter-spacing:-.01em}
   cursor:pointer;font-family:inherit}
 .sheet .opt small{display:block;color:var(--ink3);font-size:12px;margin-top:2px}
 .sheet .opt[disabled]{opacity:.45;cursor:default}
+.sheet .opt.primary{background:var(--indigo);border-color:var(--indigo);color:#fff;font-weight:500}
+.sheet .opt.primary small{color:rgba(255,255,255,.75)}
 .sheet .hint{font-size:12px;color:var(--ink3);line-height:1.6;margin:4px 0 2px}
 .sheet .idlist{font-family:Consolas,monospace;font-size:13px;line-height:1.9;color:var(--ink);
   background:var(--paper);border:1px solid var(--rule);padding:10px 12px;margin:2px 0 8px;
@@ -316,10 +318,12 @@ header h1{font-size:26px;letter-spacing:-.01em}
 
 <div class="modal" id="askmodal">
   <div class="sheet">
-    <h2>이대로 전달하세요</h2>
-    <div class="sub">아래 내용을 복사해 Claude 대화창에 붙여넣으면, 이 메모에 맞춘 문항을 만들어 드립니다.</div>
+    <h2>엄마에게 보내기</h2>
+    <div class="sub" id="asksub">아래 내용을 엄마에게 보내면, 엄마가 Claude에게 전달해 문항을 만들어 옵니다.</div>
+    <button class="opt primary" id="asksend">카카오톡 · 메시지로 보내기<small>공유 창이 열리면 엄마를 고르세요</small></button>
+    <button class="opt" id="askcopy">복사하기<small>복사한 뒤 직접 붙여넣어도 됩니다</small></button>
     <div class="askbox" id="askbox"></div>
-    <button class="opt" id="askcopy">복사하기<small>복사가 안 되면 위 상자를 길게 눌러 직접 복사하거나 화면을 캡처해 보내세요</small></button>
+    <div class="hint">위 상자를 길게 눌러 직접 복사하거나, 화면을 캡처해 보내도 됩니다.</div>
     <button class="close" id="askclose">닫기</button>
   </div>
 </div>
@@ -796,6 +800,26 @@ function openAsk(txt){
   document.getElementById('askbox').textContent = txt;
   document.getElementById('askmodal').classList.add('on');
 }
+(function(){
+  const btn = document.getElementById('asksend');
+  if (!navigator.share) {                 // 공유를 못 쓰는 기기(대개 PC)면 감춘다
+    btn.style.display = 'none';
+    document.getElementById('asksub').textContent =
+      '아래 내용을 복사해 Claude 대화창에 붙여넣으면, 이 메모에 맞춘 문항을 만들어 드립니다.';
+    return;
+  }
+  btn.onclick = function(){
+    const txt = document.getElementById('askbox').textContent;
+    navigator.share({ title: 'ipsi_math 질문', text: txt }).then(function(){
+      document.getElementById('askmodal').classList.remove('on');
+      toast('보냈어요');
+    }, function(err){
+      if (err && err.name === 'AbortError') return;      // 사용자가 취소한 것
+      copyText(txt, '공유가 막혀 있어 복사했어요. 붙여넣어 보내세요');
+    });
+  };
+})();
+
 document.getElementById('askcopy').onclick = function(){
   copyText(document.getElementById('askbox').textContent, '복사했어요. Claude에게 붙여넣으세요');
   document.getElementById('askmodal').classList.remove('on');
