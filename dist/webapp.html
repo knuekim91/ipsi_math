@@ -185,7 +185,16 @@ header h1{font-size:26px;letter-spacing:-.01em}
   border:1px solid var(--rule);background:var(--paper);color:var(--ink);resize:vertical;min-height:58px;
   line-height:1.6}
 .note:focus{outline:2px solid var(--markline);outline-offset:-1px}
-.notehint{font-size:11px;color:var(--ink3);margin-top:5px}
+.notehint{font-size:11.5px;color:var(--ink3);margin-top:6px;line-height:1.6}
+.askbtn{width:100%;margin-top:9px;font-family:inherit;font-size:14px;min-height:48px;
+  border:1px solid var(--indigo);background:var(--indigo);color:#fff;cursor:pointer;
+  border-radius:2px;font-weight:500}
+.askbtn:disabled{background:var(--card);color:var(--ink3);border-color:var(--rule);cursor:default;
+  font-weight:400}
+.askbox{font-family:Consolas,monospace;font-size:12.5px;line-height:1.7;color:var(--ink);
+  background:var(--paper);border:1px solid var(--rule);padding:12px;margin:2px 0 10px;
+  max-height:300px;overflow-y:auto;white-space:pre-wrap;word-break:break-word;
+  user-select:text;-webkit-user-select:text}
 
 /* ---- 하단 바 ---- */
 .bar{position:fixed;left:0;right:0;bottom:0;background:var(--card);border-top:1px solid var(--rule);
@@ -305,6 +314,16 @@ header h1{font-size:26px;letter-spacing:-.01em}
   </div>
 </div>
 
+<div class="modal" id="askmodal">
+  <div class="sheet">
+    <h2>이대로 전달하세요</h2>
+    <div class="sub">아래 내용을 복사해 Claude 대화창에 붙여넣으면, 이 메모에 맞춘 문항을 만들어 드립니다.</div>
+    <div class="askbox" id="askbox"></div>
+    <button class="opt" id="askcopy">복사하기<small>복사가 안 되면 위 상자를 길게 눌러 직접 복사하거나 화면을 캡처해 보내세요</small></button>
+    <button class="close" id="askclose">닫기</button>
+  </div>
+</div>
+
 <div class="modal" id="pmodal">
   <div class="sheet">
     <h2>선택한 문항 내보내기</h2>
@@ -325,6 +344,7 @@ header h1{font-size:26px;letter-spacing:-.01em}
     <h2>다시 볼 문항</h2>
     <div class="sub">모르겠음·헷갈림으로 표시한 문항입니다. 이 목록이 다음 인쇄 세트가 됩니다.</div>
     <div id="reviewlist"></div>
+    <button class="opt" id="askall">이 목록 전체를 질문으로 모으기<small>메모까지 함께 정리됩니다</small></button>
     <button class="close" id="closebtn">닫기</button>
   </div>
 </div>
@@ -542,9 +562,10 @@ function renderList(){
             '<button class="mbtn mid" data-m="mid" aria-pressed="' + (st==='mid') + '">헷갈림</button>' +
             '<button class="mbtn no" data-m="no" aria-pressed="' + (st==='no') + '">모르겠음</button>' +
           '</div>' +
-          '<textarea class="note" placeholder="어디서 막혔는지 한 줄만 적어두면 다음 문제를 정확히 만들 수 있어요">' +
+          '<textarea class="note" placeholder="어디까지 알겠고 어디부터 막히는지 적어 주세요. 적은 그대로 전달됩니다.">' +
             esc(note) + '</textarea>' +
-          '<div class="notehint">여기 적은 내용은 다음 세트를 만들 때 그대로 읽힙니다.</div>' +
+          '<button class="askbtn" data-ask="' + esc(p.id) + '">이 내용으로 문항 만들어 달라고 하기</button>' +
+          '<div class="notehint">누르면 <b>문제와 메모가 한 덩어리로 정리</b>됩니다. 그대로 복사해 Claude에게 붙여넣으세요.</div>' +
         '</div>' +
       '</div>' +
     '</article>';
@@ -578,6 +599,23 @@ function bind(){
         put(id, { status: cur === b.dataset.m ? '' : b.dataset.m });
       };
     });
+    const ab = card.querySelector('.askbtn');
+    if (ab) {
+      const refresh = function(){
+        const v = state[id] || {};
+        const ready = ((v.note || '').trim() !== '') || v.status === 'mid' || v.status === 'no';
+        ab.disabled = !ready;
+        ab.textContent = ready ? '이 내용으로 문항 만들어 달라고 하기'
+                               : '메모를 적으면 여기서 전달할 수 있어요';
+      };
+      refresh();
+      ab.onclick = function(){
+        const p = PROBLEMS.filter(function(x){ return x.id === id; })[0];
+        const t = card.querySelector('.note');
+        if (t && ((state[id] || {}).note || '') !== t.value) put(id, { note: t.value }, { silent: true });
+        openAsk(askText(p));
+      };
+    }
     const ta = card.querySelector('.note');
     if (ta) {
       let t = null;
@@ -585,7 +623,15 @@ function bind(){
         clearTimeout(t); t = null;
         if (((state[id] || {}).note || '') !== ta.value) put(id, { note: ta.value }, { silent: true });
       };
-      ta.oninput = function(){ clearTimeout(t); t = setTimeout(flush, 400); };
+      ta.oninput = function(){
+        clearTimeout(t); t = setTimeout(flush, 400);
+        if (ab) {
+          const ready = ta.value.trim() !== '';
+          ab.disabled = !ready && !((state[id] || {}).status === 'mid' || (state[id] || {}).status === 'no');
+          ab.textContent = ab.disabled ? '메모를 적으면 여기서 전달할 수 있어요'
+                                       : '이 내용으로 문항 만들어 달라고 하기';
+        }
+      };
       ta.onblur = flush;              // 입력창을 벗어날 때 확실히 저장
       pendingFlush.add(flush);        // 앱 전환·화면 닫힘 대비
     }
@@ -700,23 +746,66 @@ document.getElementById('pmodal').onclick = function(e){
   if (e.target === this) this.classList.remove('on');
 };
 
-document.getElementById('opt3').onclick = function(){
-  const NL = String.fromCharCode(10);
-  const txt = selectedProblems().map(function(p){ return p.id; }).join(NL);
-  const done = function(){ toast('문항 번호 ' + selected.size + '개를 복사했어요');
-                           document.getElementById('pmodal').classList.remove('on'); };
+const NL = String.fromCharCode(10);
+
+function copyText(txt, okMsg){
+  const done = function(){ toast(okMsg); };
   if (navigator.clipboard && navigator.clipboard.writeText) {
     navigator.clipboard.writeText(txt).then(done, function(){ fallbackCopy(txt, done); });
   } else { fallbackCopy(txt, done); }
-};
+}
 function fallbackCopy(txt, done){
   const ta = document.createElement('textarea');
   ta.value = txt; ta.style.position = 'fixed'; ta.style.opacity = '0';
   document.body.appendChild(ta); ta.select();
   try { document.execCommand('copy'); done(); }
-  catch (e) { toast('복사가 안 돼요. 화면의 문항 번호를 직접 적어주세요'); }
+  catch (e) { toast('복사가 안 돼요. 화면의 내용을 길게 눌러 복사하세요'); }
   document.body.removeChild(ta);
 }
+
+document.getElementById('opt3').onclick = function(){
+  const txt = selectedProblems().map(function(p){ return p.id; }).join(NL);
+  document.getElementById('pmodal').classList.remove('on');
+  copyText(txt, '문항 번호 ' + selected.size + '개를 복사했어요');
+};
+
+/* ---------- 질문 만들기 ---------- */
+const STATUS_LABEL = { ok: '알겠음', mid: '헷갈림', no: '모르겠음' };
+
+function askText(p){
+  const v = state[p.id] || {};
+  const L = [];
+  L.push('[ipsi_math 질문]');
+  L.push('문항: ' + p.id + ' · ' + p.topic);
+  L.push('단원: ' + p.unitLabel + ' / 출처: ' + p.source + ' / 배점: ' + p.level);
+  if (v.status) L.push('나은이 표시: ' + (STATUS_LABEL[v.status] || v.status));
+  L.push('');
+  L.push('[문제]');
+  L.push(p.qplain || '');
+  L.push('');
+  L.push('[나은이가 적은 것]');
+  L.push((v.note || '').trim() || '(메모 없음)');
+  L.push('');
+  L.push('[요청] 위 메모에 맞춰 이 문항을 다룰 수 있게 해 주세요.');
+  L.push('막힌 지점부터 다시 세울 도입 사다리와 같은 수준의 유사문항을 만들고,');
+  L.push('저장소에 넣은 뒤 인쇄용 PDF까지 만들어 주세요.');
+  return L.join(NL);
+}
+
+function openAsk(txt){
+  document.getElementById('askbox').textContent = txt;
+  document.getElementById('askmodal').classList.add('on');
+}
+document.getElementById('askcopy').onclick = function(){
+  copyText(document.getElementById('askbox').textContent, '복사했어요. Claude에게 붙여넣으세요');
+  document.getElementById('askmodal').classList.remove('on');
+};
+document.getElementById('askclose').onclick = function(){
+  document.getElementById('askmodal').classList.remove('on');
+};
+document.getElementById('askmodal').onclick = function(e){
+  if (e.target === this) this.classList.remove('on');
+};
 
 /* ---------- 안 푼 문항으로 이동 ---------- */
 function unsolvedIn(list){
@@ -772,6 +861,24 @@ document.getElementById('reviewbtn').onclick = function(){
       (v.note ? '<div class="nt">' + esc(v.note) + '</div>' : '') + '</div>';
   }).join('') : '<div class="empty">아직 표시한 문항이 없습니다.</div>';
   document.getElementById('modal').classList.add('on');
+};
+document.getElementById('askall').onclick = function(){
+  const items = PROBLEMS.filter(function(p){
+    const st = (state[p.id] || {}).status;
+    return st === 'mid' || st === 'no';
+  });
+  if (!items.length) return;
+  const head = ['[ipsi_math 질문 · 다시 볼 문항 ' + items.length + '개]', ''];
+  const body = items.map(function(p){
+    const v = state[p.id] || {};
+    return '─ ' + p.id + ' · ' + p.topic + ' (' + (STATUS_LABEL[v.status] || '') + ')' + NL +
+           '  ' + (p.qplain || '').slice(0, 160) + '…' + NL +
+           '  메모: ' + ((v.note || '').trim() || '(없음)');
+  });
+  const tail = ['', '[요청] 위 문항들의 공통된 약점을 짚고, 막힌 지점부터 세울 사다리와',
+                '같은 수준의 유사문항을 만들어 저장소에 넣고 인쇄용 PDF까지 만들어 주세요.'];
+  document.getElementById('modal').classList.remove('on');
+  openAsk(head.concat(body).concat(tail).join(NL));
 };
 document.getElementById('closebtn').onclick = function(){
   document.getElementById('modal').classList.remove('on');
