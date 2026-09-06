@@ -28,4 +28,4 @@ answer: ②
 
 ## 노하우
 
-<b><span class='m'>P(A) = P(A∩B) + P(A∩B<sup>C</sup>)</span> — 이것을 &lsquo;분할&rsquo;이라 한다.</b> 벤다이어그램에서 <span class='m'>A</span> 원 안이 두 조각으로 갈라지는 그림 하나면 충분하다.
+<b><span class='m'>P(A) = P(A∩B) + P(A∩B<sup>C</sup>)</span>, 이것을 &lsquo;분할&rsquo;이라 한다.</b> 벤다이어그램에서 <span class='m'>A</span> 원 안이 두 조각으로 갈라지는 그림 하나면 충분하다.

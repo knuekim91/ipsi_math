@@ -20,7 +20,7 @@ answer: ④
 
 ## 발상
 
-<b><span class='m'>≠</span> 조건은 여사건이다.</b> <span class='m'>f(1)f(2) = 4</span>가 되는 경우를 세서 전체에서 빼면 된다. <span class='m'>Y = {1,2,3}</span>이라 곱이 4인 조합은 <span class='m'>(2,2)</span> 하나뿐 — <span class='m'>(1,4)</span>와 <span class='m'>(4,1)</span>은 <span class='m'>4 ∉ Y</span>라 불가능하다.
+<b><span class='m'>≠</span> 조건은 여사건이다.</b> <span class='m'>f(1)f(2) = 4</span>가 되는 경우를 세서 전체에서 빼면 된다. <span class='m'>Y = {1,2,3}</span>이라 곱이 4인 조합은 <span class='m'>(2,2)</span> 하나뿐이다. <span class='m'>(1,4)</span>와 <span class='m'>(4,1)</span>은 <span class='m'>4 ∉ Y</span>라 불가능하다.
 
 ## 풀이
 

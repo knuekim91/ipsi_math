@@ -20,7 +20,7 @@ answer: 39
 
 ## 발상
 
-<b><span class='m'>p(x) = f(x) − g(x)</span>로 묶는 것이 첫 수순.</b> <span class='m'>p</span>는 최고차 1인 삼차함수다.<br><br><span class='m'>h(0)=0</span>은 <span class='m'>0 &lt; 1</span>이라 <span class='m'>|p(0)| = 0</span>, 곧 <b><span class='m'>p(0) = 0</span></b>이다. 그런데 <span class='m'>x &lt; 1</span>에서 <span class='m'>|p|</span>가 미분가능하려면 <b>거기의 근은 부호가 안 바뀌는 중근</b>이어야 한다. 따라서 <b><span class='m'>p(x) = x<sup>2</sup>(x − r)</span></b> — 미지수가 <span class='m'>r</span> 하나로 줄었다.<br><br>남은 것은 <span class='m'>x = 1</span>에서 좌우를 잇는 일뿐이다.
+<b><span class='m'>p(x) = f(x) − g(x)</span>로 묶는 것이 첫 수순.</b> <span class='m'>p</span>는 최고차 1인 삼차함수다.<br><br><span class='m'>h(0)=0</span>은 <span class='m'>0 &lt; 1</span>이라 <span class='m'>|p(0)| = 0</span>, 곧 <b><span class='m'>p(0) = 0</span></b>이다. 그런데 <span class='m'>x &lt; 1</span>에서 <span class='m'>|p|</span>가 미분가능하려면 <b>거기의 근은 부호가 안 바뀌는 중근</b>이어야 한다. 따라서 <b><span class='m'>p(x) = x<sup>2</sup>(x − r)</span></b>이다. 미지수가 <span class='m'>r</span> 하나로 줄었다.<br><br>남은 것은 <span class='m'>x = 1</span>에서 좌우를 잇는 일뿐이다.
 
 ## 풀이
 
