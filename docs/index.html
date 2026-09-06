@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>ipsi_math · 수능 수학</title>
+<meta name="description" content="2027학년도 수능 대비 수학 문항 — 문제, 핵심 아이디어, 풀이와 정답">
+<meta name="theme-color" content="#0B1020">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nanum+Myeongjo:wght@400;700;800&family=IBM+Plex+Sans+KR:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css"
+      integrity="sha384-nB0miv6/jRmo5UMMR1wu3Gz6NLsoTkbqJghGIsx//Rlm+ZU03BU6SQNC66uf4l5+" crossorigin="anonymous">
+<link rel="stylesheet" href="app.css">
+</head>
+<body>
+
+<!-- ─────────── 배경 ─────────── -->
+<div class="aurora" aria-hidden="true"><i></i><i></i><i></i></div>
+
+<!-- ─────────── 머리 ─────────── -->
+<header class="hero">
+  <div class="wrap hero-in">
+    <div class="hero-l">
+      <div class="brand">
+        <span class="mark" aria-hidden="true">∫</span>
+        <span class="bname">ipsi<em>_</em>math</span>
+      </div>
+      <h1>수능 수학<br><span>발상으로 푸는 30문항</span></h1>
+      <p class="lede">2027학년도 9월 모의평가 전 문항.
+        문제를 먼저 풀고, <b>핵심 아이디어</b>만 열어 다시 시도한 뒤, 마지막에 풀이를 봅니다.</p>
+      <div class="chips">
+        <span class="chip"><b id="cnt-all">30</b> 문항</span>
+        <span class="chip">수Ⅰ · 수Ⅱ · 확률과 통계</span>
+      </div>
+    </div>
+
+    <div class="hero-r">
+      <div class="dial">
+        <svg viewBox="0 0 200 200" class="ring" aria-hidden="true">
+          <defs>
+            <linearGradient id="g1" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%"  stop-color="#7DE2FF"/>
+              <stop offset="50%" stop-color="#A78BFA"/>
+              <stop offset="100%" stop-color="#FDBA74"/>
+            </linearGradient>
+          </defs>
+          <circle class="trk" cx="100" cy="100" r="86"/>
+          <circle class="bar" cx="100" cy="100" r="86" id="ring"/>
+        </svg>
+        <div class="dial-in">
+          <div class="dday" id="dday">D-–</div>
+          <div class="dsub">2026.11.19 목</div>
+        </div>
+      </div>
+      <div class="stat3">
+        <div class="s ok"><b id="n-ok">0</b><span>알겠음</span></div>
+        <div class="s mid"><b id="n-mid">0</b><span>헷갈림</span></div>
+        <div class="s no"><b id="n-no">0</b><span>모르겠음</span></div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- ─────────── 과목 · 단원 ─────────── -->
+<section class="wrap subjects" id="units">
+  <div class="sec-head">
+    <h2>단원으로 찾기</h2>
+    <p>과목별로 묶었습니다. 색은 그 단원의 표시입니다.</p>
+  </div>
+  <div id="subject-grid"></div>
+</section>
+
+<!-- ─────────── 검색 · 정렬 ─────────── -->
+<div class="toolbar" id="toolbar">
+  <div class="wrap tb-in">
+    <div class="search">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg>
+      <input id="q" type="search" autocomplete="off" placeholder="내용으로 찾기 — 로그, 중복조합, 접선, 21번 …" aria-label="문항 검색">
+      <button id="qx" aria-label="검색어 지우기">✕</button>
+    </div>
+    <div class="views" role="tablist">
+      <button class="vw on" data-view="no" role="tab">번호순</button>
+      <button class="vw" data-view="unit" role="tab">단원별</button>
+    </div>
+  </div>
+  <div class="wrap filt" id="filt"></div>
+</div>
+
+<!-- ─────────── 목록 ─────────── -->
+<main class="wrap list" id="list"></main>
+
+<footer class="wrap foot">
+  <p>문제 저작권은 한국교육과정평가원에 있습니다. 이 사이트는 발상과 풀이 전략을 정리한 학습용 자료입니다.</p>
+  <p class="tiny">ipsi_math · 2027학년도 수능 대비</p>
+</footer>
+
+<div class="toast" id="toast"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"
+        integrity="sha384-7zkQWkzuo3B5mTepMUcHkMB5jZaolc2xDwL6VFqjFALcbeS9Ggm/Yr2r3Dy4lfFg" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"
+        integrity="sha384-43gviWU0YVjaDtb/GhzOouOXtZMP/7XUzwPTstBeZFe/+rCMvRwr4yROQP43s0Xk" crossorigin="anonymous"></script>
+<script src="data.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
