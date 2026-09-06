@@ -4,7 +4,7 @@
   "use strict";
 
   var D = window.DATA, P = D.problems, U = D.units, S = D.subjects;
-  var EX = D.exams || [];
+  var EX = D.exams || [], YR = D.years || [];
   var LS = "ipsi_math_v2";
   var NL = String.fromCharCode(10);
 
@@ -16,7 +16,8 @@
   var view = "no";          // no | unit
   var query = "";
   var unitFilter = "";      // "" = 전체
-  var examFilter = "";      // "" = 전체 시험
+  var yearFilter = "";      // "" = 전체 학년도
+  var examFilter = "";      // "" = 그 학년도 전체
   var open = {};            // id -> {card, idea, sol}
 
   /* ───────── 유틸 ───────── */
@@ -60,8 +61,16 @@
     var t = new Date(); t.setHours(0, 0, 0, 0);
     return Math.round((exam - t) / 86400000);
   }
-  function pool() {   // 시험 필터만 적용한 문항 (단원 개수의 기준)
-    return examFilter ? P.filter(function (p) { return p.exam === examFilter; }) : P;
+  function pool() {   // 학년도·시험 필터만 적용한 문항 (단원 개수의 기준)
+    return P.filter(function (p) {
+      if (yearFilter && p.year !== yearFilter) return false;
+      if (examFilter && p.exam !== examFilter) return false;
+      return true;
+    });
+  }
+  function yearOf(id) {
+    for (var i = 0; i < YR.length; i++) if (YR[i].id === id) return YR[i];
+    return null;
   }
   function counts() {
     var c = { ok: 0, mid: 0, no: 0 };
@@ -115,16 +124,38 @@
 
   /* ───────── 단원 필터 칩 ───────── */
   function paintExams() {
-    var row = el("exrow");
-    if (!row || EX.length < 2) { if (row) row.innerHTML = ""; return; }
-    var parts = ['<button class="exb" data-e="" aria-pressed="' + (examFilter === "") +
-      '">전체 <b>' + P.length + '</b></button>'];
-    EX.forEach(function (e) {
-      parts.push('<button class="exb" data-e="' + esc(e.id) + '" aria-pressed="' +
+    var yr = el("yrow"), ex = el("exrow");
+    if (!yr) return;
+
+    /* 1단 — 학년도 (문항이 있는 학년도만) */
+    var yp = ['<button class="yb" data-y="" aria-pressed="' + (yearFilter === "") +
+      '">전체 <i>' + P.length + '</i></button>'];
+    YR.forEach(function (y) {
+      yp.push('<button class="yb" data-y="' + esc(y.id) + '" aria-pressed="' +
+        (yearFilter === y.id) + '">' + esc(y.short) + ' <i>' + y.count + '</i></button>');
+    });
+    yr.innerHTML = yp.join("");
+    Array.prototype.forEach.call(yr.querySelectorAll(".yb"), function (b) {
+      b.onclick = function () {
+        yearFilter = (yearFilter === b.dataset.y) ? "" : b.dataset.y;
+        examFilter = "";                      // 학년도를 바꾸면 시험 선택은 푼다
+        paintHead(); paintUnits(); paintExams(); paintFilters(); paintList();
+      };
+    });
+
+    /* 2단 — 그 학년도의 시험 (학년도를 고른 뒤에만) */
+    if (!ex) return;
+    var y = yearFilter && yearOf(yearFilter);
+    if (!y) { ex.innerHTML = ""; return; }
+    var xp = ['<span class="lead">' + esc(y.label) + '</span>',
+      '<button class="exb" data-e="" aria-pressed="' + (examFilter === "") +
+      '">전체 <b>' + y.count + '</b></button>'];
+    y.exams.forEach(function (e) {
+      xp.push('<button class="exb" data-e="' + esc(e.id) + '" aria-pressed="' +
         (examFilter === e.id) + '">' + esc(e.label) + ' <b>' + e.count + '</b></button>');
     });
-    row.innerHTML = parts.join("");
-    Array.prototype.forEach.call(row.querySelectorAll(".exb"), function (b) {
+    ex.innerHTML = xp.join("");
+    Array.prototype.forEach.call(ex.querySelectorAll(".exb"), function (b) {
       b.onclick = function () {
         examFilter = b.dataset.e;
         paintHead(); paintUnits(); paintExams(); paintFilters(); paintList();
@@ -154,6 +185,7 @@
 
   /* ───────── 목록 ───────── */
   function match(p) {
+    if (yearFilter && p.year !== yearFilter) return false;
     if (examFilter && p.exam !== examFilter) return false;
     if (unitFilter && p.unit !== unitFilter) return false;
     if (query && (p.search || "").indexOf(query) < 0) return false;
@@ -198,6 +230,8 @@
         '<span class="pno">' + p.no + '</span>' +
         '<span class="pt"><b>' + esc(p.topic) + '</b><span>' + esc(U[p.unit].label) +
           " · " + esc(p.source) + '</span></span>' +
+        (p.origin && p.origin !== "기출"
+          ? '<span class="bdg">' + esc(p.origin) + '</span>' : "") +
         '<span class="plv">' + esc(p.level) + '</span><span class="pmk"></span>' +
       '</button>' + body + '</article>';
   }
@@ -349,11 +383,15 @@
       if (!hit && /^\d+$/.test(key)) {               // #p-21 같은 옛 주소
         var no = +key;
         hit = P.filter(function (x) {
-          return x.no === no && (!examFilter || x.exam === examFilter);
+          return x.no === no && (!yearFilter || x.year === yearFilter) &&
+            (!examFilter || x.exam === examFilter);
         })[0] || P.filter(function (x) { return x.no === no; })[0];
       }
       if (hit) {
-        if (examFilter && hit.exam !== examFilter) { examFilter = ""; paintHead(); paintExams(); }
+        if ((yearFilter && hit.year !== yearFilter) ||
+            (examFilter && hit.exam !== examFilter)) {
+          yearFilter = ""; examFilter = ""; paintHead(); paintExams();
+        }
         if (unitFilter && hit.unit !== unitFilter) {   // 필터에 가려 있으면 푼다
           unitFilter = ""; paintUnits(); paintFilters();
         }

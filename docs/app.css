@@ -269,9 +269,25 @@ button,input{font-family:inherit}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;scroll-behavior:auto}}
 
 
-/* ─── 시험 선택 (6월 / 9월) ─── */
+/* ─── 학년도 선택 ─── */
+.yrow{display:flex;gap:8px;flex-wrap:wrap;align-items:center;padding:0 0 2px}
+.yb{appearance:none;border:1px solid var(--line);background:var(--card);
+  color:var(--dim);font:700 14px/1 var(--mono);letter-spacing:.01em;
+  padding:9px 15px;border-radius:10px;cursor:pointer;
+  display:inline-flex;align-items:baseline;gap:7px;
+  transition:background .16s,color .16s,border-color .16s,transform .16s}
+.yb:hover{transform:translateY(-1px);color:var(--ink);border-color:var(--ink)}
+.yb i{font-style:normal;font:600 11px/1 var(--body);opacity:.55}
+.yb[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.yb[aria-pressed="true"] i{opacity:.65}
+
+/* ─── 시험 선택 (연도 아래 단계) ─── */
 .exrow{display:flex;gap:8px;flex-wrap:wrap;align-items:center;
   padding:0 0 10px;margin-top:-2px}
+.exrow:not(:empty){padding-top:9px;margin-top:7px;
+  border-top:1px dashed var(--line)}
+.exrow .lead{font:600 12px/1 var(--body);color:var(--dim);
+  letter-spacing:.02em;margin-right:2px}
 .exb{appearance:none;border:1px solid var(--line);background:var(--card);
   color:var(--dim);font:600 13px/1 var(--body);letter-spacing:.01em;
   padding:8px 14px;border-radius:999px;cursor:pointer;
@@ -288,6 +304,17 @@ button,input{font-family:inherit}
 .examhd:first-child{margin-top:4px}
 .examhd b{font:700 clamp(17px,2.2vw,21px)/1.2 var(--disp);letter-spacing:-.01em;color:var(--ink)}
 .examhd small{font:500 12px/1 var(--body);color:var(--dim);letter-spacing:.02em}
+
+/* 오답노트 배지 */
+:root{--bdg-ink:hsl(28 90% 34%)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bdg-ink:hsl(28 95% 72%)}}
+:root[data-theme="dark"]{--bdg-ink:hsl(28 95% 72%)}
+:root[data-theme="light"]{--bdg-ink:hsl(28 90% 34%)}
+.bdg{flex:none;font:700 10px/1 var(--body);letter-spacing:.04em;
+  padding:4px 7px;border-radius:999px;margin-left:8px;white-space:nowrap;
+  color:var(--bdg-ink);
+  background:color-mix(in oklab, var(--bdg-ink) 14%, var(--card));
+  border:1px solid color-mix(in oklab, var(--bdg-ink) 38%, transparent)}
 
 /* 배열 도식 (칸 만들기) */
 .slot{font:600 20px/1.7 var(--mono);letter-spacing:.32em;text-align:center;

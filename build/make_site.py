@@ -20,6 +20,19 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 OUT = os.path.join(ROOT, "docs", "data.js")
 
 # 과목 → 단원. 수능 출제 과목 기준으로 묶는다.
+# 시험 이름 규칙 : "<학년도>-<시험>"  (06모평 / 09모평 / 수능)
+TERM_ORDER = {"06모평": 1, "09모평": 2, "수능": 3}
+
+
+def exam_parts(e):
+    """'2027-06모평' -> ('2027', '6월 모평', '2027학년도 6월 모의평가', 1)"""
+    yy, _, term = e.partition("-")
+    if term == "수능":
+        return yy, "수능", "%s학년도 수능" % yy, 3
+    mm = term.replace("모평", "").lstrip("0")
+    return yy, "%s월 모평" % mm, "%s학년도 %s월 모의평가" % (yy, mm),         TERM_ORDER.get(term, 9)
+
+
 SUBJECTS = [
     {"key": "수학Ⅰ", "short": "수Ⅰ", "units": ["01-지수로그", "02-삼각함수", "03-수열"]},
     {"key": "수학Ⅱ", "short": "수Ⅱ", "units": ["04-극한연속", "05-미분", "06-적분"]},
@@ -116,6 +129,7 @@ def build():
                 "diff": meta.get("difficulty", ""),
                 "source": meta.get("source", ""),
                 "exam": meta.get("exam", ""),
+                "origin": meta.get("origin", "기출"),
                 "core": meta.get("core", ""),
                 "answer": meta.get("answer", ""),
                 "tags": [t.strip() for t in
@@ -126,6 +140,7 @@ def build():
             # 기출 번호 (2027-09모평 12번 -> 12)
             m = re.search(r"(\d+)\s*번", item["source"])
             item["no"] = int(m.group(1)) if m else 999
+            item["year"] = item["exam"].partition("-")[0]
             item["search"] = " ".join([
                 item["id"], item["topic"], item["source"], item["level"], item["core"],
                 " ".join(item["tags"]), plain(item["q"]),
@@ -133,28 +148,40 @@ def build():
             ]).lower()
             probs.append(item)
 
-    # 최신 시험이 위로, 그 안에서는 문항 번호순
-    probs.sort(key=lambda p: (p["exam"], p["no"]), reverse=False)
-    probs.sort(key=lambda p: p["exam"], reverse=True)
+    # 최신 학년도가 위로, 한 학년도 안에서는 시행 순서(6월→9월→수능) → 문항 번호
+    def order(p):
+        yy, _, _, t = exam_parts(p["exam"])
+        return (-int(yy) if yy.isdigit() else 0, t, p["no"])
+    probs.sort(key=order)
 
     unit_meta = {k: dict(v, count=sum(1 for p in probs if p["unit"] == k))
                  for k, v in UNITS.items()}
 
-    exams = []
-    for e in sorted({p["exam"] for p in probs if p["exam"]}, reverse=True):
-        yy, mm = e.split("-")[0], e.split("-")[1].replace("모평", "")
-        exams.append({"id": e, "label": "%s월 모평" % mm.lstrip("0"),
-                      "full": "%s학년도 %s월 모의평가" % (yy, mm.lstrip("0")),
-                      "count": sum(1 for p in probs if p["exam"] == e)})
+    ex_ids = {p["exam"] for p in probs if p["exam"]}
+    bucket = {}
+    for e in ex_ids:
+        yy, label, full, t = exam_parts(e)
+        bucket.setdefault(yy, []).append(
+            {"id": e, "label": label, "full": full, "sort": t,
+             "count": sum(1 for p in probs if p["exam"] == e)})
+    years = []
+    for yy in sorted(bucket, key=lambda v: -int(v) if v.isdigit() else 0):
+        lst = sorted(bucket[yy], key=lambda v: v["sort"])
+        for v in lst:
+            v.pop("sort")
+        years.append({"id": yy, "label": yy + "학년도", "short": yy,
+                      "count": sum(v["count"] for v in lst), "exams": lst})
+    exams = [v for y in years for v in y["exams"]]
 
     os.makedirs(os.path.dirname(OUT), exist_ok=True)
     payload = {"problems": probs, "units": unit_meta, "subjects": SUBJECTS,
-               "exams": exams, "exam": "2026-11-19"}
+               "years": years, "exams": exams, "exam": "2026-11-19"}
     io.open(OUT, "w", encoding="utf-8").write(
         "window.DATA = " + json.dumps(payload, ensure_ascii=False) + ";\n")
     print("문항 %d개 -> %s (%.0f KB)" % (len(probs), OUT, os.path.getsize(OUT) / 1024))
-    for e in exams:
-        print("  [%s] %d문항" % (e["full"], e["count"]))
+    for y in years:
+        print("  %s  %d문항  (%s)" % (y["label"], y["count"],
+              ", ".join("%s %d" % (v["label"], v["count"]) for v in y["exams"])))
     for s in SUBJECTS:
         n = sum(unit_meta[u]["count"] for u in s["units"])
         print("  %s %d문항  (%s)" % (s["short"], n,
