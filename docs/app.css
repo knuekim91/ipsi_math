@@ -267,3 +267,29 @@ button,input{font-family:inherit}
 
 .katex{font-size:1.04em}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;scroll-behavior:auto}}
+
+
+/* ─── 시험 선택 (6월 / 9월) ─── */
+.exrow{display:flex;gap:8px;flex-wrap:wrap;align-items:center;
+  padding:0 0 10px;margin-top:-2px}
+.exb{appearance:none;border:1px solid var(--line);background:var(--card);
+  color:var(--dim);font:600 13px/1 var(--body);letter-spacing:.01em;
+  padding:8px 14px;border-radius:999px;cursor:pointer;
+  display:inline-flex;align-items:center;gap:7px;
+  transition:background .16s,color .16s,border-color .16s,transform .16s}
+.exb:hover{transform:translateY(-1px);color:var(--ink)}
+.exb b{font:700 13px/1 var(--mono);letter-spacing:0}
+.exb em{font-style:normal;opacity:.55;font-size:12px}
+.exb[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.exb[aria-pressed="true"] em{opacity:.6}
+/* 시험 구분 머리글 */
+.examhd{grid-column:1/-1;display:flex;align-items:baseline;gap:12px;
+  margin:30px 0 14px;padding-bottom:9px;border-bottom:2px solid var(--ink)}
+.examhd:first-child{margin-top:4px}
+.examhd b{font:700 clamp(17px,2.2vw,21px)/1.2 var(--disp);letter-spacing:-.01em;color:var(--ink)}
+.examhd small{font:500 12px/1 var(--body);color:var(--dim);letter-spacing:.02em}
+
+/* 배열 도식 (칸 만들기) */
+.slot{font:600 20px/1.7 var(--mono);letter-spacing:.32em;text-align:center;
+  margin:14px 0;color:var(--ink)}
+.slot span{font:500 12px/1 var(--body);letter-spacing:.02em;color:var(--dim)}

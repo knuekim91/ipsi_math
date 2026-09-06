@@ -4,6 +4,7 @@
   "use strict";
 
   var D = window.DATA, P = D.problems, U = D.units, S = D.subjects;
+  var EX = D.exams || [];
   var LS = "ipsi_math_v2";
   var NL = String.fromCharCode(10);
 
@@ -15,6 +16,7 @@
   var view = "no";          // no | unit
   var query = "";
   var unitFilter = "";      // "" = 전체
+  var examFilter = "";      // "" = 전체 시험
   var open = {};            // id -> {card, idea, sol}
 
   /* ───────── 유틸 ───────── */
@@ -58,9 +60,12 @@
     var t = new Date(); t.setHours(0, 0, 0, 0);
     return Math.round((exam - t) / 86400000);
   }
+  function pool() {   // 시험 필터만 적용한 문항 (단원 개수의 기준)
+    return examFilter ? P.filter(function (p) { return p.exam === examFilter; }) : P;
+  }
   function counts() {
     var c = { ok: 0, mid: 0, no: 0 };
-    P.forEach(function (p) { var s = st(p.id).status; if (c[s] !== undefined) c[s]++; });
+    pool().forEach(function (p) { var s = st(p.id).status; if (c[s] !== undefined) c[s]++; });
     return c;
   }
   function paintHead() {
@@ -68,28 +73,31 @@
     el("dday").textContent = d >= 0 ? "D-" + d : "D+" + (-d);
     var c = counts();
     el("n-ok").textContent = c.ok; el("n-mid").textContent = c.mid; el("n-no").textContent = c.no;
-    el("cnt-all").textContent = P.length;
+    var pl = pool();
+    el("cnt-all").textContent = pl.length;
     var seen = c.ok + c.mid + c.no, C = 2 * Math.PI * 86;
     var r = el("ring");
     r.style.strokeDasharray = C;
-    r.style.strokeDashoffset = C * (1 - (P.length ? seen / P.length : 0));
+    r.style.strokeDashoffset = C * (1 - (pl.length ? seen / pl.length : 0));
   }
 
   /* ───────── 과목 · 단원 타일 ───────── */
   function paintUnits() {
+    var pl = pool();
+    function nOf(u) { return pl.filter(function (p) { return p.unit === u; }).length; }
     el("subject-grid").innerHTML = S.map(function (sub) {
       var total = 0;
-      sub.units.forEach(function (u) { total += U[u].count; });
+      sub.units.forEach(function (u) { total += nOf(u); });
       var tiles = sub.units.map(function (u) {
         var m = U[u];
-        var mine = P.filter(function (p) { return p.unit === u; });
+        var mine = pl.filter(function (p) { return p.unit === u; });
         var done = mine.filter(function (p) { return st(p.id).status; }).length;
         var pct = mine.length ? Math.round(done / mine.length * 100) : 0;
         return '<button class="utile" style="--h:' + m.hue + '" data-u="' + esc(u) + '"' +
           ' aria-pressed="' + (unitFilter === u) + '">' +
           '<span class="dot"></span>' +
           '<span class="un">' + esc(m.label) + '</span>' +
-          '<span class="uc">' + m.count + '문항 · ' + done + '개 표시</span>' +
+          '<span class="uc">' + mine.length + '문항 · ' + done + '개 표시</span>' +
           '<span class="ub"><i style="width:' + pct + '%"></i></span></button>';
       }).join("");
       return '<div class="subj"><div class="subj-t">' + esc(sub.key) +
@@ -106,13 +114,34 @@
   }
 
   /* ───────── 단원 필터 칩 ───────── */
+  function paintExams() {
+    var row = el("exrow");
+    if (!row || EX.length < 2) { if (row) row.innerHTML = ""; return; }
+    var parts = ['<button class="exb" data-e="" aria-pressed="' + (examFilter === "") +
+      '">전체 <b>' + P.length + '</b></button>'];
+    EX.forEach(function (e) {
+      parts.push('<button class="exb" data-e="' + esc(e.id) + '" aria-pressed="' +
+        (examFilter === e.id) + '">' + esc(e.label) + ' <b>' + e.count + '</b></button>');
+    });
+    row.innerHTML = parts.join("");
+    Array.prototype.forEach.call(row.querySelectorAll(".exb"), function (b) {
+      b.onclick = function () {
+        examFilter = b.dataset.e;
+        paintHead(); paintUnits(); paintExams(); paintFilters(); paintList();
+      };
+    });
+  }
+
   function paintFilters() {
+    var pl = pool();
+    function nOf(u) { return pl.filter(function (p) { return p.unit === u; }).length; }
     var parts = ['<button class="fc" data-u="" aria-pressed="' + (unitFilter === "") +
-      '" style="--h:220"><i></i>전체 ' + P.length + '</button>'];
+      '" style="--h:220"><i></i>전체 ' + pl.length + '</button>'];
     Object.keys(U).sort().forEach(function (u) {
+      if (!nOf(u)) return;
       parts.push('<button class="fc" data-u="' + esc(u) + '" style="--h:' + U[u].hue +
         '" aria-pressed="' + (unitFilter === u) + '"><i></i>' + esc(U[u].label) +
-        " " + U[u].count + "</button>");
+        " " + nOf(u) + "</button>");
     });
     parts.push('<span class="hits" id="hits"></span>');
     el("filt").innerHTML = parts.join("");
@@ -125,6 +154,7 @@
 
   /* ───────── 목록 ───────── */
   function match(p) {
+    if (examFilter && p.exam !== examFilter) return false;
     if (unitFilter && p.unit !== unitFilter) return false;
     if (query && (p.search || "").indexOf(query) < 0) return false;
     return true;
@@ -163,7 +193,7 @@
       '</div>';
 
     return '<article class="p' + cls + (o.card ? " on" : "") + '" style="--h:' + h +
-      '" id="p-' + p.no + '" data-id="' + esc(p.id) + '">' +
+      '" id="p-' + esc(p.id) + '" data-id="' + esc(p.id) + '">' +
       '<button class="phd" aria-expanded="' + !!o.card + '">' +
         '<span class="pno">' + p.no + '</span>' +
         '<span class="pt"><b>' + esc(p.topic) + '</b><span>' + esc(U[p.unit].label) +
@@ -193,6 +223,15 @@
             '<small>' + esc(sub.key) + ' · ' + mine.length + '문항</small></div>';
           html += mine.map(card).join("");
         });
+      });
+    } else if (!examFilter && EX.length > 1) {
+      html = "";
+      EX.forEach(function (e) {
+        var mine = items.filter(function (p) { return p.exam === e.id; });
+        if (!mine.length) return;
+        html += '<div class="examhd" id="e-' + esc(e.id) + '"><b>' + esc(e.full) +
+          '</b><small>' + mine.length + '문항</small></div>';
+        html += mine.map(card).join("");
       });
     } else {
       html = items.map(card).join("");
@@ -297,7 +336,7 @@
   });
 
   /* ───────── 시작 ───────── */
-  paintHead(); paintUnits(); paintFilters(); paintList();
+  paintHead(); paintUnits(); paintExams(); paintFilters(); paintList();
 
   /* 주소의 #p-12 (문항 번호) / #u-05-미분 (단원) 으로 바로 가기.
      페이지가 이미 열려 있을 때도 동작하도록 hashchange 를 함께 듣는다. */
@@ -305,12 +344,20 @@
     if (!location.hash) return;
     var target = decodeURIComponent(location.hash.slice(1));
     if (target.indexOf("p-") === 0) {
-      var no = +target.slice(2);
-      var hit = P.filter(function (x) { return x.no === no; })[0];
+      var key = target.slice(2);
+      var hit = P.filter(function (x) { return x.id === key; })[0];
+      if (!hit && /^\d+$/.test(key)) {               // #p-21 같은 옛 주소
+        var no = +key;
+        hit = P.filter(function (x) {
+          return x.no === no && (!examFilter || x.exam === examFilter);
+        })[0] || P.filter(function (x) { return x.no === no; })[0];
+      }
       if (hit) {
+        if (examFilter && hit.exam !== examFilter) { examFilter = ""; paintHead(); paintExams(); }
         if (unitFilter && hit.unit !== unitFilter) {   // 필터에 가려 있으면 푼다
           unitFilter = ""; paintUnits(); paintFilters();
         }
+        target = "p-" + hit.id;
         open[hit.id] = Object.assign({}, open[hit.id], { card: true });
         paintList();
       }

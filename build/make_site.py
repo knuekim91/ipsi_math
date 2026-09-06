@@ -115,6 +115,7 @@ def build():
                 "level": meta.get("level", ""),
                 "diff": meta.get("difficulty", ""),
                 "source": meta.get("source", ""),
+                "exam": meta.get("exam", ""),
                 "core": meta.get("core", ""),
                 "answer": meta.get("answer", ""),
                 "tags": [t.strip() for t in
@@ -132,17 +133,28 @@ def build():
             ]).lower()
             probs.append(item)
 
-    probs.sort(key=lambda p: p["no"])
+    # 최신 시험이 위로, 그 안에서는 문항 번호순
+    probs.sort(key=lambda p: (p["exam"], p["no"]), reverse=False)
+    probs.sort(key=lambda p: p["exam"], reverse=True)
 
     unit_meta = {k: dict(v, count=sum(1 for p in probs if p["unit"] == k))
                  for k, v in UNITS.items()}
 
+    exams = []
+    for e in sorted({p["exam"] for p in probs if p["exam"]}, reverse=True):
+        yy, mm = e.split("-")[0], e.split("-")[1].replace("모평", "")
+        exams.append({"id": e, "label": "%s월 모평" % mm.lstrip("0"),
+                      "full": "%s학년도 %s월 모의평가" % (yy, mm.lstrip("0")),
+                      "count": sum(1 for p in probs if p["exam"] == e)})
+
     os.makedirs(os.path.dirname(OUT), exist_ok=True)
     payload = {"problems": probs, "units": unit_meta, "subjects": SUBJECTS,
-               "exam": "2026-11-19"}
+               "exams": exams, "exam": "2026-11-19"}
     io.open(OUT, "w", encoding="utf-8").write(
         "window.DATA = " + json.dumps(payload, ensure_ascii=False) + ";\n")
     print("문항 %d개 -> %s (%.0f KB)" % (len(probs), OUT, os.path.getsize(OUT) / 1024))
+    for e in exams:
+        print("  [%s] %d문항" % (e["full"], e["count"]))
     for s in SUBJECTS:
         n = sum(unit_meta[u]["count"] for u in s["units"])
         print("  %s %d문항  (%s)" % (s["short"], n,
