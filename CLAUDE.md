@@ -197,35 +197,33 @@ python build/make_pdf.py --all --name 전체 --space 작음
 `--space 큼|보통|작음` 으로 문제지의 풀이 공간을 조절한다 (기본 보통).
 출력은 `dist/YYYYMMDD_<이름>_문제.pdf` 와 `_해설.pdf`.
 
-## 6. 웹앱 (나은이가 폰/태블릿에서 보는 화면)
+## 6. 사이트 (나은이가 폰/태블릿에서 보는 화면)
 
-`build/make_webapp.py`가 `units/`의 모든 문항을 읽어 `dist/webapp.html` 하나로 만든다.
-게시된 Artifact: **https://claude.ai/code/artifact/35b8893a-424a-4a1d-b756-1ea1fe4cf24e**
+**https://knuekim91.github.io/ipsi_math/** — GitHub Pages, `main` 브랜치의 `docs/` 폴더.
 
 ```bash
-python build/make_webapp.py      # 문항이 추가/수정될 때마다 실행
+python build/make_site.py      # 문항을 추가/수정할 때마다 실행
+git add -A && git commit && git push
 ```
-그 다음 `dist/webapp.html`을 **같은 파일 경로로 재게시**하면 URL이 유지된다.
-문항을 추가하고 웹앱을 갱신하지 않으면 나은이 화면에는 새 문제가 안 보인다. **한 세트로 묶어서 하라.**
 
-앱에는 문항 선택(체크) 기능이 있다. 고른 문항은 **인쇄용 HTML 파일로 내려받거나**
-(`downloads` 기능 선언 필요) `문항 번호 복사`로 ID 목록을 얻을 수 있다.
-**주의 1. 아티팩트는 claude.ai 프레임 안에서 돌기 때문에 `window.print()`가 차단된다.**
-앱 안에서 직접 인쇄를 시도하지 말 것.
+`build/make_site.py`가 `units/`의 모든 문항을 읽어 `docs/data.js`를 만든다.
+푸시하면 Pages가 1~2분 안에 자동 배포한다.
+**문항만 고치고 이 스크립트를 안 돌리면 나은이 화면에 새 문제가 안 보인다.**
+한 세트로 묶어서 하라.
 
-**주의 2. `downloads` 기능을 선언하면 '링크가 있는 누구나' 공유가 막힌다.**
-(공유 창에 "This Artifact offers file downloads, so it can't be shared publicly" 가 뜬다.)
-나은이가 계정 없이 링크로 열어야 하므로 **이 앱에는 어떤 파일 내려받기 기능도 넣지 않는다.**
-인쇄물은 앱에서 만들지 않고, `문항 번호 복사`로 받은 ID를 `sets/` 파일에 넣어
-`make_pdf.py`로 만든다. 이것이 확정된 경로다. **복사한 ID를 `sets/` 파일에 붙여 넣으면
-`make_pdf.py`로 더 정갈한 문제지·해설지가 나온다** — 사용자가 ID 목록을 주면 이 경로로 처리한다.
+인쇄물은 사이트에서 만들지 않는다. 문항 ID를 `sets/` 파일에 넣고
+`make_pdf.py`로 문제지·해설지를 뽑는다. 이것이 확정된 경로다.
 
-앱은 문항별로 `알겠음 / 헷갈림 / 모르겠음`과 자유 메모를 기록한다.
-- `db` 기능이 켜져 있으면 서버에 공유 저장되고, `read_db`로 읽어 다음 세트의 재료로 쓴다.
-  문서 경로는 `progress/<문항ID>` = `{status, note, at}`.
-- 꺼져 있으면 각자 기기의 localStorage에 저장된다. 이때는 앱 하단의 "복습할 문항 보기"를
-  나은이가 직접 보여주는 방식으로 받는다.
-앱 코드는 두 경우 모두에서 동작하도록 되어 있으니 **어느 쪽이든 분기 처리를 지운다거나 하지 않는다.**
+사이트는 문항별로 `알겠음 / 헷갈림 / 모르겠음`, 자유 메모, 추천 강좌 링크를 기록한다.
+저장 위치는 로그인 여부에 따라 갈린다 — 6-3 참고.
+
+> **옛 방식 (2026-09-06 폐기)**
+> 전에는 `build/make_webapp.py`로 `dist/webapp.html`을 만들어 claude.ai Artifact로
+> 게시했다. 그 스크립트와 아티팩트는 더 이상 쓰지 않는다.
+> 아티팩트는 claude.ai 프레임 안에서 돌아 `window.print()`가 막히고,
+> `downloads` 기능을 켜면 '링크가 있는 누구나' 공유가 막혀서
+> 나은이가 계정 없이 열 수 없다는 문제가 있었다.
+> **Pages로 옮긴 지금은 두 제약 모두 해당되지 않는다.**
 
 ## 6-1. 사이트 화면 구조 (docs/)
 
