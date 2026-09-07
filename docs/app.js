@@ -258,7 +258,9 @@
   /* 이 문항에 딸린 유사문항·사다리. 부모 카드 안에서만 보인다. */
   function kidsBlock(p, s) {
     var list = KID[p.id] || [];
-    if (!list.length && !s.reqAt) return "";
+    /* 요청한 뒤 문항이 실제로 늘었으면 '요청함' 표시는 걷는다 */
+    var waiting = !!s.reqAt && list.length <= (s.reqN || 0);
+    if (!list.length && !waiting) return "";
 
     var rows = list.map(function (k) {
       var ks = st(k.id), o = open[k.id] || {};
@@ -291,7 +293,7 @@
         '</div></div>';
     }).join("");
 
-    if (s.reqAt) {
+    if (waiting) {
       var d = new Date(s.reqAt);
       rows += '<div class="kwait">문항 요청함 · ' + (d.getMonth() + 1) + "/" + d.getDate() +
         '<span>보내 주시면 여기에 들어갑니다</span></div>';
@@ -485,7 +487,9 @@
         send.disabled = !ready();
         if (ta) ta.addEventListener("input", function () { send.disabled = !ready(); });
         send.onclick = function () {
-          put(id, ta ? { note: ta.value, reqAt: Date.now() } : { reqAt: Date.now() });
+          var had = (KID[id] || []).length;
+          put(id, ta ? { note: ta.value, reqAt: Date.now(), reqN: had }
+                     : { reqAt: Date.now(), reqN: had });
           paintList();
           var p = P.filter(function (x) { return x.id === id; })[0];
           share(p);
