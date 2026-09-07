@@ -27,28 +27,8 @@ answer: 38
 <span class="m">p − q = 2√2</span>일 때,
 <span class="m">k + (r−q)<sup>2</sup></span>의 값을 구하시오.</p>
 
-<div class="fig">
-<svg viewBox="0 0 360 260" role="img" aria-label="세 로그 곡선의 교점. y=log2 x 는 오른쪽 위로 올라가는 곡선, y=log(1/2) x 는 오른쪽 아래로 내려가는 곡선, y=log2(−x+k)는 오른쪽으로 갈수록 아래로 꺾이는 곡선. 제1사분면 교점이 Q와 P, 제4사분면 교점이 R이다.">
-  <path class="ax" d="M20 130 H345 M85 245 V20"/>
-  <path class="ax" d="M345 130 l-6 -3.5 v7 z" fill="currentColor"/>
-  <path class="ax" d="M85 20 l-3.5 6 h7 z" fill="currentColor"/>
-  <path class="cv" d="M88 240 C96 168 112 142 150 132 C210 118 280 96 335 78"/>
-  <path class="cv" d="M88 20 C96 92 112 118 150 128 C210 142 280 164 335 182"/>
-  <path class="cv" d="M62 26 C74 92 92 118 130 130 C176 145 232 176 262 232" stroke-dasharray="0"/>
-  <circle class="pt" cx="106" cy="86"  r="4"/>
-  <circle class="pt" cx="150" cy="112" r="4"/>
-  <circle class="pt" cx="240" cy="185" r="4"/>
-  <text x="97"  y="80"  text-anchor="end">Q</text>
-  <text x="155" y="104">P</text>
-  <text x="248" y="180">R</text>
-  <text x="78"  y="145" text-anchor="end">O</text>
-  <text x="255" y="72">y = log₂ x</text>
-  <text x="255" y="196">y = log₁⁄₂ x</text>
-  <text x="150" y="252">y = log₂(−x+k)</text>
-  <text class="v" x="353" y="126">x</text>
-  <text class="v" x="93" y="30">y</text>
-</svg>
-</div>
+<div class="fig"><img src="img/EXP-C20.png" width="848" height="706"
+  alt="세 곡선 y=log2 x, y=log(1/2) x, y=log2(-x+k) 가 그려져 있다. 두 점 P와 Q, R가 곡선들의 교점에 표시되어 있다."></div>
 
 ## 발상
 

@@ -28,32 +28,8 @@ answer: ④
 <span class="m">x</span>좌표와 <span class="m">y</span>좌표가 모두 정수인 점의 개수를
 <span class="m">m</span>이라 하자. <span class="m">S + m</span>의 값은?</p>
 
-<div class="fig">
-<svg viewBox="0 0 360 300" role="img" aria-label="두 로그 곡선과 직선 l, x축, y축으로 둘러싸인 도형 P. 위쪽 곡선은 y=log3(x+1)+4, 아래쪽 곡선은 y=log3(x−1), 직선 l은 점 A(4,1)을 지나고 기울기가 −2이다.">
-  <path class="rg" d="M60 260 L60 148 C82 137 104 129 126 123 L126 123 L214 260 Z"/>
-  <path class="ax" d="M30 260 H345 M60 285 V30"/>
-  <path class="ax" d="M345 260 l-6 -3.5 v7 z" fill="currentColor"/>
-  <path class="ax" d="M60 30 l-3.5 6 h7 z" fill="currentColor"/>
-  <path class="cv" d="M62 40 C68 92 86 128 126 123 C170 118 230 100 335 82"/>
-  <path class="cv" d="M99 285 C104 216 116 190 137 186 C180 178 250 158 335 140"/>
-  <path class="cv" d="M126 78 L245 293" stroke-dasharray="0"/>
-  <path class="gd" d="M60 214 H214 M214 214 V260 M126 123 V260 M126 123 H60"/>
-  <circle class="pt" cx="214" cy="214" r="4"/>
-  <circle class="pt" cx="126" cy="123" r="4"/>
-  <text x="60"  y="278" text-anchor="middle">O</text>
-  <text x="214" y="278" text-anchor="middle">4</text>
-  <text x="126" y="278" text-anchor="middle">2</text>
-  <text x="52"  y="218" text-anchor="end">1</text>
-  <text x="52"  y="127" text-anchor="end">5</text>
-  <text x="222" y="208">A</text>
-  <text x="105" y="205" class="v">P</text>
-  <text x="248" y="300" class="v">l</text>
-  <text x="252" y="70">y = log₃(x+1)+4</text>
-  <text x="252" y="132">y = log₃(x−1)</text>
-  <text class="v" x="353" y="256">x</text>
-  <text class="v" x="68" y="40">y</text>
-</svg>
-</div>
+<div class="fig"><img src="img/EXP-C10.png" width="691" height="688"
+  alt="두 곡선 y=log3(x+1)+4 와 y=log3(x-1), 직선 l 이 그려져 있다. 점 A는 (4,1)이고, 두 곡선과 y축·직선 l 로 둘러싸인 영역 P가 칠해져 있다."></div>
 
 <div class="choices"><span>① 28</span><span>② 30</span><span>③ 32</span>
 <span>④ 34</span><span>⑤ 36</span></div>

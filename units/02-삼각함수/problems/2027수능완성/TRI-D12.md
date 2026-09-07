@@ -23,29 +23,8 @@ answer: ②
 직선 <span class="m">BC</span>와 만나는 점을 <span class="m">E</span>라 하자.
 <span class="m">AE : CD = 2 : 1</span>일 때, 삼각형 <span class="m">AEB</span>의 넓이는?</p>
 
-<div class="fig">
-<svg viewBox="0 0 330 235" role="img" aria-label="한 원에 내접하는 사각형 ABCD. 점 A는 원의 위쪽, D는 오른쪽 위, C는 오른쪽 아래, B는 왼쪽 아래에 있다. 직선 BC를 왼쪽으로 늘인 곳에 점 E가 있고, 선분 AE는 선분 BD와 평행하다. 삼각형 AEB가 칠해져 있다.">
-  <path class="rg" d="M223 22 L23 200 L157 200 Z"/>
-  <circle class="cv" cx="223" cy="124" r="101.5"/>
-  <path class="cv" d="M223 22 L307 66 L290 200 L157 200 Z"/>
-  <path class="gd" d="M223 22 L290 200"/>
-  <path class="gd" d="M157 200 L307 66"/>
-  <path class="cv" d="M223 22 L23 200"/>
-  <path class="cv" d="M23 200 L290 200"/>
-  <path class="gd" d="M186 105 L196 116"/>
-  <path class="gd" d="M251 105 L261 116"/>
-  <circle class="pt" cx="223" cy="22"  r="3.5"/>
-  <circle class="pt" cx="307" cy="66"  r="3.5"/>
-  <circle class="pt" cx="290" cy="200" r="3.5"/>
-  <circle class="pt" cx="157" cy="200" r="3.5"/>
-  <circle class="pt" cx="23"  cy="200" r="3.5"/>
-  <text x="223" y="13"  text-anchor="middle">A</text>
-  <text x="318" y="60"  text-anchor="middle">D</text>
-  <text x="298" y="217" text-anchor="middle">C</text>
-  <text x="152" y="217" text-anchor="middle">B</text>
-  <text x="16"  y="217" text-anchor="middle">E</text>
-</svg>
-</div>
+<div class="fig"><img src="img/TRI-D12.png" width="770" height="573"
+  alt="한 원에 내접하는 사각형 ABCD. A는 위, D는 오른쪽 위, C는 오른쪽 아래, B는 아래쪽에 있다. 직선 BC를 왼쪽으로 늘인 곳에 점 E가 있고 선분 AE는 선분 BD와 평행하다. 삼각형 AEB가 칠해져 있다."></div>
 
 <div class="choices"><span>① √6/2</span><span>② √7/2</span><span>③ √2</span>
 <span>④ 3/2</span><span>⑤ √10/2</span></div>

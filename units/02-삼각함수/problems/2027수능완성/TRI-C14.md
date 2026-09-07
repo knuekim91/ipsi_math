@@ -22,20 +22,8 @@ answer: ②
 <p class="m">BC = 2, &nbsp; cos(∠CAD) : cos(∠CBD) = 7 : 3</p>
 <p>일 때, <span class="m">BD<sup>2</sup> + CD<sup>2</sup></span>의 값은?</p>
 
-<div class="fig">
-<svg viewBox="0 0 330 230" role="img" aria-label="AB=AC인 이등변삼각형 ABC. 점 A는 왼쪽 아래, 점 B는 오른쪽 아래, 점 C는 위쪽. 점 D는 선분 AB 위에서 B에 가까운 쪽에 있고 C와 이어져 있다.">
-  <path class="cv" d="M40 190 L280 190 L227 45 Z"/>
-  <path class="cv" d="M227 45 L220 190"/>
-  <circle class="pt" cx="40"  cy="190" r="3.5"/>
-  <circle class="pt" cx="280" cy="190" r="3.5"/>
-  <circle class="pt" cx="227" cy="45"  r="3.5"/>
-  <circle class="pt" cx="220" cy="190" r="3.5"/>
-  <text x="30"  y="205" text-anchor="middle">A</text>
-  <text x="290" y="205" text-anchor="middle">B</text>
-  <text x="232" y="35"  text-anchor="middle">C</text>
-  <text x="214" y="207" text-anchor="middle">D</text>
-</svg>
-</div>
+<div class="fig"><img src="img/TRI-C14.png" width="743" height="478"
+  alt="AB=AC인 이등변삼각형 ABC. A는 왼쪽 아래, B는 오른쪽 아래, C는 위쪽에 있고 선분 AB 위의 점 D가 C와 이어져 있다."></div>
 
 <div class="choices"><span>① 31/8</span><span>② 33/8</span><span>③ 35/8</span>
 <span>④ 37/8</span><span>⑤ 39/8</span></div>

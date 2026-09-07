@@ -110,3 +110,17 @@ th, td { border: .5pt solid #999; padding: 3.5pt 6pt; text-align: center; }
 th { background: #eee; font-size: 8.2pt; font-weight: 700; }
 td.mono { font-family: Consolas, monospace; font-size: 8.2pt; }
 td.ans { font-weight: 700; font-family: "Cambria Math", Cambria, serif; }
+
+/* ─────────── 그림 ─────────── */
+/* 인쇄물은 흑백이다. 교재에서 오려 온 PNG 는 검은 선 + 흰 바탕이라 그대로 쓴다. */
+.fig{margin:5mm 0;display:flex;justify-content:center;page-break-inside:avoid}
+.fig img{max-width:74mm;height:auto}
+.fig svg{max-width:74mm;height:auto;color:#000}
+.fig .ax{stroke:#000;stroke-width:1.1;fill:none;opacity:.75}
+.fig .cv{stroke:#000;stroke-width:1.9;fill:none;stroke-linecap:round;stroke-linejoin:round}
+.fig .gd{stroke:#000;stroke-width:.9;stroke-dasharray:4 3.5;opacity:.4;fill:none}
+.fig .pt{fill:#000;stroke:none}
+.fig .po{fill:#fff;stroke:#000;stroke-width:1.7}
+.fig .rg{fill:#000;opacity:.13;stroke:none}
+.fig text{fill:#000;font-size:11px}
+.fig text.v{font-style:italic}

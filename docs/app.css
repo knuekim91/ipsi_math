@@ -499,9 +499,23 @@ button,input{font-family:inherit}
   border-style:solid;color:#0B1020}
 .fc.gen[aria-pressed="true"] i{background:rgba(11,16,32,.45)}
 
-/* ─────────── 그림 (SVG) ─────────── */
+/* ─────────── 그림 ─────────── */
 .fig{margin:16px 0;display:flex;justify-content:center;overflow-x:auto}
 .fig svg{max-width:100%;height:auto;color:var(--tx)}
+
+/* 교재에서 오려 온 그림(PNG). 검은 선 + 흰 바탕의 선화다.
+   그냥 놓으면 흰 판이 카드 위에 떠 보이므로 바탕을 블렌드로 녹인다.
+     다크(기본) : 반전해 흰 선으로 만든 뒤 screen 으로 검은 바탕을 지운다
+     라이트      : 그대로 두고 multiply 로 흰 바탕을 지운다
+   이 사이트는 다크가 기본이라 반전이 기본값이고 라이트에서 되돌린다. */
+.fig img{display:block;max-width:min(100%,380px);height:auto;
+         filter:invert(1) hue-rotate(180deg);mix-blend-mode:screen}
+:root[data-theme="light"] .fig img{filter:none;mix-blend-mode:multiply}
+@media (prefers-color-scheme:light){
+  :root:not([data-theme="dark"]) .fig img{filter:none;mix-blend-mode:multiply}
+}
+/* 인쇄는 흰 종이다. 원본 그대로 내보낸다. */
+@media print{.fig img{filter:none;mix-blend-mode:normal;max-width:74mm}}
 /* 축·눈금 */
 .fig .ax{stroke:currentColor;stroke-width:1.3;fill:none;opacity:.7}
 /* 그래프 곡선 — 단원 색을 쓰되 테마에 따라 밝기를 바꾼다.

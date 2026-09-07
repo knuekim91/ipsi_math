@@ -81,19 +81,28 @@ def parse_problem(path):
 
 
 def load_all():
+    """problems/ 아래를 재귀로 훑는다. 교재는 하위 폴더에 들어 있다.
+
+    예전에는 맨 위 칸만 읽어서 units/*/problems/2027수능완성/ 의 문항이
+    인쇄물에서 통째로 빠졌다. make_site.py 와 같은 방식으로 맞춘다.
+    """
     out = {}
     for unit in sorted(os.listdir(UNITS_DIR)):
         pdir = os.path.join(UNITS_DIR, unit, "problems")
         if not os.path.isdir(pdir):
             continue
-        for fn in sorted(os.listdir(pdir)):
-            if not fn.endswith(".md") or fn.startswith("_"):
-                continue
-            p = parse_problem(os.path.join(pdir, fn))
-            pid = p.get("id") or os.path.splitext(fn)[0]
-            p["id"] = pid
+        paths = []
+        for root, dirs, names in os.walk(pdir):
+            dirs[:] = [x for x in dirs if not x.startswith((".", "_"))]
+            for fn in names:
+                if fn.endswith(".md") and not fn.startswith("_"):
+                    paths.append(os.path.join(root, fn))
+        for path in sorted(paths, key=lambda x: os.path.basename(x)):
+            p = parse_problem(path)
+            if not p.get("id"):
+                continue                      # README 등 안내 파일
             p.setdefault("unit", unit)
-            out[pid] = p
+            out[p["id"]] = p
     return out
 
 
@@ -136,8 +145,12 @@ def block(text):
 
 
 def head(title, css):
+    # 문항 본문의 <img src="img/…"> 는 docs/ 기준의 상대 경로다.
+    # 인쇄용 HTML 은 임시 폴더에 쓰이므로 base 를 박아 주어야 그림이 나온다.
+    base = os.path.join(ROOT, "docs").replace("\\", "/")
     return (
         '<!doctype html><html lang="ko"><head><meta charset="utf-8">'
+        f'<base href="file:///{base}/">'
         f"<title>{esc(title)}</title><style>{css}</style></head><body>"
     )
 

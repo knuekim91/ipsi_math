@@ -42,25 +42,8 @@ answer: 136
 아래 표준정규분포표를 이용하여
 <span class="m">1000 × (S<sub>1</sub> − S<sub>2</sub>)</span>의 값을 구하시오.</p>
 
-<div class="fig">
-<svg viewBox="0 0 380 230" role="img" aria-label="두 정규분포 곡선. 왼쪽의 높고 좁은 곡선 y=g(x)는 x=m에서 최대, 오른쪽의 낮고 넓은 곡선 y=h(x)는 x=2m에서 최대. 두 곡선이 만나는 점을 기준으로 왼쪽이 S1, 오른쪽이 S2이다.">
-  <path class="rg" d="M148 190 L148 60 C160 52 172 60 186 96 L186 190 Z"/>
-  <path class="ax" d="M30 190 H360 M100 205 V25"/>
-  <path class="ax" d="M360 190 l-6 -3.5 v7 z" fill="currentColor"/>
-  <path class="cv" d="M40 189 C90 187 120 150 148 60 C176 150 206 187 260 189"/>
-  <path class="cv" d="M40 190 C110 189 150 175 186 96 C222 175 300 188 360 189"/>
-  <path class="gd" d="M148 60 V190 M186 96 V190"/>
-  <text x="148" y="205" text-anchor="middle" class="v">m</text>
-  <text x="192" y="205" text-anchor="middle" class="v">2m</text>
-  <text x="93"  y="205" text-anchor="end">O</text>
-  <text x="158" y="120">S₁</text>
-  <text x="192" y="86">S₂</text>
-  <text x="152" y="48">y = g(x)</text>
-  <text x="262" y="170">y = h(x)</text>
-  <text class="v" x="370" y="186">x</text>
-  <text class="v" x="108" y="34">y</text>
-</svg>
-</div>
+<div class="fig"><img src="img/STA-C29.png" width="844" height="526"
+  alt="두 정규분포 곡선 y=g(x)와 y=h(x). g는 x=m에서, h는 x=2m에서 최대이며 x=m과 x=2m 사이의 두 영역 S1, S2가 칠해져 있다."></div>
 
 <span class="cond"><span class="m">z</span> : 1.0 / 1.5 / 2.0 / 2.5 / 3.0<br>
 <span class="m">P(0 ≤ Z ≤ z)</span> : 0.341 / 0.433 / 0.477 / 0.494 / 0.499</span>
