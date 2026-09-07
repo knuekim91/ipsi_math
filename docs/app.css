@@ -436,3 +436,45 @@ button,input{font-family:inherit}
 .lnote{margin:0 0 12px;font-size:13.5px;line-height:1.75;color:var(--tx2)}
 .lnote.dimmer{color:var(--tx3);font-size:12.5px}
 .lswap:empty{display:none}
+
+/* ─────────── 반응 버튼 (알겠음 / 모름) ─────────── */
+.stat3.two{grid-template-columns:1fr 1fr}
+.rb i{font-style:normal;font-size:11px;opacity:.72;margin-left:6px;
+  padding:2px 7px;border-radius:999px;background:var(--card2)}
+.rb.no[aria-pressed="true"] i{background:color-mix(in srgb,var(--no) 25%,transparent)}
+
+/* ─────────── 딸림 문항 (유사문항 · 사다리) ─────────── */
+.kids{margin-top:16px;padding-top:14px;border-top:1px solid var(--line2);
+  display:flex;flex-direction:column;gap:8px}
+.kids .lab{color:var(--tx3)}
+.kids .lab b{font-family:var(--mono);font-size:11px;margin-left:5px;
+  padding:2px 7px;border-radius:999px;background:var(--card2);color:var(--tx2)}
+.kid{border:1px solid var(--line);border-radius:12px;background:var(--card2);overflow:hidden}
+.kid.s-ok{border-color:color-mix(in srgb,var(--ok) 45%,var(--line))}
+.kid.s-no{border-color:color-mix(in srgb,var(--no) 45%,var(--line))}
+.khd{width:100%;display:flex;align-items:center;gap:10px;padding:12px 13px;
+  border:0;background:none;color:var(--tx);cursor:pointer;text-align:left}
+.ktag{flex:none;font:700 10px/1 var(--body);letter-spacing:.04em;padding:4px 8px;
+  border-radius:999px;background:color-mix(in srgb,var(--c,#A78BFA) 20%,var(--card));
+  color:var(--c,hsl(var(--h) 82% 64%))}
+.kt{min-width:0;display:flex;flex-direction:column;gap:2px}
+.kt b{font-size:13.5px;font-weight:600}
+.kt span{font-size:11px;color:var(--tx3);font-family:var(--mono)}
+.kmk{margin-left:auto;flex:none;width:9px;height:9px;border-right:2px solid var(--tx3);
+  border-bottom:2px solid var(--tx3);transform:rotate(45deg);transition:transform .2s}
+.kid.on .kmk{transform:rotate(-135deg)}
+.kbd{display:none;padding:0 13px 13px}
+.kid.on .kbd{display:block}
+.kact{font-size:12.5px;min-height:38px;padding:0 13px;border-radius:10px;cursor:pointer;
+  border:1px solid var(--line);background:var(--card);color:var(--tx2)}
+.kact[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink);font-weight:600}
+.krow{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-top:12px}
+.krb{min-height:40px;border-radius:10px;cursor:pointer;font-size:13px;
+  border:1px solid var(--line);background:var(--card);color:var(--tx3)}
+.krb.ok[aria-pressed="true"]{background:color-mix(in srgb,var(--ok) 18%,transparent);
+  border-color:var(--ok);color:var(--ok);font-weight:600}
+.krb.no[aria-pressed="true"]{background:color-mix(in srgb,var(--no) 18%,transparent);
+  border-color:var(--no);color:var(--no);font-weight:600}
+.kwait{display:flex;align-items:center;gap:10px;padding:13px;border-radius:12px;
+  border:1px dashed var(--line);color:var(--tx3);font-size:12.5px;font-weight:600}
+.kwait span{font-weight:400;font-size:11.5px;opacity:.8;margin-left:auto;text-align:right}

@@ -5,11 +5,20 @@
 
   var D = window.DATA, P = D.problems, U = D.units, S = D.subjects;
   var EX = D.exams || [], YR = D.years || [];
+  var KID = D.kids || {};                 // 부모ID -> 딸림 문항 배열
   var LS = "ipsi_math_v2";
   var NL = String.fromCharCode(10);
 
   var state = {};
   try { state = JSON.parse(localStorage.getItem(LS) || "{}"); } catch (e) { state = {}; }
+  /* 버튼을 알겠음/모름 둘로 줄이면서 예전 헷갈림 기록을 모름으로 옮긴다 */
+  (function () {
+    var moved = 0;
+    for (var k in state) {
+      if (state[k] && state[k].status === "mid") { state[k].status = "no"; moved++; }
+    }
+    if (moved) { try { localStorage.setItem(LS, JSON.stringify(state)); } catch (e) {} }
+  })();
   function save() {
     try { localStorage.setItem(LS, JSON.stringify(state)); } catch (e) {}
     if (window.IPSI && window.IPSI.onChange) window.IPSI.onChange(state);
@@ -115,7 +124,7 @@
     return null;
   }
   function counts() {
-    var c = { ok: 0, mid: 0, no: 0 };
+    var c = { ok: 0, no: 0 };
     pool().forEach(function (p) { var s = st(p.id).status; if (c[s] !== undefined) c[s]++; });
     return c;
   }
@@ -123,10 +132,10 @@
     var d = dday();
     el("dday").textContent = d >= 0 ? "D-" + d : "D+" + (-d);
     var c = counts();
-    el("n-ok").textContent = c.ok; el("n-mid").textContent = c.mid; el("n-no").textContent = c.no;
+    el("n-ok").textContent = c.ok; el("n-no").textContent = c.no;
     var pl = pool();
     el("cnt-all").textContent = pl.length;
-    var seen = c.ok + c.mid + c.no, C = 2 * Math.PI * 86;
+    var seen = c.ok + c.no, C = 2 * Math.PI * 86;
     var r = el("ring");
     r.style.strokeDasharray = C;
     r.style.strokeDashoffset = C * (1 - (pl.length ? seen / pl.length : 0));
@@ -246,6 +255,51 @@
     return true;
   }
 
+  /* 이 문항에 딸린 유사문항·사다리. 부모 카드 안에서만 보인다. */
+  function kidsBlock(p, s) {
+    var list = KID[p.id] || [];
+    if (!list.length && !s.reqAt) return "";
+
+    var rows = list.map(function (k) {
+      var ks = st(k.id), o = open[k.id] || {};
+      return '<div class="kid' + (ks.status ? " s-" + ks.status : "") +
+        (o.card ? " on" : "") + '" data-kid="' + esc(k.id) + '">' +
+        '<button class="khd">' +
+          '<span class="ktag">' + esc(k.origin === "사다리" ? "사다리" : "유사문항") + '</span>' +
+          '<span class="kt"><b>' + esc(k.topic) + '</b>' +
+            '<span>' + esc(k.source) + '</span></span>' +
+          '<span class="kmk"></span>' +
+        '</button>' +
+        '<div class="kbd">' +
+          '<div class="stem">' + k.q + '</div>' +
+          '<div class="acts">' +
+            (k.idea ? '<button class="kact" data-t="idea" aria-pressed="' + !!o.idea + '">핵심 아이디어</button>' : "") +
+            (k.sol ? '<button class="kact" data-t="sol" aria-pressed="' + !!o.sol + '">풀이와 정답</button>' : "") +
+          '</div>' +
+          (k.idea ? '<div class="pane' + (o.idea ? " on" : "") + '" data-p="idea">' +
+            '<div class="idea"><span class="lab">핵심 아이디어</span>' + k.idea + '</div></div>' : "") +
+          (k.sol ? '<div class="pane' + (o.sol ? " on" : "") + '" data-p="sol">' +
+            '<div class="sol"><span class="lab">풀이</span>' + k.sol + '</div>' +
+            (k.trap ? '<div class="trap"><span class="lab">함정</span>' + k.trap + '</div>' : "") +
+            (k.know ? '<div class="know"><span class="lab">노하우</span>' + k.know + '</div>' : "") +
+            '<div class="ansbig"><span>정답</span><b>' + esc(k.answer) + '</b></div>' +
+            '</div>' : "") +
+          '<div class="krow">' +
+            '<button class="krb ok" data-kr="ok" aria-pressed="' + (ks.status === "ok") + '">알겠음</button>' +
+            '<button class="krb no" data-kr="no" aria-pressed="' + (ks.status === "no") + '">모름</button>' +
+          '</div>' +
+        '</div></div>';
+    }).join("");
+
+    if (s.reqAt) {
+      var d = new Date(s.reqAt);
+      rows += '<div class="kwait">문항 요청함 · ' + (d.getMonth() + 1) + "/" + d.getDate() +
+        '<span>보내 주시면 여기에 들어갑니다</span></div>';
+    }
+    return '<div class="kids"><span class="lab">이어서 풀 문항' +
+      (list.length ? ' <b>' + list.length + '</b>' : "") + '</span>' + rows + '</div>';
+  }
+
   function card(p) {
     var s = st(p.id), o = open[p.id] || {};
     var h = U[p.unit].hue, cls = s.status ? " s-" + s.status : "";
@@ -290,16 +344,17 @@
             '<div class="hint">여기에 넣은 주소는 <b>이 기기에만</b> 저장됩니다. ' +
             '둘 다 보이게 하려면 위 버튼으로 알려 주세요.</div></div>';
         })() +
+        kidsBlock(p, s) +
         '<div class="react"><span class="lab">풀고 나서</span><div class="rrow">' +
           '<button class="rb ok" data-r="ok" aria-pressed="' + (s.status === "ok") + '">알겠음</button>' +
-          '<button class="rb mid" data-r="mid" aria-pressed="' + (s.status === "mid") + '">헷갈림</button>' +
-          '<button class="rb no" data-r="no" aria-pressed="' + (s.status === "no") + '">모르겠음</button>' +
+          '<button class="rb no" data-r="no" aria-pressed="' + (s.status === "no") + '">모름 <i>문제 추가</i></button>' +
         '</div>' +
-        '<div class="ask' + ((s.status === "mid" || s.status === "no") ? " on" : "") + '">' +
+        '<div class="ask' + (s.status === "no" ? " on" : "") + '">' +
           '<textarea placeholder="어디까지 알겠고 어디부터 막히는지 적어 주세요. 적은 그대로 전달됩니다.">' +
             esc(s.note || "") + '</textarea>' +
           '<button class="sendbtn">이 내용으로 문항 만들어 달라고 하기</button>' +
-          '<div class="hint">누르면 문제와 메모가 한 덩어리로 정리됩니다. 복사하거나 공유로 보내세요.</div>' +
+          '<div class="hint">누르면 이 문항 아래에 <b>자리가 잡히고</b>, 문제와 메모가 한 덩어리로 '
+          + '정리됩니다. 복사해서 보내 주시면 그 자리에 새 문항이 들어갑니다.</div>' +
         '</div></div>' +
       '</div>';
 
@@ -384,6 +439,22 @@
         ta.onblur = flush;
       }
 
+      Array.prototype.forEach.call(c.querySelectorAll(".kid"), function (kc) {
+        var kid = kc.dataset.kid;
+        var ko = open[kid] = open[kid] || {};
+        kc.querySelector(".khd").onclick = function () { ko.card = !ko.card; paintList(); };
+        Array.prototype.forEach.call(kc.querySelectorAll(".kact"), function (b) {
+          b.onclick = function () { ko[b.dataset.t] = !ko[b.dataset.t]; paintList(); };
+        });
+        Array.prototype.forEach.call(kc.querySelectorAll(".krb"), function (b) {
+          b.onclick = function () {
+            var cur = st(kid).status;
+            put(kid, { status: cur === b.dataset.kr ? "" : b.dataset.kr });
+            paintList();
+          };
+        });
+      });
+
       var lu = c.querySelector(".lecurl");
       if (lu) {
         var saveLec = function () {
@@ -414,7 +485,8 @@
         send.disabled = !ready();
         if (ta) ta.addEventListener("input", function () { send.disabled = !ready(); });
         send.onclick = function () {
-          if (ta) put(id, { note: ta.value });
+          put(id, ta ? { note: ta.value, reqAt: Date.now() } : { reqAt: Date.now() });
+          paintList();
           var p = P.filter(function (x) { return x.id === id; })[0];
           share(p);
         };
@@ -433,7 +505,8 @@
     if (s.status) L.push("표시: " + (LABEL[s.status] || s.status));
     L.push("", "[문제]", plain, "", "[적은 것]", (s.note || "").trim() || "(없음)", "",
       "[요청] 위 메모에 맞춰 막힌 지점부터 세울 도입 문항과",
-      "같은 수준의 유사문항을 만들어 주세요.");
+      "같은 수준의 유사문항을 만들어 주세요.",
+      "새 문항에는 parent: " + p.id + " 를 넣어 이 문항 아래에 붙여 주세요.");
     return L.join(NL);
   }
   function lecText(p, url) {

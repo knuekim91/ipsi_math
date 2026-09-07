@@ -147,6 +147,7 @@ def build():
                 "exam": meta.get("exam", ""),
                 "origin": meta.get("origin", "기출"),
                 "lecture": meta.get("lecture", ""),
+                "parent": meta.get("parent", "").strip(),
                 "core": meta.get("core", ""),
                 "answer": meta.get("answer", ""),
                 "tags": [t.strip() for t in
@@ -171,16 +172,31 @@ def build():
         return (-int(yy) if yy.isdigit() else 0, t, p["no"])
     probs.sort(key=order)
 
-    unit_meta = {k: dict(v, count=sum(1 for p in probs if p["unit"] == k))
+    # 부모가 있는 문항(유사문항·사다리)은 목록과 집계에서 뺀다.
+    # 부모 카드 안에서만 보이므로 "기출 몇 문항" 숫자가 흔들리지 않는다.
+    kids = {}
+    for p in probs:
+        if p["parent"]:
+            kids.setdefault(p["parent"], []).append(p)
+    for v in kids.values():
+        v.sort(key=lambda p: p["id"])
+    main = [p for p in probs if not p["parent"]]
+    for p in main:
+        p["kids"] = [k["id"] for k in kids.get(p["id"], [])]
+    orphan = sorted(set(kids) - {p["id"] for p in main})
+    if orphan:
+        print("  ! 부모를 찾지 못한 문항: %s" % ", ".join(orphan))
+
+    unit_meta = {k: dict(v, count=sum(1 for p in main if p["unit"] == k))
                  for k, v in UNITS.items()}
 
-    ex_ids = {p["exam"] for p in probs if p["exam"]}
+    ex_ids = {p["exam"] for p in main if p["exam"]}
     bucket = {}
     for e in ex_ids:
         yy, label, full, t = exam_parts(e)
         bucket.setdefault(yy, []).append(
             {"id": e, "label": label, "full": full, "sort": t,
-             "count": sum(1 for p in probs if p["exam"] == e)})
+             "count": sum(1 for p in main if p["exam"] == e)})
     years = []
     for yy in sorted(bucket, key=lambda v: -int(v) if v.isdigit() else 0):
         lst = sorted(bucket[yy], key=lambda v: v["sort"])
@@ -191,12 +207,16 @@ def build():
     exams = [v for y in years for v in y["exams"]]
 
     os.makedirs(os.path.dirname(OUT), exist_ok=True)
-    payload = {"problems": probs, "units": unit_meta, "subjects": SUBJECTS,
-               "years": years, "exams": exams, "exam": "2026-11-19"}
+    payload = {"problems": main, "units": unit_meta, "subjects": SUBJECTS,
+               "years": years, "exams": exams, "exam": "2026-11-19",
+               "kids": {k: v for k, v in
+                        ((pid, [dict(x) for x in lst]) for pid, lst in kids.items())}}
     io.open(OUT, "w", encoding="utf-8").write(
         "window.DATA = " + json.dumps(payload, ensure_ascii=False) + ";\n")
     stamp(len(probs))
-    print("문항 %d개 -> %s (%.0f KB)" % (len(probs), OUT, os.path.getsize(OUT) / 1024))
+    n_kid = sum(len(v) for v in kids.values())
+    print("문항 %d개 (+ 딸림 %d개) -> %s (%.0f KB)"
+          % (len(main), n_kid, OUT, os.path.getsize(OUT) / 1024))
     for y in years:
         print("  %s  %d문항  (%s)" % (y["label"], y["count"],
               ", ".join("%s %d" % (v["label"], v["count"]) for v in y["exams"])))
