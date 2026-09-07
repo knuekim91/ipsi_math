@@ -147,6 +147,9 @@ def build():
         for path in sorted(files, key=lambda x: os.path.basename(x)):
             fn = os.path.basename(path)
             meta, sec = parse(path)
+            # front matter 에 id 가 없으면 문항이 아니다 (README 등 안내 파일)
+            if not meta.get("id"):
+                continue
             item = {
                 "id": meta.get("id", fn[:-3]),
                 "unit": unit,
