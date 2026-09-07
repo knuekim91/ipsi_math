@@ -25,7 +25,7 @@ answer: 73
 <p>실수 <span class="m">t</span>에 대하여 함수
 <span class="m">y = |f(x)|</span>의 그래프와 직선 <span class="m">y = t</span>가 만나는
 서로 다른 점의 개수를 <span class="m">g(t)</span>라 하자.
-집합 <span class="m">L = {l | l = lim<sub>t→k+</sub>g(t) − lim<sub>t→k−</sub>g(t), k는 실수}</span>의
+집합 <span class="m">L = {l | l = lim<sub>t→k+</sub>g(t) − lim<sub>t→k−</sub>g(t)}</span> (<span class="m">k</span>는 실수)의
 모든 원소의 합이 <span class="m">2</span>일 때, 모든
 <span class="m">f(0)</span>의 값의 합은 <span class="m">q/p</span>이다.
 <span class="m">p + q</span>의 값을 구하시오.

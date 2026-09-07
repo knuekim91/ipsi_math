@@ -83,6 +83,21 @@ MATH_RE = re.compile(
     r"<(span|p)([^>]*)class=['\"]([^'\"]*\bm\b[^'\"]*)['\"]([^>]*)>(.*?)</\1>", re.S)
 
 
+# to_mixed 는 한글 덩어리를 경계로 수식을 쪼갠 뒤 조각마다 $...$ 를 씌운다.
+# 그래서 중괄호가 한글을 사이에 두고 갈라지면 { 가 열린 채 $ 를 만나 KaTeX 가 깨진다.
+#   {n | 1 <= n <= 12, n은 자연수}  ->  $... , n$은 자연수$}$   (Can't use function '$')
+# 한글을 수식 칸 밖으로 빼면 해결된다. 빌드 때마다 전수 검사한다.
+MATH_SEG = re.compile(r"\$([^$]*)\$")
+
+
+def check_math(tex, where, warn):
+    for m in MATH_SEG.finditer(tex or ""):
+        body = re.sub(r"\[{}]", "", m.group(1))
+        if body.count("{") != body.count("}"):
+            warn.append("%s : 중괄호가 한글에 걸려 갈라짐 -> %s"
+                        % (where, m.group(0)[:60]))
+
+
 def latexify(html):
     """수식 컨테이너만 LaTeX로 바꾸고 나머지 HTML 구조는 살린다."""
     def rep(m):
@@ -132,6 +147,7 @@ def stamp(n):
 
 
 def build():
+    WARN = []
     probs = []
     for unit in sorted(UNITS):
         d = os.path.join(ROOT, "units", unit, "problems")
@@ -167,7 +183,10 @@ def build():
                          meta.get("tags", "").strip("[]").split(",") if t.strip()],
             }
             for name, key in SECTIONS:
-                item[key] = latexify(sec.get(name, "")) if sec.get(name) else ""
+                raw = sec.get(name, "")
+                item[key] = latexify(raw) if raw else ""
+                if item[key]:
+                    check_math(item[key], "%s %s" % (item["id"], name), WARN)
             # 기출 번호 (2027-09모평 12번 -> 12)
             m = re.search(r"(\d+)\s*번", item["source"])
             item["no"] = int(m.group(1)) if m else 999
@@ -227,6 +246,10 @@ def build():
     io.open(OUT, "w", encoding="utf-8").write(
         "window.DATA = " + json.dumps(payload, ensure_ascii=False) + ";\n")
     stamp(len(probs))
+    if WARN:
+        print("  ! 수식 칸 안에 한글이 있습니다 (변환기가 깨집니다)")
+        for w in WARN:
+            print("      " + w)
     n_kid = sum(len(v) for v in kids.values())
     print("문항 %d개 (+ 딸림 %d개) -> %s (%.0f KB)"
           % (len(main), n_kid, OUT, os.path.getsize(OUT) / 1024))
