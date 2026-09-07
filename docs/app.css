@@ -478,3 +478,23 @@ button,input{font-family:inherit}
 .kwait{display:flex;align-items:center;gap:10px;padding:13px;border-radius:12px;
   border:1px dashed var(--line);color:var(--tx3);font-size:12.5px;font-weight:600}
 .kwait span{font-weight:400;font-size:11.5px;opacity:.8;margin-left:auto;text-align:right}
+
+/* ─────────── 추가생성 표시 ─────────── */
+:root{--gen:hsl(265 80% 58%)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--gen:hsl(265 85% 76%)}}
+:root[data-theme="dark"]{--gen:hsl(265 85% 76%)}
+:root[data-theme="light"]{--gen:hsl(265 80% 48%)}
+
+.bdg.gen{
+  color:var(--gen);
+  background:color-mix(in srgb,var(--gen) 14%,var(--card));
+  border-color:color-mix(in srgb,var(--gen) 40%,transparent);
+  font-family:var(--body);
+}
+/* 필터 띠의 추가생성 칩 — 단원 칩과 구분되게 점선 */
+.fc.gen{border-style:dashed;border-color:color-mix(in srgb,var(--gen) 45%,var(--line));
+  color:var(--gen);font-weight:600}
+.fc.gen i{background:var(--gen)}
+.fc.gen[aria-pressed="true"]{background:var(--gen);border-color:var(--gen);
+  border-style:solid;color:#0B1020}
+.fc.gen[aria-pressed="true"] i{background:rgba(11,16,32,.45)}

@@ -33,6 +33,7 @@
   var view = "no";          // no | unit
   var query = "";
   var unitFilter = "";      // "" = 전체
+  var genOnly = false;      // 추가생성된 문항만 보기
   var yearFilter = "";      // "" = 전체 학년도
   var examFilter = "";      // "" = 그 학년도 전체
   var open = {};            // id -> {card, idea, sol}
@@ -112,6 +113,8 @@
     var t = new Date(); t.setHours(0, 0, 0, 0);
     return Math.round((exam - t) / 86400000);
   }
+  function nGen(p) { return (p.kids || []).length; }
+
   function pool() {   // 학년도·시험 필터만 적용한 문항 (단원 개수의 기준)
     return P.filter(function (p) {
       if (yearFilter && p.year !== yearFilter) return false;
@@ -237,17 +240,25 @@
         '" aria-pressed="' + (unitFilter === u) + '"><i></i>' + esc(U[u].label) +
         " " + nOf(u) + "</button>");
     });
+    var nG = pl.filter(nGen).length;
+    if (nG) {
+      parts.push('<button class="fc gen" id="genchip" aria-pressed="' + genOnly +
+        '"><i></i>추가생성 ' + nG + '</button>');
+    }
     parts.push('<span class="hits" id="hits"></span>');
     el("filt").innerHTML = parts.join("");
-    Array.prototype.forEach.call(document.querySelectorAll(".fc"), function (b) {
+    Array.prototype.forEach.call(document.querySelectorAll(".fc:not(.gen)"), function (b) {
       b.onclick = function () {
         unitFilter = b.dataset.u; paintUnits(); paintFilters(); paintList();
       };
     });
+    var gc = el("genchip");
+    if (gc) gc.onclick = function () { genOnly = !genOnly; paintFilters(); paintList(); };
   }
 
   /* ───────── 목록 ───────── */
   function match(p) {
+    if (genOnly && !nGen(p)) return false;
     if (yearFilter && p.year !== yearFilter) return false;
     if (examFilter && p.exam !== examFilter) return false;
     if (unitFilter && p.unit !== unitFilter) return false;
@@ -368,6 +379,7 @@
           " · " + esc(p.source) + '</span></span>' +
         (p.origin && p.origin !== "기출"
           ? '<span class="bdg">' + esc(p.origin) + '</span>' : "") +
+        (nGen(p) ? '<span class="bdg gen">추가생성 ' + nGen(p) + '</span>' : "") +
         '<span class="plv">' + esc(p.level) + '</span><span class="pmk"></span>' +
       '</button>' + body + '</article>';
   }
@@ -378,7 +390,9 @@
     if (hits) hits.textContent = query ? "검색 결과 " + items.length + "개" : "";
 
     if (!items.length) {
-      host.innerHTML = '<div class="empty"><b>찾는 문항이 없습니다</b>다른 낱말로 찾아보세요.</div>';
+      host.innerHTML = '<div class="empty"><b>찾는 문항이 없습니다</b>' +
+        (genOnly ? '추가생성 문항이 붙은 문항만 보는 중입니다. 칩을 한 번 더 눌러 해제하세요.'
+                 : '다른 낱말로 찾아보세요.') + '</div>';
       return;
     }
     var html;
@@ -606,6 +620,7 @@
         })[0] || P.filter(function (x) { return x.no === no; })[0];
       }
       if (hit) {
+        if (genOnly && !nGen(hit)) { genOnly = false; paintFilters(); }
         if ((yearFilter && hit.year !== yearFilter) ||
             (examFilter && hit.exam !== examFilter)) {
           yearFilter = ""; examFilter = ""; paintHead(); paintExams();
