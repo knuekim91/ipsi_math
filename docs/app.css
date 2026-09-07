@@ -498,3 +498,26 @@ button,input{font-family:inherit}
 .fc.gen[aria-pressed="true"]{background:var(--gen);border-color:var(--gen);
   border-style:solid;color:#0B1020}
 .fc.gen[aria-pressed="true"] i{background:rgba(11,16,32,.45)}
+
+/* ─────────── 그림 (SVG) ─────────── */
+.fig{margin:16px 0;display:flex;justify-content:center;overflow-x:auto}
+.fig svg{max-width:100%;height:auto;color:var(--tx)}
+/* 축·눈금 */
+.fig .ax{stroke:currentColor;stroke-width:1.3;fill:none;opacity:.7}
+/* 그래프 곡선 — 단원 색을 쓰되 테마에 따라 밝기를 바꾼다.
+   흰 배경에서는 어둡게, 검은 배경에서는 밝게 해야 선이 보인다. */
+:root{--figl:42%}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--figl:66%}}
+:root[data-theme="dark"]{--figl:66%}
+:root[data-theme="light"]{--figl:42%}
+.fig .cv{stroke:hsl(var(--h,220) 72% var(--figl));stroke-width:2.6;fill:none;
+  stroke-linecap:round;stroke-linejoin:round}
+/* 안내선 */
+.fig .gd{stroke:currentColor;stroke-width:1;stroke-dasharray:4 3.5;opacity:.35;fill:none}
+/* 채운 점 / 빈 점 */
+.fig .pt{fill:hsl(var(--h,220) 72% var(--figl));stroke:none}
+.fig .po{fill:var(--bg);stroke:hsl(var(--h,220) 72% var(--figl));stroke-width:2.2}
+/* 칠한 영역 */
+.fig .rg{fill:hsl(var(--h,220) 72% var(--figl));opacity:.18;stroke:none}
+.fig text{fill:currentColor;font-family:var(--body);font-size:12.5px;opacity:.85}
+.fig text.v{font-style:italic;font-size:13px}
