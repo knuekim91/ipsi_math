@@ -22,6 +22,8 @@ OUT = os.path.join(ROOT, "docs", "data.js")
 # 과목 → 단원. 수능 출제 과목 기준으로 묶는다.
 # 시험 이름 규칙 : "<학년도>-<시험>"  (06모평 / 09모평 / 수능)
 TERM_ORDER = {"06모평": 1, "09모평": 2, "수능": 3}
+# 시험이 아닌 교재. 모의평가·수능 뒤에 놓는다.
+BOOKS = {"수능특강": 4, "수능완성": 5}
 
 
 def exam_parts(e):
@@ -29,6 +31,8 @@ def exam_parts(e):
     yy, _, term = e.partition("-")
     if term == "수능":
         return yy, "수능", "%s학년도 수능" % yy, 3
+    if term in BOOKS:
+        return yy, term, "%s %s" % (yy, term), BOOKS[term]
     mm = term.replace("모평", "").lstrip("0")
     return yy, "%s월 모평" % mm, "%s학년도 %s월 모의평가" % (yy, mm),         TERM_ORDER.get(term, 9)
 
@@ -133,10 +137,16 @@ def build():
         d = os.path.join(ROOT, "units", unit, "problems")
         if not os.path.isdir(d):
             continue
-        for fn in sorted(os.listdir(d)):
-            if not fn.endswith(".md") or fn.startswith("_"):
-                continue
-            meta, sec = parse(os.path.join(d, fn))
+        # problems/ 바로 아래와 그 하위 폴더(2027수능완성 등)를 모두 읽는다
+        files = []
+        for root, dirs, names in os.walk(d):
+            dirs[:] = [x for x in dirs if not x.startswith((".", "_"))]
+            for fn in names:
+                if fn.endswith(".md") and not fn.startswith("_"):
+                    files.append(os.path.join(root, fn))
+        for path in sorted(files, key=lambda x: os.path.basename(x)):
+            fn = os.path.basename(path)
+            meta, sec = parse(path)
             item = {
                 "id": meta.get("id", fn[:-3]),
                 "unit": unit,
