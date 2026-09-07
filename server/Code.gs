@@ -3,9 +3,14 @@
  *
  * 배포 방법은 server/README.md 참고.
  *
- * 스프레드시트 두 장을 쓴다. (없으면 처음 실행할 때 자동으로 만든다)
+ * 시트에 붙이는 스크립트가 아니라 독립 스크립트다.
+ * 데이터를 담을 스프레드시트는 스스로 만든다 (내 드라이브 > ipsi_math 데이터).
+ * 이미 쓰는 시트에 넣고 싶으면 스크립트 속성에 SHEET_ID 를 넣으면 된다.
+ *
+ * 시트 세 장을 쓴다.
  *   users  : id | name | salt | hash | role | created
  *   state  : user | json | at
+ *   tokens : token | user | expires
  *
  * 요청은 전부 POST 이고 본문은 JSON 문자열이다.
  * Content-Type 은 반드시 text/plain 이어야 한다.
