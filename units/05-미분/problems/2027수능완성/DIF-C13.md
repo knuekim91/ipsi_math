@@ -30,6 +30,12 @@ answer: ②
 
 조건 (나)는 <b>그래프를 오른쪽으로 <span class="m">a</span>, 위로 <span class="m">b</span>만큼
 옮기면 자기 자신과 겹친다</b>는 뜻이다. 계단처럼 같은 모양이 반복된다.<br><br>
+<b>왜 그것이 평행이동인지는 점 하나로 확인하면 가장 빠르다.</b>
+곡선 위의 점 <span class="m">(p, f(p))</span>를 오른쪽으로 <span class="m">a</span>, 위로 <span class="m">b</span>만큼 옮기면
+점 <span class="m">(p + a, f(p) + b)</span>가 된다.
+이 점이 다시 곡선 위에 있으려면 <span class="m">y</span>좌표가 <span class="m">x</span>좌표에 함수를 먹인 값,
+곧 <span class="m">f(p + a)</span>와 같아야 한다. 그것이 바로 조건 (나)다.
+<b>조건 (나)는 &lsquo;그래프의 모든 점이 옮겨져도 그래프 위에 남는다&rsquo;를 식으로 쓴 것</b>이다.<br><br>
 <b>여기서 양변을 미분하는 것이 열쇠다.</b> 상수 <span class="m">b</span>는 미분하면 사라지므로</p>
 <p class="eqx m">f′(x+a) = f′(x)</p>
 <p>가 되어 <b>도함수가 주기 <span class="m">a</span>인 함수</b>가 된다.
