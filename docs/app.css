@@ -514,8 +514,14 @@ button,input{font-family:inherit}
 @media (prefers-color-scheme:light){
   :root:not([data-theme="dark"]) .fig img{filter:none;mix-blend-mode:multiply}
 }
+/* 명암이 뜻을 가진 그림은 반전하면 안 된다.
+   예: 06모평 28번은 카드의 앞면(흰색)과 뒷면(회색)을 명암으로 구분한다.
+   반전하면 뒷면이 오히려 밝아져 거꾸로 읽힌다. 이런 것만 흰 판에 얹는다. */
+.fig.plain img{filter:none;mix-blend-mode:normal;background:#fff;
+               padding:8px;border-radius:10px}
 /* 인쇄는 흰 종이다. 원본 그대로 내보낸다. */
-@media print{.fig img{filter:none;mix-blend-mode:normal;max-width:74mm}}
+@media print{.fig img{filter:none;mix-blend-mode:normal;max-width:74mm}
+             .fig.plain img{padding:0;background:none}}
 /* 축·눈금 */
 .fig .ax{stroke:currentColor;stroke-width:1.3;fill:none;opacity:.7}
 /* 그래프 곡선 — 단원 색을 쓰되 테마에 따라 밝기를 바꾼다.

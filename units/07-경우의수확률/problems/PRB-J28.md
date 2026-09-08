@@ -16,7 +16,10 @@ answer: ③
 
 ## 문제
 
-<p>앞면에 숫자 <span class="m">1, 2, 3, 4, 5, 6</span>이 하나씩 적혀 있는 카드 6장이 있다. 각 카드의 뒷면에는 앞면에 적힌 숫자와 같은 숫자가 적혀 있다. 이 6장의 카드가 다음과 같이 놓여 있다.</p><span class="cond">숫자 <span class="m">1, 6</span>이 적힌 카드는 뒷면이 보이도록 놓여 있고,<br>숫자 <span class="m">2, 3, 4, 5</span>가 적힌 카드는 앞면이 보이도록 놓여 있다.</span><p>이 6장의 카드와 한 개의 주사위를 사용하여 다음 시행을 한다.</p><span class="cond">주사위를 한 번 던져 나온 눈의 수가 <span class="m">k</span>일 때,<br><span class="m">k</span>가 홀수이면 <span class="m">k</span> 이하의 수가 적힌 카드를 모두 한 번씩 뒤집고,<br><span class="m">k</span>가 짝수이면 <span class="m">k</span> 이상의 수가 적힌 카드를 모두 한 번씩 뒤집는다.</span><p>이 시행을 4번 반복한 후 6장의 카드가 모두 앞면이 보이도록 놓여 있을 확률은?</p><div class="choices"><span>① 19/162</span><span>② 13/108</span><span>③ 10/81</span><span>④ 41/324</span><span>⑤ 7/54</span></div>
+<p>앞면에 숫자 <span class="m">1, 2, 3, 4, 5, 6</span>이 하나씩 적혀 있는 카드 6장이 있다. 각 카드의 뒷면에는 앞면에 적힌 숫자와 같은 숫자가 적혀 있다. 이 6장의 카드가 다음과 같이 놓여 있다.</p><span class="cond">숫자 <span class="m">1, 6</span>이 적힌 카드는 뒷면이 보이도록 놓여 있고,<br>숫자 <span class="m">2, 3, 4, 5</span>가 적힌 카드는 앞면이 보이도록 놓여 있다.</span><p>이 6장의 카드와 한 개의 주사위를 사용하여 다음 시행을 한다.</p><span class="cond">주사위를 한 번 던져 나온 눈의 수가 <span class="m">k</span>일 때,<br><span class="m">k</span>가 홀수이면 <span class="m">k</span> 이하의 수가 적힌 카드를 모두 한 번씩 뒤집고,<br><span class="m">k</span>가 짝수이면 <span class="m">k</span> 이상의 수가 적힌 카드를 모두 한 번씩 뒤집는다.</span><p>이 시행을 4번 반복한 후 6장의 카드가 모두 앞면이 보이도록 놓여 있을 확률은?</p><div class="fig plain"><img src="img/PRB-J28.png" width="1389" height="374"
+  alt="카드 6장이 왼쪽부터 1, 2, 3, 4, 5, 6 순서로 놓여 있다. 1과 6이 적힌 카드는 뒷면이 보이고 나머지 넷은 앞면이 보인다."></div>
+
+<div class="choices"><span>① 19/162</span><span>② 13/108</span><span>③ 10/81</span><span>④ 41/324</span><span>⑤ 7/54</span></div>
 
 ## 발상
 

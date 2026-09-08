@@ -18,6 +18,9 @@ answer: 48
 
 <p><span class="m">b &gt; 1</span>인 실수 <span class="m">b</span>에 대하여 두 함수 <span class="m">f(x) = b<sup>x</sup></span>, <span class="m">g(x) = −log<sub>b</sub>x</span>의 그래프가 제1사분면에서 만나는 점을 <span class="m">P(α, β)</span>라 하자. <span class="m">αβ<sup>3</sup> = 1</span>일 때, 직선 <span class="m">OP</span>의 기울기를 <span class="m">m</span>이라 하고 <span class="m">g(m)</span>을 구하는 과정이다. (단, <span class="m">O</span>는 원점)</p><span class="cond">점 <span class="m">P</span>가 두 그래프 위에 있으므로 <span class="m">β = b<sup>α</sup></span>, <span class="m">β = −log<sub>b</sub>α</span>, 즉 <span class="m">α = log<sub>b</sub>β</span>, <span class="m">log<sub>b</sub>α = −β</span>이다.<br><br>따라서 <span class="m">3α − β = 3log<sub>b</sub>β + log<sub>b</sub>α = log<sub>b</sub>(αβ<sup>3</sup>) = 0</span>이므로<br><span class="m">m = β/α = <b>(가)</b></span> 이다.<br><br>또 <span class="m">β<sup>4</sup> = m·αβ<sup>3</sup> = m</span> 이므로 <span class="m">β = <b>(나)</b></span> 이다.<br><br>한편 <span class="m">b = α<sup>−1/β</sup></span>이고 <span class="m">α = β/m</span>이므로<br><span class="m">g(m) = −log<sub>b</sub>m = β/log<sub>m</sub>α = β/(−1 + log<sub>m</sub>β) = <b>(다)</b></span> 이다.</span><p>위에서 <span class="m">(가), (나), (다)</span>에 알맞은 수를 각각 <span class="m">p, q, r</span>라 할 때, <span class="m">(p × q × r)<sup>2</sup></span>의 값을 구하시오.</p>
 
+
+<div class="fig"><img src="img/EXP-J20.png" width="977" height="1102"
+  alt="두 곡선 y=f(x)와 y=g(x)의 그래프. f는 오른쪽 위로 증가하고 g는 오른쪽 아래로 감소하며, 두 곡선이 제1사분면의 점 P에서 만난다."></div>
 ## 발상
 
 <b><span class='m'>αβ<sup>3</sup> = 1</span>에 로그를 씌우면 <span class='m'>log α + 3log β = 0</span></b>이 되고, 교점 조건이 <span class='m'>log<sub>b</sub>β = α</span>, <span class='m'>log<sub>b</sub>α = −β</span>이므로 그대로 <span class='m'>−β + 3α = 0</span>. 곧 <b><span class='m'>β = 3α</span></b>, 기울기는 3이다.

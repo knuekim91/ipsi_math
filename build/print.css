@@ -124,3 +124,4 @@ td.ans { font-weight: 700; font-family: "Cambria Math", Cambria, serif; }
 .fig .rg{fill:#000;opacity:.13;stroke:none}
 .fig text{fill:#000;font-size:11px}
 .fig text.v{font-style:italic}
+.fig.plain img{background:none;padding:0}

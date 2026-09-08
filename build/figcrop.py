@@ -26,20 +26,38 @@ def grow(r, g):
     return pymupdf.Rect(r.x0 - g, r.y0 - g, r.x1 + g, r.y1 + g)
 
 
-def find(pg, gap=16):
-    """페이지에서 그림 덩어리를 찾는다. 조건상자는 뺀다."""
+def repeated(doc):
+    """여러 쪽에 되풀이해 나오는 이미지는 머리글 장식이지 그림이 아니다."""
+    from collections import Counter
+    c = Counter()
+    for pg in doc:
+        for im in pg.get_images(full=True):
+            c[im[0]] += 1
+    return {x for x, n in c.items() if n > 1}
+
+
+def find(doc, pno, gap=16):
+    """한 쪽에서 그림 덩어리를 찾는다. 조건상자와 머리글 장식은 뺀다.
+
+    교재(EBS)는 그림을 벡터로, 평가원 시험지는 래스터 이미지로 넣는다.
+    둘 다 잡아야 하므로 두 갈래를 모두 모은 뒤 함께 합친다.
+    """
     import pymupdf
+    pg = doc[pno]
     R = pg.rect
     boxes = []
+
+    # (1) 벡터로 그린 그림
     for p in pg.get_drawings():
         r = pymupdf.Rect(p["rect"])
         if r.x0 < 0 or r.y0 < 0 or r.x1 > R.x1 or r.y1 > R.y1:
             continue                                   # 재단선 밖 장식
-        if r.width > R.width * 0.8 or r.height > R.height * 0.8:
-            continue                                   # 전면 괘선
+        if r.width > R.width * 0.75 or r.height > R.height * 0.75:
+            continue                                   # 단 나눔선·전면 괘선
         if r.width < 1 and r.height < 1:
             continue
         boxes.append(r)
+
     merged = True
     while merged:
         merged = False
@@ -54,16 +72,41 @@ def find(pg, gap=16):
     figs = [r for r in boxes
             if r.width > 45 and r.height > 45 and abs(r.width - COLW) > 6]
 
+    # (2) 래스터로 넣은 그림
+    rep = repeated(doc)
+    top = R.height * 0.18                              # 머리글 띠는 그림이 아니다
+    for im in pg.get_images(full=True):
+        if im[0] in rep:
+            continue
+        for r in pg.get_image_rects(im[0]):
+            r = pymupdf.Rect(r)
+            if r.width < 40 or r.height < 30 or r.y1 < top:
+                continue
+            figs.append(r)
+
+    # 한 그림이 두 장으로 쪼개져 들어간 경우가 있어 다시 합친다
+    merged = True
+    while merged:
+        merged = False
+        for i in range(len(figs)):
+            for j in range(len(figs) - 1, i, -1):
+                if grow(figs[i], 4).intersects(figs[j]):
+                    figs[i] = figs[i] | figs[j]
+                    figs.pop(j)
+                    merged = True
+            if merged:
+                break
+
     # 점 이름(A, B, C …)은 도형이 아니라 글자라 위 bbox 에 안 잡힌다. 끌어들인다.
     for b in pg.get_text("dict")["blocks"]:
         if b["type"] != 0:
             continue
         for l in b["lines"]:
-            for s in l["spans"]:
-                t = s["text"].strip()
+            for sp in l["spans"]:
+                t = sp["text"].strip()
                 if not t or len(t) > 2 or CHOICE.match(t):
                     continue                            # 선택지 번호는 제외
-                r = pymupdf.Rect(s["bbox"])
+                r = pymupdf.Rect(sp["bbox"])
                 cx, cy = (r.x0 + r.x1) / 2, (r.y0 + r.y1) / 2
                 for k, f in enumerate(figs):
                     if grow(f, 14).contains(pymupdf.Point(cx, cy)):
@@ -82,6 +125,8 @@ def main():
     ap.add_argument("--bbox", help="x0,y0,x1,y1 로 직접 지정")
     ap.add_argument("--name", help="저장 이름 (문항 ID)")
     ap.add_argument("--dpi", type=int, default=DPI)
+    ap.add_argument("--color", action="store_true",
+                    help="색이 들어간 그림일 때만. 기본은 회색조(용량 절반)")
     a = ap.parse_args()
 
     doc = pymupdf.open(a.pdf)
@@ -91,7 +136,7 @@ def main():
         x0, y0, x1, y1 = [float(v) for v in a.bbox.split(",")]
         clip = pymupdf.Rect(x0, y0, x1, y1)
     else:
-        figs = find(pg)
+        figs = find(doc, a.page - 1)
         if a.list or a.pick is None:
             print("본문 %d쪽에서 찾은 그림 %d개" % (a.page, len(figs)))
             for i, r in enumerate(figs):
@@ -105,7 +150,9 @@ def main():
     if not os.path.isdir(OUT):
         os.makedirs(OUT)
     path = os.path.join(OUT, a.name + ".png")
-    pix = pg.get_pixmap(clip=clip, dpi=a.dpi)
+    # 수학 그림은 검은 선화다. 회색조로 뽑으면 용량이 절반이고 보기는 같다.
+    cs = pymupdf.csRGB if a.color else pymupdf.csGRAY
+    pix = pg.get_pixmap(clip=clip, dpi=a.dpi, colorspace=cs)
     pix.save(path)
     print("%s  %dx%d px  %.1f KB" % (path, pix.width, pix.height,
                                      os.path.getsize(path) / 1024))
