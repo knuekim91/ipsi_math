@@ -115,6 +115,71 @@ def find(doc, pno, gap=16):
     return sorted(figs, key=lambda r: (round(r.y0), r.x0))
 
 
+# ---------------------------------------------------------------------------
+# 통짜 스캔 PDF 용 (설맞이 · 수분감)
+#
+# 이런 PDF 는 한 쪽이 통째로 사진 한 장이라 벡터 경로도 개별 이미지도 없다.
+# 그래서 구조로는 그림을 못 찾는다. 픽셀을 직접 보고 잉크 덩어리를 찾는다.
+# 가로로 한 번, 세로로 한 번 잘라 내려가는 고전적인 방법(XY-cut)을 쓴다.
+# ---------------------------------------------------------------------------
+
+def _bands(counts, gap, lo=0):
+    """잉크가 있는 구간을 찾되, gap 보다 좁은 틈은 이어 붙인다."""
+    out, start, blank = [], None, 0
+    for i, c in enumerate(counts):
+        if c > lo:
+            if start is None:
+                start = i
+            blank = 0
+        elif start is not None:
+            blank += 1
+            if blank > gap:
+                out.append((start, i - blank))
+                start, blank = None, 0
+    if start is not None:
+        out.append((start, len(counts) - 1 - blank))
+    return out
+
+
+def find_scanned(doc, pno, dpi=60, thr=190, gap_pt=7,
+                 top=0.10, bottom=0.07, min_pt=46):
+    """스캔된 쪽에서 그림 후보를 찾는다.
+
+    top/bottom 은 머리글·바닥글 장식을 잘라 내는 비율이다.
+    교재마다 장식이 달라 필요하면 옵션으로 조절한다.
+    """
+    import pymupdf
+    pg = doc[pno]
+    pix = pg.get_pixmap(dpi=dpi, colorspace=pymupdf.csGRAY)
+    w, h, s = pix.width, pix.height, pix.samples
+    k = 72.0 / dpi                      # 픽셀 -> 포인트
+    gap = max(2, int(gap_pt / k))
+    y0, y1 = int(h * top), int(h * (1 - bottom))
+
+    rows = [s[y * w:(y + 1) * w] for y in range(h)]
+    rcount = [0] * h
+    for y in range(y0, y1):
+        r = rows[y]
+        rcount[y] = sum(1 for v in r if v < thr)
+
+    figs = []
+    for by0, by1 in _bands(rcount, gap):
+        if (by1 - by0) * k < min_pt:
+            continue                     # 글줄 한 줄 높이는 그림이 아니다
+        ccount = [0] * w
+        for y in range(by0, by1 + 1):
+            r = rows[y]
+            for x in range(w):
+                if r[x] < thr:
+                    ccount[x] += 1
+        for bx0, bx1 in _bands(ccount, gap):
+            W, H = (bx1 - bx0) * k, (by1 - by0) * k
+            if W < min_pt or H < min_pt:
+                continue
+            figs.append(pymupdf.Rect(bx0 * k, by0 * k, bx1 * k, by1 * k))
+    return sorted(figs, key=lambda r: (round(r.y0), r.x0))
+
+
 def main():
     import pymupdf
     ap = argparse.ArgumentParser()
@@ -125,6 +190,8 @@ def main():
     ap.add_argument("--bbox", help="x0,y0,x1,y1 로 직접 지정")
     ap.add_argument("--name", help="저장 이름 (문항 ID)")
     ap.add_argument("--dpi", type=int, default=DPI)
+    ap.add_argument("--scan", action="store_true",
+                    help="통짜 스캔 PDF (설맞이·수분감). 픽셀로 그림을 찾는다")
     ap.add_argument("--color", action="store_true",
                     help="색이 들어간 그림일 때만. 기본은 회색조(용량 절반)")
     a = ap.parse_args()
@@ -136,7 +203,7 @@ def main():
         x0, y0, x1, y1 = [float(v) for v in a.bbox.split(",")]
         clip = pymupdf.Rect(x0, y0, x1, y1)
     else:
-        figs = find(doc, a.page - 1)
+        figs = find_scanned(doc, a.page - 1) if a.scan else find(doc, a.page - 1)
         if a.list or a.pick is None:
             print("본문 %d쪽에서 찾은 그림 %d개" % (a.page, len(figs)))
             for i, r in enumerate(figs):

@@ -314,12 +314,17 @@ source: 사다리 1단 (DIF-W01 풀이 ①)
 새 PDF 가 들어오면 **그림부터 훑어 `FIGURES.md` 에 등록한다.**
 
 ```bash
-python build/figcrop.py --pdf "<파일>" --page <쪽> --list
+python build/figcrop.py --pdf "<파일>" --page <쪽> --list              # 벡터 PDF
+python build/figcrop.py --pdf "<파일>" --page <쪽> --scan --list       # 통짜 스캔 PDF
 python build/figcrop.py --pdf "<파일>" --page <쪽> --pick 0 --name <문항ID> --dpi 340
 ```
 
-`figcrop.py` 는 벡터로 그린 그림(EBS 교재)과 래스터로 넣은 그림(평가원 시험지)을
-모두 찾는다. 기본이 회색조라 용량이 절반이다.
+**PDF 는 두 종류다.** 평가원 시험지와 EBS 교재는 벡터라 구조로 찾고,
+설맞이·수분감은 한 쪽이 통째로 사진 한 장이라 `--scan` 으로 픽셀을 봐야 한다.
+스캔본도 300~400dpi 라 잘라 쓰면 인쇄 원본 그대로의 품질이 나온다.
+기본이 회색조라 용량이 절반이다.
+
+어느 자료에 무엇이 있는지는 **`FIGURES.md`** 에 정리해 두었다.
 
 **명암이 뜻을 가지는 그림은 반전하면 안 된다.** 카드의 앞면·뒷면처럼
 회색 농도로 구분하는 그림은 다크 모드에서 뜻이 뒤집혀 보인다.
