@@ -520,3 +520,22 @@ grep -n "</span> —\|— <span class=.m." units/*/problems/*.md
 - **유사문항은 난이도를 낮추지 않는다.** 쉬운 변형은 학습 효과가 없다.
 - **PDF는 흑백 인쇄 기준.** 색으로만 구분되는 정보를 넣지 않는다.
 - 단원 폴더 이름과 ID 접두사는 **바꾸지 않는다.** 과거 세트 파일이 깨진다.
+
+## 5-1. 인쇄물을 웹으로 올릴 때
+
+PDF 를 만들고 끝내지 않는다. **`docs/pdf/` 에 올려 링크로 열 수 있게 한다.**
+나은이가 폰에서 바로 열고, 아버님이 집에서 인쇄하신다.
+
+```bash
+python build/make_pdf.py --set sets/<파일> --name <이름>
+cp dist/<날짜>_<이름>_문제.pdf docs/pdf/<slug>-problems.pdf
+cp dist/<날짜>_<이름>_해설.pdf docs/pdf/<slug>-solutions.pdf
+# build/make_pdflist.py 의 SETS 에 한 줄 추가한 뒤
+python build/make_pdflist.py
+```
+
+- **파일 이름은 영문(slug)으로 한다.** 한글 이름은 주소에서 퍼센트 인코딩되어
+  카톡으로 보낼 때 깨져 보인다.
+- `docs/prints.html` 이 목록 페이지이고 메인 히어로에서 링크된다.
+  PDF 가 늘 때마다 `SETS` 에 한 줄 추가하고 다시 돌린다.
+- 문제지·해설지가 따로 없는 한 장짜리는 `SINGLES` 에 넣는다.
